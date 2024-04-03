@@ -1,42 +1,42 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+IHM/SpinToWinAngular/dist
+IHM/SpinToWinAngular/tmp
+IHM/SpinToWinAngular/out-tsc
+IHM/SpinToWinAngular/bazel-out
 
 # Node
-/node_modules
-npm-debug.log
-yarn-error.log
+IHM/SpinToWinAngular/node_modules
+IHM/SpinToWinAngular/npm-debug.log
+IHM/SpinToWinAngular/yarn-error.log
 
 # IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+IHM/SpinToWinAngular/.idea/
+IHM/SpinToWinAngular/.project
+IHM/SpinToWinAngular/.classpath
+IHM/SpinToWinAngular/.c9/
+IHM/SpinToWinAngular/*.launch
+IHM/SpinToWinAngular/.settings/
+IHM/SpinToWinAngular/*.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+IHM/SpinToWinAngular/.vscode/*
+IHM/SpinToWinAngular/.vscode/settings.json
+IHM/SpinToWinAngular/.vscode/tasks.json
+IHM/SpinToWinAngular/.vscode/launch.json
+IHM/SpinToWinAngular/.vscode/extensions.json
+IHM/SpinToWinAngular/.history/*
 
 # Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+IHM/SpinToWinAngular/.angular/cache
+IHM/SpinToWinAngular/.sass-cache/
+IHM/SpinToWinAngular/connect.lock
+IHM/SpinToWinAngular/coverage
+IHM/SpinToWinAngular/libpeerconnection.log
+IHM/SpinToWinAngular/testem.log
+IHM/SpinToWinAngular/typings
 
 # System files
-.DS_Store
-Thumbs.db
+IHM/SpinToWinAngular/.DS_Store
+IHM/SpinToWinAngular/Thumbs.db
