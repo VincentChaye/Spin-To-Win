@@ -19,7 +19,7 @@ const routes: Routes = [
       { path: 'roulette', component: RouletteComponent }, // Charge le composant RouletteComponent lorsque le chemin est '/roulette'
       { path: 'register', component: RegisterComponent }, // Charge le composant RegisterComponent lorsque le chemin est '/register'
       { path: 'login', component: LoginComponent }, // Charge le composant LoginComponent lorsque le chemin est '/login'
-      { path: 'credit', component: CreditComponent }, // Charge le composant LoginComponent lorsque le chemin est '/login'
+      { path: 'credit', component: CreditComponent }, // Charge le composant CreditComponent lorsque le chemin est '/credit'
 
     ]
   }

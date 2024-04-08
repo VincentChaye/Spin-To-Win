@@ -9,7 +9,6 @@ import { PublicRoutingModule } from './public-routing.module';
 @NgModule({
   declarations: [
     PheaderComponent,
-   
     PlayoutComponent
   ],
   imports: [

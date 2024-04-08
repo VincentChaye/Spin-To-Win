@@ -1,35 +1,27 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <!-- Logo ou nom de la marque -->
-    <a class="navbar-brand" [routerLink]="['/roulette']">Navbar</a>
-    <!-- Bouton pour le mode responsive sur les petits écrans -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <!-- Contenu de la barre de navigation -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Liens de navigation -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-       
-        <!-- Lien normal -->
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/Vegastudio']">Home</a>
-        </li>
-       
-        <!-- Lien normal -->
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/SpinToWin']">SpinToWin</a>
-        </li>
 
+    <nav  id="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
 
-        <!-- Lien normal -->
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/credit']">Credit</a>
-        </li>
+        <a id="TitleNav" class="navbar-brand navbar-expand-lg" [routerLink]="['/Vegastudio']" style="font-weight: bold;letter-spacing: 3px;">
+          <img src="assets/image/vegastudio.png" alt="LogoStudioVegas" width="200" height="200"  class="d-inline-block align-text">
+          VegaStudio
+        </a>
 
+        <div id="lienPage" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav navbar-expand-lg">
+            <div class="border border-nav">
+              <a class="nav-link" [routerLink]="['/homr']">Home</a>
+            </div>
+            <div class="border border-nav" >
+              <a class="nav-link" [routerLink]="['/SpinToWin']">SpinToWin</a>
+            </div>
+            <div class="border border-nav">
+              <a class="nav-link" [routerLink]="['/credit']">Credit</a>
+            </div>
+              <a id="rick" href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Rick ?</a>   
+          </div>
 
-      </ul>
-      
-    </div>
-  </div>
-</nav>
+        </div>
+      </div>
+    </nav>
+
