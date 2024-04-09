@@ -1,27 +1,20 @@
 
-    <nav  id="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-
-        <a id="TitleNav" class="navbar-brand navbar-expand-lg" [routerLink]="['/Vegastudio']" style="font-weight: bold;letter-spacing: 3px;">
-          <img src="assets/image/vegastudio.png" alt="LogoStudioVegas" width="200" height="200"  class="d-inline-block align-text">
-          VegaStudio
+    <nav id="navbar" class=" p-xxl-5">
+      <div>
+        <a id="TitleNav" [routerLink]="['/Vegastudio']">
+          <img src="assets/image/vegastudio.png" alt="LogoStudioVegas" class="logo">
         </a>
+      </div>
 
-        <div id="lienPage" class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav navbar-expand-lg">
-            <div class="border border-nav">
-              <a class="nav-link" [routerLink]="['/homr']">Home</a>
-            </div>
-            <div class="border border-nav" >
-              <a class="nav-link" [routerLink]="['/SpinToWin']">SpinToWin</a>
-            </div>
-            <div class="border border-nav">
-              <a class="nav-link" [routerLink]="['/credit']">Credit</a>
-            </div>
-              <a id="rick" href="https://www.youtube.com/watch?v=xvFZjo5PgG0">Rick ?</a>   
-          </div>
+      <div id="lienPage" class="mx-xxl-1">
+            <a class="btn link mx-3 text-light" [routerLink]="['/home']">Acceuil</a>
+            <a class="btn link mx-3 text-light" [routerLink]="['/SpinToWin']">SpinToWin</a>
+            <a class="btn link mx-3 text-light" [routerLink]="['/credit']">Credit</a>
+      </div>
 
-        </div>
+      <div class="account">
+        <a [routerLink]="['/login']" class="btn mx-2 link text-light ">Connexion</a>
+        <a [routerLink]="['/register']" class="btn mx-2 bg inscription">Inscription</a>
       </div>
     </nav>
 
