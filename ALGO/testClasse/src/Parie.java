@@ -10,6 +10,9 @@ public class Parie {
 	private int[][] sommeNombre;
 	private int[] sommeTiers = new int[3];
 	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Parie [idJoueur=" + idJoueur + ", sommePairImpair=" + Arrays.toString(sommePairImpair) + ", sommeLigne="
