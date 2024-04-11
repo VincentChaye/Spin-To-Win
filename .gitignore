@@ -40,3 +40,7 @@ IHM/SpinToWinAngular/typings
 # System files
 IHM/SpinToWinAngular/.DS_Store
 IHM/SpinToWinAngular/Thumbs.db
+
+ALGO/testClasse/bin
+ALGO/.metadata
+ALGO/spintowin/target/
