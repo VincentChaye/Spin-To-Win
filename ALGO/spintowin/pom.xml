@@ -14,7 +14,7 @@
             <artifactId>javax.json</artifactId>
             <version>1.1.4</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.200</version>
@@ -35,7 +35,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>spintowin.SimpleHttpServer</mainClass>
+                    <mainClass>spintowin.H2Database</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -34,10 +34,10 @@ class Resource1Handler implements HttpHandler {
         System.out.println("Received request for /resource1");
         
         String response = "Babam Babam";
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        try (OutputStream os = exchange.getResponseBody()) {
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            os.write(response.getBytes());
+        }
     }
 }
 
@@ -65,14 +65,15 @@ class Resource2Handler implements HttpHandler {
             String response = String.valueOf(result);
             
             // Send the response
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+            try (OutputStream os = exchange.getResponseBody()) {
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                os.write(response.getBytes());
+            }
         } catch (NumberFormatException e) {
             // Send a 400 response if the number is not valid
             exchange.sendResponseHeaders(400, 0);
-            return;
         }
     }
 }
+
+
