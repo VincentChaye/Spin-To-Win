@@ -3,10 +3,14 @@ package spintowin;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,46 +76,66 @@ public class DatabaseManager {
     }
 
     
-    private void createPlayerFromRequestData(String requestData)  {
-        Map<String, String> formData = new HashMap<>();
-        String[] pairs = requestData.split("&");
-        for (String pair : pairs) {
-            String[] keyValue = pair.split("=");
-            String key = URLDecoder.decode(keyValue[0], "UTF-8");
-            String value = URLDecoder.decode(keyValue[1], "UTF-8");
-            formData.put(key, value);
-        }
+    void createPlayerFromRequestData(Joueur newPlayer) {
+        try {
+            // Convertir la java.util.Date en java.sql.Date
+            java.sql.Date sqlDate = new java.sql.Date(newPlayer.getDateNaissance().getTime());
+            
+            String sql = "INSERT INTO joueur (pseudo, nom, prenom, date_naissance, credit, mot_de_passe_hash) VALUES (?, ?, ?, ?, ?, ?)";
+            try (Connection conn = getConnection();
+                    PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, newPlayer.getPseudo());
+                pstmt.setString(2, newPlayer.getNom());
+                pstmt.setString(3, newPlayer.getPrenom());
+                pstmt.setDate(4, sqlDate);
+                pstmt.setFloat(5, newPlayer.getCredit());
+                pstmt.setString(6, newPlayer.getMot_de_passe_hash());
 
-        // Maintenant, vous pouvez utiliser les données du formulaire pour créer un objet Joueur
-        // Par exemple :
-        String playerName = formData.get("name");
-        String playerPseudo = formData.get("pseudo");
-        // ...
+                int rowsInserted = pstmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("Le joueur a été inséré avec succès dans la base de données.");
+                } else {
+                    System.out.println("Échec de l'insertion du joueur dans la base de données.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+
+    
+    
+    
     
     // Méthode pour récupérer tous les joueurs
     public static List<Joueur> getAllJoueurs() {
         List<Joueur> joueurs = new ArrayList<>();
         String sql = "SELECT * FROM joueur";
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Joueur joueur = new Joueur(
-                        rs.getInt("id"),
-                        rs.getString("pseudo"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getDate("date_naissance"),
-                        rs.getFloat("credit"),
-                        rs.getString("mot_de_passe_hash")
-                );
-                joueurs.add(joueur);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return joueurs;
+        	     PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        	    ResultSet rs = pstmt.executeQuery();
+        	    while (rs.next()) {
+        	        Joueur joueur = new Joueur(
+        	                rs.getInt("id"),
+        	                rs.getString("pseudo"),
+        	                rs.getString("nom"),
+        	                rs.getString("prenom"),
+        	                rs.getDate("date_naissance"),
+        	                rs.getFloat("credit"),
+        	                rs.getString("mot_de_passe_hash")
+        	        );
+        	        joueurs.add(joueur);
+        	    }
+        	    return joueurs;
+        	} catch (SQLException e) {
+        	    e.printStackTrace();
+        	}
+		return joueurs;
+
+        
     }
 
     // Autres méthodes pour gérer les opérations de base de données ici...

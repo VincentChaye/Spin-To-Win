@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 
 @SuppressWarnings("restriction")
@@ -27,6 +28,7 @@ public class SimpleHttpServer1 {
         // Define the request handler for retrieving player details by ID
         server.createContext("/player", new PlayerHandler());
         server.createContext("/player/name", new PlayerHandlerName());
+        server.createContext("/player/new", new PlayerHandlerNew());
         // Start the server
         server.start();
         
@@ -165,49 +167,6 @@ class PlayerHandlerName implements HttpHandler {
     }
 }
 
-class PlayerHandlerCreate implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // Extraction du pseudo à partir du chemin de la requête
-        String requestPath = exchange.getRequestURI().getPath();
-        String[] parts = requestPath.split("/");
-
-        // Vérifier si le chemin de la requête a le format attendu
-        if (parts.length != 4 || !parts[1].equals("player") || !parts[2].equals("name")) {
-            exchange.sendResponseHeaders(404, 0); // Envoyer une réponse 404 si le chemin n'est pas correct
-            return;
-        }
-
-        try {
-            // Extract the player pseudo from the URL part after /player/name/
-            String joueurPseudo = parts[3];
-            
-            // Appeler getJoueurByName pour récupérer les détails du joueur
-            Joueur playerDetails = DatabaseManager.getJoueurByName(joueurPseudo);
-            
-            // Vérifier si le joueur existe
-            if (playerDetails != null) {
-                // Convertir playerDetails en une représentation sous forme de chaîne de caractères
-                String playerDetailsString = playerDetails.toString();
-                
-                // Envoyer les détails du joueur en tant que réponse
-                byte[] responseBytes = playerDetailsString.getBytes();
-                exchange.sendResponseHeaders(200, responseBytes.length);
-                try (OutputStream os = exchange.getResponseBody()) {
-                    os.write(responseBytes);
-                }
-            } else {
-                // Envoyer une réponse 404 si le joueur n'existe pas
-                exchange.sendResponseHeaders(404, 0);
-            }
-        } catch (NumberFormatException e) {
-            // Envoyer une réponse 400 si l'ID n'est pas valide
-            exchange.sendResponseHeaders(400, 0);
-        }
-    }
-}
-
-
 class PlayerHandlerNew implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -227,21 +186,24 @@ class PlayerHandlerNew implements HttpHandler {
                 requestBody.append(line);
             }
 
-            // Vous devez implémenter la logique pour extraire les données du joueur du corps de la requête
-            // et créer un nouvel objet Joueur à partir de ces données
+            // Convertir le JSON en objet Joueur
+            ObjectMapper objectMapper = new ObjectMapper();
+            Joueur newPlayer = objectMapper.readValue(requestBody.toString(), Joueur.class);
 
-            // Supposons que vous ayez une méthode pour créer un joueur à partir des données de la requête
-            Joueur newPlayer = createPlayerFromRequestData(requestBody.toString());
+            // Appeler la fonction pour créer le joueur en base de données
+            DatabaseManager databaseManager = new DatabaseManager();
+            databaseManager.createPlayerFromRequestData(newPlayer);
 
-            // Maintenant, vous pouvez implémenter la logique pour enregistrer le nouveau joueur dans la base de données
-            // Vous devrez adapter cette partie selon votre système de gestion de base de données
-
-            // Si le joueur est créé avec succès, vous pouvez renvoyer une réponse 201 (Created)
+            // Envoyer une réponse 201 (Created)
             exchange.sendResponseHeaders(201, 0);
         } catch (Exception e) {
-            // En cas d'erreur lors de la création du joueur, vous pouvez renvoyer une réponse 500 (Internal Server Error)
+            // En cas d'erreur, envoyer une réponse 500 (Internal Server Error)
             exchange.sendResponseHeaders(500, 0);
         }
     }
-
 }
+
+	
+
+
+

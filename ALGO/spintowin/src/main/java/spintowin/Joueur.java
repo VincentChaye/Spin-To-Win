@@ -119,6 +119,20 @@ public class Joueur {
 
 
 
+	public Joueur(String pseudo, String nom, String prenom, Date dateNaissance, float credit,
+			String mot_de_passe_hash) {
+		super();
+		this.pseudo = pseudo;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.dateNaissance = dateNaissance;
+		this.credit = credit;
+		this.mot_de_passe_hash = mot_de_passe_hash;
+	}
+
+
+
+
 	public Joueur(int id, String pseudo, String nom, String prenom, Date dateNaissance, float credit,
 			String mot_de_passe_hash) {
 		super();
