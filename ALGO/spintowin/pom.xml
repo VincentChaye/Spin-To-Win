@@ -14,11 +14,17 @@
             <artifactId>javax.json</artifactId>
             <version>1.1.4</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.200</version>
         </dependency>
+        <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.12.5</version> <!-- Utilisez la dernière version disponible -->
+</dependency>
+
     </dependencies>
 
     <build>
@@ -35,7 +41,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>spintowin.SimpleHttpServer</mainClass>
+                    <mainClass>spintowin.H2Database</mainClass>
                 </configuration>
             </plugin>
         </plugins>
