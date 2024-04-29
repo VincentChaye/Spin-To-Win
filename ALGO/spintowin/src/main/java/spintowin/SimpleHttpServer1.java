@@ -2,14 +2,18 @@ package spintowin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.sun.net.httpserver.HttpExchange;
 
 @SuppressWarnings("restriction")
@@ -29,6 +33,8 @@ public class SimpleHttpServer1 {
         server.createContext("/player", new PlayerHandler());
         server.createContext("/player/name", new PlayerHandlerName());
         server.createContext("/player/new", new PlayerHandlerNew());
+        server.createContext("/player/pseudo", new PlayerHandlerAllPseudo()); 
+        server.createContext("/player/auth", new PlayerHandlerAuth());
         // Start the server
         server.start();
         
@@ -202,6 +208,110 @@ class PlayerHandlerNew implements HttpHandler {
         }
     }
 }
+    class PlayerHandlerAllPseudo implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            // Extraction du pseudo à partir du chemin de la requête
+        	System.out.println("Allpseudo");
+
+        	String requestPath = exchange.getRequestURI().getPath();
+            String[] parts = requestPath.split("/");
+
+            if (parts.length < 3 || !parts[1].equals("player") || !parts[2].equals("pseudo")) {
+                exchange.sendResponseHeaders(404, 0); // Envoyer une réponse 404 si le chemin n'est pas correct
+                System.out.println("Allpseudoloupe");
+                return;
+            }
+
+
+            try {
+                // Appeler getAllPseudo pour récupérer la liste des pseudonymes
+                List<String> playerPseudos = DatabaseManager.getAllPseudo();
+
+                // Convertir la liste de pseudonymes en JSON
+                ObjectMapper objectMapper = new ObjectMapper();
+                ArrayNode pseudoArray = objectMapper.createArrayNode();
+                for (String pseudo : playerPseudos) {
+                    pseudoArray.add(pseudo);
+                }
+                String jsonResponse = objectMapper.writeValueAsString(pseudoArray);
+
+                // Envoyer les pseudonymes en tant que réponse JSON
+                byte[] responseBytes = jsonResponse.getBytes();
+                exchange.getResponseHeaders().set("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, responseBytes.length);
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(responseBytes);
+                }
+            } catch (NumberFormatException e) {
+                // Envoyer une réponse 400 si l'ID n'est pas valide
+                exchange.sendResponseHeaders(400, 0);
+            }
+        }
+        }
+        
+        class PlayerHandlerAuth implements HttpHandler {
+            @Override
+            public void handle(HttpExchange exchange) throws IOException {
+                System.out.println("Authenticating player...");
+
+                // Vérifier que la méthode HTTP est POST
+                if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                    exchange.sendResponseHeaders(405, 0); // Méthode non autorisée
+                    return;
+                }
+
+                // Récupérer les données du corps de la requête
+                InputStream requestBody = exchange.getRequestBody();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+                StringBuilder requestBodyBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    requestBodyBuilder.append(line);
+                }
+                String requestBodyString = requestBodyBuilder.toString();
+
+                // Analyser les données JSON du corps de la requête
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode requestBodyJson = objectMapper.readTree(requestBodyString);
+                String pseudo = requestBodyJson.get("pseudo").asText();
+                String motDePasse = requestBodyJson.get("motDePasse").asText();
+
+                // Vérifier l'authenticité du joueur dans la base de données
+                Joueur isAuthenticated = DatabaseManager.verifieMotDePasse(pseudo, motDePasse);
+
+                if (isAuthenticated != null) {
+                	ObjectMapper objectMapper1 = new ObjectMapper();
+                	String jsonResponse = objectMapper1.writeValueAsString(isAuthenticated);
+
+                	// Envoyer la réponse
+                	exchange.getResponseHeaders().set("Content-Type", "application/json");
+                	byte[] responseBytes = jsonResponse.getBytes(StandardCharsets.UTF_8);
+                	exchange.sendResponseHeaders(200, responseBytes.length);
+                	try (OutputStream os = exchange.getResponseBody()) {
+                	    os.write(responseBytes);
+                	}
+                } else {
+                    // Renvoyer une réponse d'erreur si l'authentification échoue
+                    String jsonResponse = "{\"message\": \"Authentication failed. Invalid pseudo or motDePasse.\"}";
+
+                    // Envoyer la réponse
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
+                    exchange.sendResponseHeaders(401, jsonResponse.getBytes().length);
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(jsonResponse.getBytes());
+                    }
+                
+            }
+        }
+        
+        
+        
+    }
+    
+    
+    
+
 
 	
 

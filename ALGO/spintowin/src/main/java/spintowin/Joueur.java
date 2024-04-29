@@ -105,6 +105,14 @@ public class Joueur {
 
 
 
+	public Joueur(String pseudo) {
+		super();
+		this.pseudo = pseudo;
+	}
+
+
+
+
 	public String getMot_de_passe_hash() {
 		return mot_de_passe_hash;
 	}
