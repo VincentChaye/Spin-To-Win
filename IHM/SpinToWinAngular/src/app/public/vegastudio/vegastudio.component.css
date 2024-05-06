@@ -14,13 +14,28 @@
     color: #FEB24C;
 }
 #text{
-    padding-top: 10%;
+    padding-top: 17.5%;
     width: 100%;
     height: 100%;
-    background-color: #00000060;
+    background-color: #00000098;
+}
+#text h1{
+	color: white;
+	font-size: 50px;
+	text-align: center;
+	margin-bottom: 1%;
+}
+#text hr{
+    border: 2px solid #fff;
+	margin: auto;
+	margin-bottom: 1%;
+	background-color: #fff;
 }
 
-#text hr{
-    border: 2px solid #f1f1f1;
+#text p{
+	color: white;
+	font-size: 20px;
+	text-align: center;
+	margin-bottom: 1%;
 }
 
