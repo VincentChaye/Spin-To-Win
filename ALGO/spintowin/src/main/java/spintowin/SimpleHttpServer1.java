@@ -178,11 +178,15 @@ class PlayerHandlerName implements HttpHandler {
 class PlayerHandlerNew implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        // Vérifier si la méthode HTTP est PUT
-        if (!exchange.getRequestMethod().equalsIgnoreCase("PUT")) {
-            exchange.sendResponseHeaders(405, 0); // Envoyer une réponse 405 (Method Not Allowed) si la méthode n'est pas PUT
-            return;
-        }
+	    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+	        Utils.setCorsHeaders(exchange);
+	        exchange.sendResponseHeaders(200, -1);
+	        return;
+	    }
+        
+        Utils.setCorsHeaders(exchange);
+	    System.out.println("New player...");
+
 
         try {
             // Lire le corps de la requête pour obtenir les données du joueur
@@ -207,6 +211,13 @@ class PlayerHandlerNew implements HttpHandler {
         } catch (Exception e) {
             // En cas d'erreur, envoyer une réponse 500 (Internal Server Error)
             exchange.sendResponseHeaders(500, 0);
+        }
+    }
+    static class Utils {
+        public static void setCorsHeaders(HttpExchange exchange) {
+            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
         }
     }
 }
