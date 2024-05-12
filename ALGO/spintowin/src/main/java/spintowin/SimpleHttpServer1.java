@@ -176,51 +176,62 @@ class PlayerHandlerName implements HttpHandler {
 }
 
 class PlayerHandlerNew implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-	    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+	 @Override
+	    public void handle(HttpExchange exchange) throws IOException {
+	        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+	            Utils.setCorsHeaders(exchange);
+	            exchange.sendResponseHeaders(200, -1);
+	            return;
+	        }
+
 	        Utils.setCorsHeaders(exchange);
-	        exchange.sendResponseHeaders(200, -1);
-	        return;
+	        System.out.println("New player...");
+
+	        try {
+	            // Lire le corps de la requête pour obtenir les données du joueur
+	            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+	            BufferedReader br = new BufferedReader(isr);
+	            StringBuilder requestBody = new StringBuilder();
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                requestBody.append(line);
+	            }
+
+	            // Convertir le JSON en objet Joueur
+	            ObjectMapper objectMapper = new ObjectMapper();
+	            Joueur newPlayer = objectMapper.readValue(requestBody.toString(), Joueur.class);
+
+	            // Appeler la fonction pour créer le joueur en base de données
+	            DatabaseManager databaseManager = new DatabaseManager();
+	            databaseManager.createPlayerFromRequestData(newPlayer);
+
+	            // Envoyer une réponse 201 (Created) avec les données du joueur ajouté
+	            exchange.getResponseHeaders().set("Content-Type", "application/json");
+	            exchange.sendResponseHeaders(201, 0);
+
+	            // Sérialiser l'objet joueur en JSON
+	            String jsonResponse = objectMapper.writeValueAsString(newPlayer);
+
+	            // Envoyer les données du joueur dans le corps de la réponse
+	            try (OutputStream os = exchange.getResponseBody()) {
+	                os.write(jsonResponse.getBytes(StandardCharsets.UTF_8));
+	            }
+	        } catch (Exception e) {
+	            // En cas d'erreur, envoyer une réponse 500 (Internal Server Error)
+	            exchange.sendResponseHeaders(500, 0);
+	        } finally {
+	            exchange.close(); // Fermez l'échange après avoir envoyé la réponse
+	        }
 	    }
-        
-        Utils.setCorsHeaders(exchange);
-	    System.out.println("New player...");
 
-
-        try {
-            // Lire le corps de la requête pour obtenir les données du joueur
-            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder requestBody = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                requestBody.append(line);
-            }
-
-            // Convertir le JSON en objet Joueur
-            ObjectMapper objectMapper = new ObjectMapper();
-            Joueur newPlayer = objectMapper.readValue(requestBody.toString(), Joueur.class);
-
-            // Appeler la fonction pour créer le joueur en base de données
-            DatabaseManager databaseManager = new DatabaseManager();
-            databaseManager.createPlayerFromRequestData(newPlayer);
-
-            // Envoyer une réponse 201 (Created)
-            exchange.sendResponseHeaders(201, 0);
-        } catch (Exception e) {
-            // En cas d'erreur, envoyer une réponse 500 (Internal Server Error)
-            exchange.sendResponseHeaders(500, 0);
-        }
-    }
-    static class Utils {
-        public static void setCorsHeaders(HttpExchange exchange) {
-            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        }
-    }
-}
+	    static class Utils {
+	        public static void setCorsHeaders(HttpExchange exchange) {
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	        }
+	    }
+	}
     class PlayerHandlerAllPseudo implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {

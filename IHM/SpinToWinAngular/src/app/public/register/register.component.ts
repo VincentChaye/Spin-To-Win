@@ -34,7 +34,9 @@ export class RegisterComponent {
     this.httpClient.post(url, body, { headers })
       .subscribe(
         (response: any) => {
+          this.PLAYERINFO.playerInfo = response;
           console.log('API POST réussi :', response);
+          
         },
         (error: any) => {
           console.error('Erreur lors de l\'appel API POST :', error);
