@@ -10,11 +10,19 @@
             <a class="btn link mx-3 text-light" [routerLink]="['/home']">Acceuil</a>
             <a class="btn link mx-3 text-light" [routerLink]="['/SpinToWin']">SpinToWin</a>
             <a class="btn link mx-3 text-light" [routerLink]="['/credit']">Credit</a>
+       
       </div>
 
       <div class="account">
-        <a [routerLink]="['/login']" class="btn mx-2 link text-light ">Connexion</a>
-        <a [routerLink]="['/register']" class="btn mx-2 bg inscription">Inscription</a>
+        <!-- Afficher les boutons de connexion et d'inscription si playerInfo est vide -->
+        <ng-container *ngIf="!PLAYERINFO.playerInfo">
+          <a [routerLink]="['/login']" class="btn mx-2 link text-light">Connexion</a>
+          <a [routerLink]="['/register']" class="btn mx-2 bg inscription">Inscription</a>
+        </ng-container>
+        
+        <!-- Afficher le bouton alternatif si playerInfo n'est pas vide -->
+        <button *ngIf="PLAYERINFO.playerInfo" type="button" class="btn inscription" (click)="afficheJoueur()">Compte</button>
       </div>
+      
     </nav>
 

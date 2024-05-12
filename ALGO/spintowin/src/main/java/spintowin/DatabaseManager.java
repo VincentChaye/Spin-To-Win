@@ -43,6 +43,7 @@ public class DatabaseManager {
                         rs.getString("pseudo"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
+                        rs.getString("email"),
                         rs.getDate("date_naissance"),
                         rs.getFloat("credit"),
                         rs.getString("mot_de_passe_hash")
@@ -67,6 +68,7 @@ public class DatabaseManager {
                         rs.getString("pseudo"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
+                        rs.getString("email"),
                         rs.getDate("date_naissance"),
                         rs.getFloat("credit"),
                         rs.getString("mot_de_passe_hash")
@@ -95,9 +97,10 @@ public class DatabaseManager {
                            rs.getString("pseudo"),
                            rs.getString("nom"),
                            rs.getString("prenom"),
+                           rs.getString("email"),
                            rs.getDate("date_naissance"),
-                           rs.getFloat("credit"),
-                           rs.getString("mot_de_passe_hash")
+                           rs.getFloat("credit")
+                          
                    );
                }
         } catch (SQLException e) {
@@ -115,15 +118,16 @@ public class DatabaseManager {
 
             String motDePasseCrypte = crypterMotDePasse(newPlayer.getMot_de_passe_hash());
             if (motDePasseCrypte != null) {
-                String sql = "INSERT INTO joueur (pseudo, nom, prenom, date_naissance, credit, mot_de_passe_hash) VALUES (?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO joueur (pseudo, nom, prenom,email, date_naissance, credit, mot_de_passe_hash) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 try (Connection conn = getConnection();
                      PreparedStatement pstmt = conn.prepareStatement(sql)) {
                     pstmt.setString(1, newPlayer.getPseudo());
                     pstmt.setString(2, newPlayer.getNom());
                     pstmt.setString(3, newPlayer.getPrenom());
-                    pstmt.setDate(4, sqlDate);
-                    pstmt.setFloat(5, newPlayer.getCredit());
-                    pstmt.setString(6, motDePasseCrypte); // Utilisez le mot de passe crypté
+                    pstmt.setString(4, newPlayer.getEmail());
+                    pstmt.setDate(5, sqlDate);
+                    pstmt.setFloat(6, newPlayer.getCredit());
+                    pstmt.setString(7, motDePasseCrypte); // Utilisez le mot de passe crypté
 
                     int rowsInserted = pstmt.executeUpdate();
                     if (rowsInserted > 0) {
@@ -176,6 +180,7 @@ public class DatabaseManager {
         	                rs.getString("pseudo"),
         	                rs.getString("nom"),
         	                rs.getString("prenom"),
+        	                rs.getString("email"),
         	                rs.getDate("date_naissance"),
         	                rs.getFloat("credit"),
         	                rs.getString("mot_de_passe_hash")

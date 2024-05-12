@@ -1,44 +1,46 @@
 package spintowin;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-
-@SuppressWarnings("restriction")
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 public class SimpleHttpServer1 {
-    
+    private static HttpServer server; // Ajout d'un champ statique pour stocker l'instance du serveur
+
     public static void main(String[] args) throws IOException {
-        // Create an HTTP server on port 8000
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        
-        // Define the request handler for the path "/resource1"
+        // Créez le serveur HTTP sur le port 8000
+        server = HttpServer.create(new InetSocketAddress(8000), 0);
+
+        // Définissez les gestionnaires de requêtes pour les différents chemins
         server.createContext("/resource1", new Resource1Handler());
-        
-        // Define the request handler for the path "/resource2"
         server.createContext("/resource2", new Resource2Handler());
-        
-        // Define the request handler for retrieving player details by ID
         server.createContext("/player", new PlayerHandler());
         server.createContext("/player/name", new PlayerHandlerName());
         server.createContext("/player/new", new PlayerHandlerNew());
-        server.createContext("/player/pseudo", new PlayerHandlerAllPseudo()); 
+        server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
         server.createContext("/player/auth", new PlayerHandlerAuth());
-        // Start the server
+
+        // Activez le CORS globalement
+        server.setExecutor(null); // Utilisation d'un gestionnaire d'exécution null pour un démarrage par défaut
+
+        // Démarrer le serveur
         server.start();
-        
+
         System.out.println("Server started on port 8000");
+    }
+
+    // Méthode statique pour obtenir l'instance du serveur
+    public static HttpServer getServer() {
+        return server;
     }
 }
 
@@ -251,15 +253,16 @@ class PlayerHandlerNew implements HttpHandler {
         }
         
         class PlayerHandlerAuth implements HttpHandler {
-            @Override
-            public void handle(HttpExchange exchange) throws IOException {
-                System.out.println("Authenticating player...");
+        	@Override
+        	public void handle(HttpExchange exchange) throws IOException {
+        	    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+        	        Utils.setCorsHeaders(exchange);
+        	        exchange.sendResponseHeaders(200, -1);
+        	        return;
+        	    }
+        	    Utils.setCorsHeaders(exchange);
+        	    System.out.println("Authenticating player...");
 
-                // Vérifier que la méthode HTTP est POST
-                if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
-                    exchange.sendResponseHeaders(405, 0); // Méthode non autorisée
-                    return;
-                }
 
                 // Récupérer les données du corps de la requête
                 InputStream requestBody = exchange.getRequestBody();
@@ -305,7 +308,15 @@ class PlayerHandlerNew implements HttpHandler {
             }
         }
         
-        
+            
+            static class Utils {
+                public static void setCorsHeaders(HttpExchange exchange) {
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                }
+            }
+
         
     }
     

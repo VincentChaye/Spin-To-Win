@@ -25,6 +25,7 @@ public class H2Database {
                         + " pseudo VARCHAR(255) UNIQUE,"
                         + " nom VARCHAR(255),"
                         + " prenom VARCHAR(255),"
+                        + " email VARCHAR(255),"
                         + " date_naissance DATE,"
                         + " credit FLOAT,"
                         + " mot_de_passe_hash VARCHAR(255)"
