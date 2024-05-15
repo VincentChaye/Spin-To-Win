@@ -8,6 +8,8 @@ import { PlayoutComponent } from './playout/playout.component';
 import { PublicRoutingModule } from './public-routing.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+=======
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,9 @@ import { RegisterComponent } from './register/register.component';
     HttpClientModule,
     FormsModule, // Ajouter FormsModule ici
     PublicRoutingModule
+=======
+    PublicRoutingModule,
+    FormsModule
   ]
 })
 export class PublicModule { }
