@@ -1,0 +1,57 @@
+#bg {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background: url("../../../assets/image/backgroundVegaStudio.png") no-repeat center fixed;
+    background-size: cover;
+    z-index: -1;
+}
+
+#item{
+	width: 65%;
+	height: 80%;
+	background-color: #343434;
+	margin-top: 7.5%;
+	box-shadow: 1px 1px 10px 1px #000000f1;
+	border-radius: 8px;
+	color: #ddd;
+}
+#item h1 {
+	margin-left: 5%;
+	padding-top: 2%;
+}
+#item form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 40%;
+	margin: auto;
+	text-align: left;
+	margin-top: 13%;
+}
+
+#item form label{
+	margin-bottom: 10px;
+}
+
+#item form input{
+	margin-bottom: 48px;
+	border-radius: 8px;
+	height: 38px;
+}
+
+#item form a{
+	text-align: center;
+
+	text-decoration: none;
+}
+
+#item form input[type=submit] {
+	background-color: #feb24c;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	height: 38px;
+	margin-top: 90px;
+}
