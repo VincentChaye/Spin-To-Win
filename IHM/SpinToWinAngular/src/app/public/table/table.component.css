@@ -1,0 +1,128 @@
+body{
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../../assets/image/bck.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+
+/* Placement du texte */
+.title-table{
+    position: absolute;
+    font-size: 125%;
+    top: 2%;
+    left: 30%;
+    color: white;
+}
+.title-select{
+    position: absolute;
+    font-size: 125%;
+    top: 2%;
+    left: 75%;
+    color: white;
+}
+
+.title-select-mem{
+    position: absolute;
+    font-size: 105%;
+    left: 76%;
+    top: 45%;
+    color: white;
+}
+/* DIV CONTAINER */ 
+.table-component{
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    width: 950px;
+    height: 300px;
+    bottom: 5px;
+    left: 500px;
+    border-radius: 8px;
+}
+
+.selected {
+    border: 2px solid yellow;  /* ou toute autre couleur de votre choix */
+  }
+  
+.roulette-component{
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    bottom: 5px;
+    left: 30px;
+    width: 300px;
+    height: 300px;
+    border-radius: 8px;
+}
+
+/* Table */
+td{
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 40px;        /* Largeur fixe pour le td */
+    height: 40px;       /* Hauteur fixe pour le td */
+    border: black 1px solid;
+}
+.num{
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    text-align: center;
+}
+.select{
+    position: absolute;
+    left: 80%;
+    top: 15%;
+    text-align: center;
+    color: black;
+}
+
+/* Personnalisation des bords des tableaux */
+
+.zero{
+    border: none;
+}
+.haut-bas{
+    border-top: none;  
+    border-bottom: none;
+}
+.haut-droite{
+    border-top: none;  
+    border-right: none;
+}
+.haut{
+    border-top: none;  
+}
+.bas{
+    border-bottom: none;
+}
+.gauche-droite{
+    border-left: none;
+    border-right: none;
+}
+.gauche{
+    border-left: none;
+}
+.droite{
+    border-right: none;
+}
+.empty{
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+/* Couleur case table */
+
+#rouge{
+    background-color: rgba(255, 0, 0, 0.7);
+}
+#noir{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.selectedtd{
+    background-color: rgba(81, 255, 0, 0.7);
+}

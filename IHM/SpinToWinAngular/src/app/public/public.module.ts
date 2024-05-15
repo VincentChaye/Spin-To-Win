@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CreditComponent } from './credit/credit.component';
 
+
 @NgModule({
   declarations: [
     PheaderComponent,
@@ -24,6 +25,7 @@ import { CreditComponent } from './credit/credit.component';
     HttpClientModule,
     FormsModule, // Ajouter FormsModule ici
     PublicRoutingModule
+
   ]
 })
 export class PublicModule { }
