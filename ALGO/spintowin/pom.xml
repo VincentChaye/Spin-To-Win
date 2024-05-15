@@ -8,7 +8,12 @@
     <name>SpinToWin</name>
 
     <dependencies>
-        <!-- Dépendance pour HTTPServer -->
+        <!-- Dépendances pour HTTPServer -->
+        <dependency>
+  <groupId>com.thetransactioncompany</groupId>
+  <artifactId>cors-filter</artifactId>
+  <version>2.2.1</version>
+</dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
@@ -20,11 +25,22 @@
             <version>1.4.200</version>
         </dependency>
         <dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.12.5</version> <!-- Utilisez la dernière version disponible -->
-</dependency>
-
+            <groupId>com.sun.net.httpserver</groupId>
+            <artifactId>http</artifactId>
+            <version>20070405</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.5</version> <!-- Utilisez la dernière version disponible -->
+        </dependency>
+        <!-- Dépendance pour CorsFilter -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version> <!-- Remplacez par la dernière version disponible -->
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -41,7 +57,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>spintowin.H2Database</mainClass>
+                    <mainClass>spintowin.SimpleHttpServer1</mainClass>
                 </configuration>
             </plugin>
         </plugins>

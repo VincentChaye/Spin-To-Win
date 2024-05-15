@@ -1,38 +1,46 @@
 package spintowin;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.net.httpserver.HttpExchange;
-
-@SuppressWarnings("restriction")
+import java.util.List;
 public class SimpleHttpServer1 {
-    
+    private static HttpServer server; // Ajout d'un champ statique pour stocker l'instance du serveur
+
     public static void main(String[] args) throws IOException {
-        // Create an HTTP server on port 8000
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-        
-        // Define the request handler for the path "/resource1"
+        // Créez le serveur HTTP sur le port 8000
+        server = HttpServer.create(new InetSocketAddress(8000), 0);
+
+        // Définissez les gestionnaires de requêtes pour les différents chemins
         server.createContext("/resource1", new Resource1Handler());
-        
-        // Define the request handler for the path "/resource2"
         server.createContext("/resource2", new Resource2Handler());
-        
-        // Define the request handler for retrieving player details by ID
         server.createContext("/player", new PlayerHandler());
         server.createContext("/player/name", new PlayerHandlerName());
         server.createContext("/player/new", new PlayerHandlerNew());
-        // Start the server
+        server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
+        server.createContext("/player/auth", new PlayerHandlerAuth());
+
+        // Activez le CORS globalement
+        server.setExecutor(null); // Utilisation d'un gestionnaire d'exécution null pour un démarrage par défaut
+
+        // Démarrer le serveur
         server.start();
-        
+
         System.out.println("Server started on port 8000");
+    }
+
+    // Méthode statique pour obtenir l'instance du serveur
+    public static HttpServer getServer() {
+        return server;
     }
 }
 
@@ -168,40 +176,175 @@ class PlayerHandlerName implements HttpHandler {
 }
 
 class PlayerHandlerNew implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        // Vérifier si la méthode HTTP est PUT
-        if (!exchange.getRequestMethod().equalsIgnoreCase("PUT")) {
-            exchange.sendResponseHeaders(405, 0); // Envoyer une réponse 405 (Method Not Allowed) si la méthode n'est pas PUT
-            return;
-        }
+	 @Override
+	    public void handle(HttpExchange exchange) throws IOException {
+	        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+	            Utils.setCorsHeaders(exchange);
+	            exchange.sendResponseHeaders(200, -1);
+	            return;
+	        }
 
-        try {
-            // Lire le corps de la requête pour obtenir les données du joueur
-            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder requestBody = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                requestBody.append(line);
+	        Utils.setCorsHeaders(exchange);
+	        System.out.println("New player...");
+
+	        try {
+	            // Lire le corps de la requête pour obtenir les données du joueur
+	            InputStreamReader isr = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+	            BufferedReader br = new BufferedReader(isr);
+	            StringBuilder requestBody = new StringBuilder();
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                requestBody.append(line);
+	            }
+
+	            // Convertir le JSON en objet Joueur
+	            ObjectMapper objectMapper = new ObjectMapper();
+	            Joueur newPlayer = objectMapper.readValue(requestBody.toString(), Joueur.class);
+
+	            // Appeler la fonction pour créer le joueur en base de données
+	            DatabaseManager databaseManager = new DatabaseManager();
+	            databaseManager.createPlayerFromRequestData(newPlayer);
+
+	            // Envoyer une réponse 201 (Created) avec les données du joueur ajouté
+	            exchange.getResponseHeaders().set("Content-Type", "application/json");
+	            exchange.sendResponseHeaders(201, 0);
+
+	            // Sérialiser l'objet joueur en JSON
+	            String jsonResponse = objectMapper.writeValueAsString(newPlayer);
+
+	            // Envoyer les données du joueur dans le corps de la réponse
+	            try (OutputStream os = exchange.getResponseBody()) {
+	                os.write(jsonResponse.getBytes(StandardCharsets.UTF_8));
+	            }
+	        } catch (Exception e) {
+	            // En cas d'erreur, envoyer une réponse 500 (Internal Server Error)
+	            exchange.sendResponseHeaders(500, 0);
+	        } finally {
+	            exchange.close(); // Fermez l'échange après avoir envoyé la réponse
+	        }
+	    }
+
+	    static class Utils {
+	        public static void setCorsHeaders(HttpExchange exchange) {
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	        }
+	    }
+	}
+    class PlayerHandlerAllPseudo implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            // Extraction du pseudo à partir du chemin de la requête
+        	System.out.println("Allpseudo");
+
+        	String requestPath = exchange.getRequestURI().getPath();
+            String[] parts = requestPath.split("/");
+
+            if (parts.length < 3 || !parts[1].equals("player") || !parts[2].equals("pseudo")) {
+                exchange.sendResponseHeaders(404, 0); // Envoyer une réponse 404 si le chemin n'est pas correct
+                System.out.println("Allpseudoloupe");
+                return;
             }
 
-            // Convertir le JSON en objet Joueur
-            ObjectMapper objectMapper = new ObjectMapper();
-            Joueur newPlayer = objectMapper.readValue(requestBody.toString(), Joueur.class);
 
-            // Appeler la fonction pour créer le joueur en base de données
-            DatabaseManager databaseManager = new DatabaseManager();
-            databaseManager.createPlayerFromRequestData(newPlayer);
+            try {
+                // Appeler getAllPseudo pour récupérer la liste des pseudonymes
+                List<String> playerPseudos = DatabaseManager.getAllPseudo();
 
-            // Envoyer une réponse 201 (Created)
-            exchange.sendResponseHeaders(201, 0);
-        } catch (Exception e) {
-            // En cas d'erreur, envoyer une réponse 500 (Internal Server Error)
-            exchange.sendResponseHeaders(500, 0);
+                // Convertir la liste de pseudonymes en JSON
+                ObjectMapper objectMapper = new ObjectMapper();
+                ArrayNode pseudoArray = objectMapper.createArrayNode();
+                for (String pseudo : playerPseudos) {
+                    pseudoArray.add(pseudo);
+                }
+                String jsonResponse = objectMapper.writeValueAsString(pseudoArray);
+
+                // Envoyer les pseudonymes en tant que réponse JSON
+                byte[] responseBytes = jsonResponse.getBytes();
+                exchange.getResponseHeaders().set("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, responseBytes.length);
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(responseBytes);
+                }
+            } catch (NumberFormatException e) {
+                // Envoyer une réponse 400 si l'ID n'est pas valide
+                exchange.sendResponseHeaders(400, 0);
+            }
         }
+        }
+        
+        class PlayerHandlerAuth implements HttpHandler {
+        	@Override
+        	public void handle(HttpExchange exchange) throws IOException {
+        	    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+        	        Utils.setCorsHeaders(exchange);
+        	        exchange.sendResponseHeaders(200, -1);
+        	        return;
+        	    }
+        	    Utils.setCorsHeaders(exchange);
+        	    System.out.println("Authenticating player...");
+
+
+                // Récupérer les données du corps de la requête
+                InputStream requestBody = exchange.getRequestBody();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+                StringBuilder requestBodyBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    requestBodyBuilder.append(line);
+                }
+                String requestBodyString = requestBodyBuilder.toString();
+
+                // Analyser les données JSON du corps de la requête
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode requestBodyJson = objectMapper.readTree(requestBodyString);
+                String pseudo = requestBodyJson.get("pseudo").asText();
+                String motDePasse = requestBodyJson.get("motDePasse").asText();
+
+                // Vérifier l'authenticité du joueur dans la base de données
+                Joueur isAuthenticated = DatabaseManager.verifieMotDePasse(pseudo, motDePasse);
+
+                if (isAuthenticated != null) {
+                	ObjectMapper objectMapper1 = new ObjectMapper();
+                	String jsonResponse = objectMapper1.writeValueAsString(isAuthenticated);
+
+                	// Envoyer la réponse
+                	exchange.getResponseHeaders().set("Content-Type", "application/json");
+                	byte[] responseBytes = jsonResponse.getBytes(StandardCharsets.UTF_8);
+                	exchange.sendResponseHeaders(200, responseBytes.length);
+                	try (OutputStream os = exchange.getResponseBody()) {
+                	    os.write(responseBytes);
+                	}
+                } else {
+                    // Renvoyer une réponse d'erreur si l'authentification échoue
+                    String jsonResponse = "{\"message\": \"Authentication failed. Invalid pseudo or motDePasse.\"}";
+
+                    // Envoyer la réponse
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
+                    exchange.sendResponseHeaders(401, jsonResponse.getBytes().length);
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(jsonResponse.getBytes());
+                    }
+                
+            }
+        }
+        
+            
+            static class Utils {
+                public static void setCorsHeaders(HttpExchange exchange) {
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                }
+            }
+
+        
     }
-}
+    
+    
+    
+
 
 	
 
