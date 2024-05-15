@@ -11,6 +11,6 @@ export class CreditComponent {
  
   constructor( public PLAYERINFO: PlayoutComponent) {}
   
-
+  
 
 }

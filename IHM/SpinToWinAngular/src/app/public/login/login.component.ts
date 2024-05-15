@@ -47,6 +47,9 @@ export class LoginComponent {
           // Supprimer la propriété 'mot_de_passe_hash' de l'objet response
           delete response.mot_de_passe_hash;
           
+          // Formater la date
+          response.dateNaissance = new Date(response.dateNaissance).toISOString().split('T')[0];
+          
           // Assigner la réponse au joueurInfo dans le composant PlayoutComponent
           this.PLAYERINFO.playerInfo = response;
           
@@ -58,6 +61,7 @@ export class LoginComponent {
         }
       );
   }
+
 
   // // Méthode pour récupérer toutes les données du serveur
   // getAllServers() {
