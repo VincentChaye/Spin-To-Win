@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { PheaderComponent } from './pheader/pheader.component';
 import { PlayoutComponent } from './playout/playout.component';
 import { PublicRoutingModule } from './public-routing.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,8 +14,9 @@ import { PublicRoutingModule } from './public-routing.module';
   ],
   imports: [
     CommonModule,
-    RouterModule, // Assurez-vous que RouterModule est importé
-    PublicRoutingModule // Assurez-vous que PublicRoutingModule est importé
+    RouterModule,
+    PublicRoutingModule,
+    FormsModule
   ]
 })
 export class PublicModule { }

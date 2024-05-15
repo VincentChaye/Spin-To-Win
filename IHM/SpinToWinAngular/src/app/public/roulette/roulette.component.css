@@ -1,0 +1,48 @@
+.body {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: url("../../../assets/image/bck.png") no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  svg {
+    background-image: url("../../../assets/image/roulette-francaise.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .container-roulette {
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.43);
+    border: #011b3a 5px solid;
+    top: 110px;
+    left: 620px;
+    padding: 50px;
+    border-radius: 8px;
+  }
+  
+  g,
+  path {
+    fill: rgba(0, 0, 0, 0);
+  }
+  
+  .container-roulette g,
+  path {
+    transform: rotate(-2deg);
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(calc(1080deg + var(--final-angle)));
+    }
+  }
+  
+  .ball-animation {
+    transform: rotate(0deg);
+    animation: spin 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  }
+  

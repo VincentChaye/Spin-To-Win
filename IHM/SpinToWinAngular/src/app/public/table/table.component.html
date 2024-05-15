@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+
+    </head>
+    <body>
+        <div class="credit">
+            <p>Crédits : {{ nbr }}</p>
+        </div>
+        <div class="roulette-component">
+
+        </div>
+        <div class="table-component">
+            <p class="title-table">Table de jeu :</p>
+            <table class="num">
+                <tr>
+                  <td class="bas" style="background-color: green;"></td>
+                  <td id="rouge">3</td>
+                  <td id="noir">6</td>
+                  <td id="rouge">9</td>
+                  <td id="rouge">12</td>
+                  <td id="rouge">15</td>
+                  <td id="rouge">18</td>
+                  <td id="rouge">21</td>
+                  <td id="noir">24</td>
+                  <td id="rouge">27</td>
+                  <td id="rouge">30</td>
+                  <td id="noir">33</td>
+                  <td id="rouge">36</td>
+                  <td>1/3</td>
+                </tr>
+                <tr>
+                <td class="haut-bas" style="background-color: green;">0</td>
+                  <td id="noir">2</td>
+                  <td id="rouge">5</td>
+                  <td id="noir">8</td>
+                  <td id="noir">11</td>
+                  <td id="rouge">14</td>
+                  <td id="noir">17</td>
+                  <td id="noir">20</td>
+                  <td id="rouge">23</td>
+                  <td id="noir">26</td>
+                  <td id="noir">29</td>
+                  <td id="rouge">32</td>
+                  <td id="noir">35</td>
+                  <td>1/3</td>
+                </tr>
+                <tr>
+                <td class="haut-droite" style="background-color: green;"></td>
+                  <td id="rouge">1</td>
+                  <td id="noir">4</td>
+                  <td id="rouge">7</td>
+                  <td id="noir">10</td>
+                  <td id="noir">13</td>
+                  <td id="rouge">16</td>
+                  <td id="noir">19</td>
+                  <td id="noir">22</td>
+                  <td id="rouge">25</td>
+                  <td id="rouge">28</td>
+                  <td id="noir">31</td>
+                  <td id="rouge">34</td>
+                  <td>1/3</td>
+                </tr>
+                <tr>
+                    <td class="empty"></td>
+                      <td class="droite"></td>
+                      <td class="gauche-droite">1/3</td>
+                      <td class="gauche-droite"></td>
+                      <td class="gauche"></td>
+                      <td class="droite"></td>
+                      <td class="gauche-droite">1/3</td>
+                      <td class="gauche-droite"></td>
+                      <td class="gauche"></td>
+                      <td class="droite"></td>
+                      <td class="gauche-droite">1/3</td>
+                      <td class="gauche-droite"></td>
+                      <td class="gauche"></td>
+                      <td class="empty"></td>
+                    </tr>
+                    <tr>
+                        <td class="empty"></td>
+                          <td class="droite">1/2</td>
+                          <td class="gauche"> </td>
+                          <td class="droite">PAIR</td>
+                          <td class="gauche"> </td>
+                          <td class="droite" id="rouge" >ROUGE</td>
+                          <td class="gauche" id="rouge"> </td>
+                          <td class="droite" id="noir">NOIR</td>
+                          <td class="gauche" id="noir"> </td>
+                          <td class="droite">IMPAIR</td>
+                          <td class="gauche"> </td> 
+                          <td class="droite">1/2</td>
+                          <td class="gauche"> </td>
+                          <td class="empty"></td>
+                        </tr>
+              </table>
+              <!-- Sélection des jetons -->
+              <p class="title-select">Sélectionner vos jetons :</p>
+              <table class="select">
+                <tr>
+                  <td class="jeton" data-value="1" style="background-color: rgba(215, 190, 0, 0.8);" (click)="selectJeton(1)">1</td>
+                  <td class="jeton" data-value="2" style="background-color: rgba(255, 85, 0, 0.8);" (click)="selectJeton(2)">2</td>
+                  <td class="jeton" data-value="5" style="background-color: rgba(215, 0, 0, 0.8);" (click)="selectJeton(5)">5</td>
+                </tr>
+                <tr>
+                  <td class="jeton" data-value="10" style="background-color: rgba(68, 255, 0, 0.8);" (click)="selectJeton(10)">10</td>
+                  <td class="jeton" data-value="20" style="background-color: rgba(0, 234, 255, 0.8);" (click)="selectJeton(20)">20</td>
+                  <td class="jeton" data-value="50" style="background-color: rgba(38, 0, 255, 0.8);" (click)="selectJeton(50)">50</td>
+                </tr>
+              </table>
+              
+
+              <p class="title-select-mem"> Vous avez sélectionné le <br> jeton : {{ jetonSelectionne }} </p>
+        </div>
+    </body>
+</html>
