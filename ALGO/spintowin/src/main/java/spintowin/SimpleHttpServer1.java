@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Random;
 public class SimpleHttpServer1 {
     private static HttpServer server; // Ajout d'un champ statique pour stocker l'instance du serveur
 
@@ -28,7 +29,7 @@ public class SimpleHttpServer1 {
         server.createContext("/player/new", new PlayerHandlerNew());
         server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
         server.createContext("/player/auth", new PlayerHandlerAuth());
-
+        server.createContext("/game/ball", new GenerateBallHandler());
         // Activez le CORS globalement
         server.setExecutor(null); // Utilisation d'un gestionnaire d'exécution null pour un démarrage par défaut
 
@@ -342,11 +343,45 @@ class PlayerHandlerNew implements HttpHandler {
         
     }
     
-    
+        
     
 
 
-	
+        class GenerateBallHandler implements HttpHandler {
+            @Override
+            public void handle(HttpExchange exchange) throws IOException {
+                if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+        	        Utils.setCorsHeaders(exchange);
+        	        exchange.sendResponseHeaders(200, -1);
+        	        return;
+                }
+                Utils.setCorsHeaders(exchange);
+        	    System.out.println("Ball generate");
+                
+                // Générer un nombre aléatoire entre 0 et 36
+                Random random = new Random();
+                int randomNumber = random.nextInt(37); // 0 inclus, 37 exclu
+
+                // Convertir le nombre en JSON
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonResponse = objectMapper.writeValueAsString(randomNumber);
+
+                // Envoyer le nombre aléatoire en tant que réponse JSON
+                byte[] responseBytes = jsonResponse.getBytes();
+                exchange.getResponseHeaders().set("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, responseBytes.length);
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(responseBytes);
+                }
+            }
+            static class Utils {
+                public static void setCorsHeaders(HttpExchange exchange) {
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                    exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                }
+            }
+            }
 
 
 

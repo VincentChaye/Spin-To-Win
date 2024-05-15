@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
+import { PlayoutComponent } from '../playout/playout.component';
 
 @Component({
   selector: 'app-credit', 
-  standalone: false, 
+ 
   templateUrl: './credit.component.html',
-  styleUrl: './credit.component.css'
+  styleUrls: ['./credit.component.css']
 })
 export class CreditComponent {
+ 
+  constructor( public PLAYERINFO: PlayoutComponent) {}
+  
+
 
 }

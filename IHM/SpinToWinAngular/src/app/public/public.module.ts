@@ -8,13 +8,15 @@ import { PlayoutComponent } from './playout/playout.component';
 import { PublicRoutingModule } from './public-routing.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { CreditComponent } from './credit/credit.component';
 
 @NgModule({
   declarations: [
     PheaderComponent,
     PlayoutComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    CreditComponent
   ],
   imports: [
     CommonModule,

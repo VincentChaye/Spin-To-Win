@@ -13,7 +13,7 @@ export class RegisterComponent {
   Nom: string = '';
   Prenom: string = '';
   Email: string = '';
-  Age: number | undefined;
+  Age:  Date | undefined;
   Username: string = '';
   Password: string = '';
 
