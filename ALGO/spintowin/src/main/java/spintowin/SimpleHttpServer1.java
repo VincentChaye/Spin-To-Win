@@ -6,6 +6,11 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
+import roulette.Bet;
+import roulette.Game;
+import roulette.Player;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +34,7 @@ public class SimpleHttpServer1 {
         server.createContext("/player/new", new PlayerHandlerNew());
         server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
         server.createContext("/player/auth", new PlayerHandlerAuth());
-
+        server.createContext("/game/playe", new PlayerPlaye());
         server.createContext("/player/update", new PlayerUpdateCredit());
 
         
@@ -239,19 +244,16 @@ class PlayerHandlerNew implements HttpHandler {
 	    }
 	}
     class PlayerHandlerAllPseudo implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            // Extraction du pseudo à partir du chemin de la requête
-        	System.out.println("Allpseudo");
+    	@Override
+	    public void handle(HttpExchange exchange) throws IOException {
+	        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+	            Utils.setCorsHeaders(exchange);
+	            exchange.sendResponseHeaders(200, -1);
+	            return;
+	        }
 
-        	String requestPath = exchange.getRequestURI().getPath();
-            String[] parts = requestPath.split("/");
-
-            if (parts.length < 3 || !parts[1].equals("player") || !parts[2].equals("pseudo")) {
-                exchange.sendResponseHeaders(404, 0); // Envoyer une réponse 404 si le chemin n'est pas correct
-                System.out.println("Allpseudoloupe");
-                return;
-            }
+	        Utils.setCorsHeaders(exchange);
+	        System.out.println("All player...");
 
 
             try {
@@ -278,6 +280,13 @@ class PlayerHandlerNew implements HttpHandler {
                 exchange.sendResponseHeaders(400, 0);
             }
         }
+        static class Utils {
+	        public static void setCorsHeaders(HttpExchange exchange) {
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+	            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	        }
+	    }
         }
         
         class PlayerHandlerAuth implements HttpHandler {
@@ -414,7 +423,42 @@ class PlayerHandlerNew implements HttpHandler {
             
               
     
- 
+            class PlayerPlaye implements HttpHandler {
+                @Override
+                public void handle(HttpExchange exchange) throws IOException {
+                    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+                        Utils.setCorsHeaders(exchange);
+                        exchange.sendResponseHeaders(200, -1);
+                        return;
+                    }
+                    Utils.setCorsHeaders(exchange);
+                    System.out.println("Updating player credit...");
+
+                    // Récupérer les données du corps de la requête
+
+                    Game game = new Game();
+                    Player player1 = new Player("Elio", 1000);
+                    game.addPlayer(player1);
+
+                    player1.placeBet(new Bet(100, "noir"));
+                    game.playRound();
+
+                    // Envoyer une réponse
+                    String response = "Player credit updated!";
+                    exchange.sendResponseHeaders(200, response.getBytes().length);
+                    OutputStream outputStream = exchange.getResponseBody();
+                    outputStream.write(response.getBytes());
+                    outputStream.close();
+                }
+
+                static class Utils {
+                    public static void setCorsHeaders(HttpExchange exchange) {
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                    }
+                }
+            }
         
     
     

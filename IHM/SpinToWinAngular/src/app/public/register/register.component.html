@@ -29,8 +29,9 @@
   
 		<div class="multiinput">
 		  <div class="labelinput">
+			
 			<label for="username">Username</label>
-			<input type="text" id="username" name="username" [(ngModel)]="Username">
+<input type="text" id="username" name="username" [(ngModel)]="Username" (ngModelChange)="checkPseudoValidity()">
 		  </div>
 		  <div class="labelinput">
 			<label for="password">Password</label>
@@ -39,7 +40,10 @@
 		</div>
   
 		<p>Vous avez déjà un compte ? <br><a href="">Connectez-vous</a></p>
-		<button type="button" (click)="submitForm()">Envoyer</button>
+		<button class="btn btn-warning" [disabled]="!isPseudoIncluded"  (click)="submitForm()">Envoyer</button>
+
+
+
 	  </form>
 	</div>
   </div>

@@ -1,11 +1,8 @@
-package Game;
+package roulette;
 
 import java.util.ArrayList;
 import java.util.List;
-import Bet.Bet;
-import Player.Player;
-import Roulette.Roulette;
-import Color.Color;
+
 
 public class Game {
     private Roulette roulette;
@@ -20,13 +17,13 @@ public class Game {
         players.add(player);
     }
 
-    public void playRound(int numeroTombé) {
+    public void playRound() {
         for (Player player : players) {
             for (Bet bet : player.getBets()) {
                 System.out.println(Color.CYAN + player.name + " joue " + Color.YELLOW + bet.getAmount() + Color.CYAN + " sur le " + Color.PURPLE + bet.getTarget() + Color.RESET);
             }
         }
-        int winningNumber = numeroTombé;
+        int winningNumber = roulette.spin();
         if (winningNumber == 0) {
             System.out.println(Color.CYAN + "Numéro tombé: " + Color.GREEN + winningNumber + Color.RESET);
         } else if (Roulette.RED_NUMBERS.contains(winningNumber)) {
@@ -91,4 +88,3 @@ public class Game {
         return 0;
     }
 }
-
