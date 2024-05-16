@@ -1,1 +1,10 @@
-<p>credit works!</p>
+
+<div id="bg">
+<div class="info" *ngIf="PLAYERINFO.playerInfo">
+    <p>Pseudo: {{ PLAYERINFO.playerInfo.pseudo }}</p>
+    <p>Nom: {{ PLAYERINFO.playerInfo.nom }}</p>
+    <p>Prénom: {{ PLAYERINFO.playerInfo.prenom }}</p>
+    <p>Crédit: {{ PLAYERINFO.playerInfo.credit }}</p>
+  </div>
+  
+</div>

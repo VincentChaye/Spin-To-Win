@@ -13,7 +13,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class PlayoutComponent {
   
   playerInfo : any;
-
+  pageCharger : number = 1;
   private reloaderSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public reloader$: Observable<number> = this.reloaderSubject.asObservable();
 
