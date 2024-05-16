@@ -1,5 +1,7 @@
 
-    <nav id="navbar" class=" p-xxl-5">
+<nav *ngIf="PLAYERINFO?.pageCharger === 1" id="navbar" class="p-xxl-5">
+
+
       <div>
         <a id="TitleNav" [routerLink]="['/Vegastudio']">
           <img src="assets/image/vegastudio.png" alt="LogoStudioVegas" class="logo">
@@ -7,9 +9,9 @@
       </div>
 
       <div id="lienPage" class="mx-xxl-1">
-            <a class="btn link mx-3 text-light" [routerLink]="['/home']">Acceuil</a>
+            <a class="btn link mx-3 text-light" [routerLink]="['/Vegastudio']">Acceuil</a>
             <a class="btn link mx-3 text-light" [routerLink]="['/SpinToWin']">SpinToWin</a>
-            <a class="btn link mx-3 text-light" [routerLink]="['/credit']">Credit</a>
+            <a class="btn link mx-3 text-light" [routerLink]="['/Vega']">Credit</a>
        
       </div>
 

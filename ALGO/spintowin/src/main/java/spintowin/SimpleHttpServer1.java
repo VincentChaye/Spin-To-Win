@@ -28,7 +28,7 @@ public class SimpleHttpServer1 {
         server.createContext("/player/new", new PlayerHandlerNew());
         server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
         server.createContext("/player/auth", new PlayerHandlerAuth());
-
+        server.createContext("/player/update", new PlayerUpdateCredit());
         // Activez le CORS globalement
         server.setExecutor(null); // Utilisation d'un gestionnaire d'exécution null pour un démarrage par défaut
 
@@ -339,9 +339,73 @@ class PlayerHandlerNew implements HttpHandler {
                 }
             }
 
-        
-    }
-    
+        }
+            class PlayerUpdateCredit implements HttpHandler {
+                @Override
+                public void handle(HttpExchange exchange) throws IOException {
+                    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+                        Utils.setCorsHeaders(exchange);
+                        exchange.sendResponseHeaders(200, -1);
+                        return;
+                    }
+                    Utils.setCorsHeaders(exchange);
+                    System.out.println("Updating player credit...");
+
+                    // Récupérer les données du corps de la requête
+                    InputStream requestBody = exchange.getRequestBody();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+                    StringBuilder requestBodyBuilder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        requestBodyBuilder.append(line);
+                    }
+                    String requestBodyString = requestBodyBuilder.toString();
+
+                    // Analyser les données JSON du corps de la requête
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode requestBodyJson = objectMapper.readTree(requestBodyString);
+                    String pseudo = requestBodyJson.get("pseudo").asText();
+                    int credit = requestBodyJson.get("credit").asInt(); // Utilisez asInt() pour récupérer un entier
+
+                    // Mettre à jour le crédit du joueur dans la base de données
+                    Joueur updatedPlayer = DatabaseManager.updateCredit(pseudo, credit);
+
+                    // Vérifier si la mise à jour a réussi
+                    if (updatedPlayer != null) {
+                        // Convertir le joueur mis à jour en JSON
+                        String jsonResponse = objectMapper.writeValueAsString(updatedPlayer);
+
+                        // Envoyer la réponse
+                        exchange.getResponseHeaders().set("Content-Type", "application/json");
+                        byte[] responseBytes = jsonResponse.getBytes(StandardCharsets.UTF_8);
+                        exchange.sendResponseHeaders(200, responseBytes.length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(responseBytes);
+                        }
+                    } else {
+                        // Renvoyer une réponse d'erreur si la mise à jour a échoué
+                        String jsonResponse = "{\"message\": \"Failed to update player credit.\"}";
+
+                        // Envoyer la réponse
+                        exchange.getResponseHeaders().set("Content-Type", "application/json");
+                        exchange.sendResponseHeaders(400, jsonResponse.getBytes().length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(jsonResponse.getBytes());
+                        }
+                    }
+                }
+                static class Utils {
+                    public static void setCorsHeaders(HttpExchange exchange) {
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                    }
+                }
+            }
+          
+            
+            
+              
     
     
 
