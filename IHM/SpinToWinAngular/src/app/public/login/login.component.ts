@@ -39,6 +39,12 @@ export class LoginComponent {
         (response) => {
           console.log('PUT request successful:', response);
           delete response.mot_de_passe_hash;
+ 
+          
+          // Formater la date
+          response.dateNaissance = new Date(response.dateNaissance).toISOString().split('T')[0];
+          
+         
           this.PLAYERINFO.playerInfo = response;
           console.log('trans', this.PLAYERINFO.playerInfo);
           this.router.navigate(['/Vegastudio']); // Utilisez le service Router pour la navigation
@@ -48,4 +54,24 @@ export class LoginComponent {
         }
       );
   }
+ 
+
+
+  // // Méthode pour récupérer toutes les données du serveur
+  // getAllServers() {
+  //   this._httpClient.get(this.allServerURL)
+  //     .pipe(
+  //       map((response: any) => response.filter((server: any) => server.srv_server_commissionner === true || server.srv_server_commissionner === false)),
+  //       map((filteredResponse: any[]) => {
+  //         filteredResponse.forEach((server: any) => {
+  //           // Traitement supplémentaire des données si nécessaire
+  //         });
+  //         return filteredResponse;
+  //       })
+  //     )
+  //     .subscribe(filteredResponse => {
+  //       // Assigner les données récupérées à une variable ou effectuer un traitement supplémentaire si nécessaire
+  //     });
+  // }
+ 
 }

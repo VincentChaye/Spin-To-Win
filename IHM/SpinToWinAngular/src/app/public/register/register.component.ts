@@ -14,34 +14,52 @@ export class RegisterComponent {
   Nom: string = '';
   Prenom: string = '';
   Email: string = '';
-  Age: Date | undefined; // Modifiez le type de Age en Date
+  Age: string = '';
   Username: string = '';
   Password: string = '';
+  testdate(){
+    console.log(this.Age)
+  }
 
   submitForm(): void {
     const url = 'http://localhost:8000/player/new';
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
+  
+    // Convertir la date au format ISO
+    let dateNaissanceISO: string | null = null;
+    if (typeof this.Age === 'string') {
+      const parts = this.Age.split('-');
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1; // Les mois sont indexés à partir de zéro (0 = janvier, 1 = février, etc.)
+      const day = parseInt(parts[2], 10);
+      const date = new Date(year, month, day);
+      dateNaissanceISO = date.toISOString().split('T')[0];
+    }
+  
+    // Créer le corps de la requête
     const body = {
       pseudo: this.Username,
       nom: this.Nom,
       prenom: this.Prenom,
       email: this.Email,
-      dateNaissance: this.Age ? this.Age.toISOString().split('T')[0] : null, // Modifiez la gestion de la date
+      dateNaissance: this.Age ? new Date(this.Age).toISOString().split('T')[0] : null,
       credit: 100.0,
       mot_de_passe_hash: this.Password
     };
-
+  
+    // Envoyer la requête HTTP POST
     this.httpClient.post(url, body, { headers })
       .subscribe(
         (response: any) => {
-          this.PLAYERINFO.playerInfo = response;
+          response.dateNaissance = new Date(response.dateNaissance).toISOString().split('T')[0];
           console.log('API POST réussi :', response);
-          this.router.navigate(['/Vegastudio']);
+          
         },
         (error: any) => {
           console.error('Erreur lors de l\'appel API POST :', error);
         }
       );
   }
+  
+  
 }
