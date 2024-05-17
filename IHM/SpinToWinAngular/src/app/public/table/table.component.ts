@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlayoutComponent } from '../playout/playout.component';
 
 @Component({
   selector: 'app-table',
@@ -6,6 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent {
+  constructor(public PLAYERINFO: PlayoutComponent) {
+    // Définir PLAYERINFO.pageCharger à 1 lorsque le composant est chargé
+    this.PLAYERINFO.pageCharger = 0;
+  }
+  
   selectedToken: { value: number, color: string } | null = null;
   cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
   credit: number = 100;

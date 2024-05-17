@@ -1,5 +1,7 @@
 
-    <nav id="navbar" class=" p-xxl-5">
+<nav *ngIf="PLAYERINFO?.pageCharger === 1" id="navbar" class="p-xxl-5">
+
+
       <div>
         <a id="TitleNav" [routerLink]="['/Vegastudio']">
           <img src="assets/image/vegastudio.png" alt="LogoStudioVegas" class="logo">
@@ -7,14 +9,24 @@
       </div>
 
       <div id="lienPage" class="mx-xxl-1">
-            <a class="btn link mx-3 text-light" [routerLink]="['/home']">Acceuil</a>
+            <a class="btn link mx-3 text-light" [routerLink]="['/Vegastudio']">Acceuil</a>
             <a class="btn link mx-3 text-light" [routerLink]="['/SpinToWin']">SpinToWin</a>
-            <a class="btn link mx-3 text-light" [routerLink]="['/credit']">Credit</a>
+            <a class="btn link mx-3 text-light" [routerLink]="['/credit']">Jeu</a>
+       
       </div>
 
       <div class="account">
-        <a [routerLink]="['/login']" class="btn mx-2 link text-light ">Connexion</a>
-        <a [routerLink]="['/register']" class="btn mx-2 bg inscription">Inscription</a>
+        <!-- Afficher les boutons de connexion et d'inscription si playerInfo est vide -->
+        <ng-container *ngIf="!PLAYERINFO.playerInfo">
+          <a [routerLink]="['/login']" class="btn mx-2 link text-light">Connexion</a>
+          <a [routerLink]="['/register']" class="btn mx-2 bg inscription">Inscription</a>
+        </ng-container>
+        
+        <!-- Afficher le bouton alternatif si playerInfo n'est pas vide -->
+        <ng-container *ngIf="PLAYERINFO.playerInfo">
+        
+        <a [routerLink]="['/credit']" class="btn mx-2 bg inscription">Compte</a></ng-container>
       </div>
+      
     </nav>
 

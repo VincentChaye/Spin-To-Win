@@ -9,6 +9,6 @@ public class Main {
         game.addPlayer(player1);
 
         player1.placeBet(new Bet(100, "noir"));
-        game.playRound();
+        game.playRound(6);
     }
 }

@@ -20,13 +20,13 @@ public class Game {
         players.add(player);
     }
 
-    public void playRound() {
+    public void playRound(int numeroTombé) {
         for (Player player : players) {
             for (Bet bet : player.getBets()) {
                 System.out.println(Color.CYAN + player.name + " joue " + Color.YELLOW + bet.getAmount() + Color.CYAN + " sur le " + Color.PURPLE + bet.getTarget() + Color.RESET);
             }
         }
-        int winningNumber = roulette.spin();
+        int winningNumber = numeroTombé;
         if (winningNumber == 0) {
             System.out.println(Color.CYAN + "Numéro tombé: " + Color.GREEN + winningNumber + Color.RESET);
         } else if (Roulette.RED_NUMBERS.contains(winningNumber)) {
