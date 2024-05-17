@@ -1,13 +1,14 @@
 <div class="body">
-    <div class="container-roulette">
-      <svg width="600" height="600" viewBox="-100 -100 200 200">
-        <g transform="rotate(-90)">
-          <path *ngFor="let path of paths; let i = index"
-                [attr.d]="path"
-                [attr.fill]="'hsl(' + i * 10 + ', 100%, 50%)'"
-                [attr.id]="tab[i]"></path>
-          <circle #ball cx="3" cy="-70" r="3" fill="white"></circle>
-        </g>
-      </svg>
-    </div>
-  </div>  
+  <div class="container-roulette">
+    <svg width="600" height="600" viewBox="-100 -100 200 200">
+      <g transform="rotate(-90)">
+        <path *ngFor="let path of paths; let i = index"
+              [attr.d]="path"
+              [attr.fill]="'hsl(' + i * 10 + ', 100%, 50%)'"
+              [attr.id]="tab[i]"></path>
+        <circle #ball cx="3" cy="-70" r="3" fill="white"></circle>
+      </g>
+    </svg>
+    <button #spinButton>Spin</button>
+  </div>
+</div>  
