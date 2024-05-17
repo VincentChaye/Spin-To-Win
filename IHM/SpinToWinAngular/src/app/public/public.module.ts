@@ -6,6 +6,7 @@ import { PheaderComponent } from './pheader/pheader.component';
 import { PlayoutComponent } from './playout/playout.component';
 import { PublicRoutingModule } from './public-routing.module';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     PublicRoutingModule,
     FormsModule
+    
   ]
 })
 export class PublicModule { }
