@@ -9,5 +9,9 @@
     color: brown;
 }
 
-.info{margin-top: 30%;
-background-color: aqua;}
+.info{
+	z-index: 1;
+	margin-top: 1%;
+	background-color: white;
+	width: 50%;
+}
