@@ -1,6 +1,7 @@
 <div class="body">
   <div class="container-roulette">
-    <svg width="600" height="600" viewBox="-100 -100 200 200">
+      <p *ngIf="ballFalling !== null">La balle est tombée sur : {{ ballFalling }}</p>
+      <svg width="600" height="600" viewBox="-100 -100 200 200">
       <g transform="rotate(-90)">
         <path *ngFor="let path of paths; let i = index"
               [attr.d]="path"
@@ -9,6 +10,8 @@
         <circle #ball cx="3" cy="-70" r="3" fill="white"></circle>
       </g>
     </svg>
-    <button #spinButton>Spin</button>
+    <!-- <button #spinButton>Spin</button> -->
+  
+
   </div>
 </div>  

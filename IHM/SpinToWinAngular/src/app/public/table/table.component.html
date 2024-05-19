@@ -9,8 +9,11 @@
       <p class="p-numérochaud"> Encore un peu de patience ...<br> Les statistiques seront bientôt disponibles ! </p>
   </div>
   <div class="roulette-component">
-      <div class="roulette-img"><p>Lancer la roulette !</p></div>
+    <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;">
+      <p>Lancer la roulette !</p>
+    </div>
   </div>
+  
   <div class="table-component">
       <p class="title-table">Table de jeu :</p>
       <table class="table" (click)="onCellClick($event)">
