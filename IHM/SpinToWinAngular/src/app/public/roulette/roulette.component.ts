@@ -9,6 +9,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { PlayoutComponent } from "../playout/playout.component";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-roulette",
@@ -17,11 +18,7 @@ import { PlayoutComponent } from "../playout/playout.component";
   templateUrl: "./roulette.component.html",
   styleUrls: ["./roulette.component.css"],
 })
-
 export class RouletteComponent implements OnInit, AfterViewInit {
-
- 
-  
   paths: string[] = [];
   finalAngle: number = 0;
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
@@ -29,7 +26,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
 
-  constructor(private renderer: Renderer2,public PLAYERINFO: PlayoutComponent) {
+  constructor(private httpClient: HttpClient, private renderer: Renderer2, public PLAYERINFO: PlayoutComponent) {
     this.PLAYERINFO.pageCharger = 0;
   }
 
@@ -40,6 +37,20 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.renderer.listen(this.spinButton.nativeElement, 'click', () => {
       this.startAnimation();
+    });
+  }
+
+  getBall(): Promise<number> {
+    const url = 'http://localhost:8000/game/ball';
+    return this.httpClient.get<number>(url).toPromise().then(response => {
+      if (typeof response === 'number') {
+        return response;
+      } else {
+        throw new Error('Response is not a number');
+      }
+    }).catch(error => {
+      console.error('Error fetching ball number:', error);
+      return 0; // Return a default value in case of error
     });
   }
 
@@ -59,17 +70,15 @@ export class RouletteComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getRandomInt(max: number): number {
-    const nbr = Math.floor(Math.random() * max);
-    return this.WichIndiceInTab(nbr);
-  }
-
   startAnimation() {
-    const randomSliceIndex = this.getRandomInt(38);
-    const sliceDegree = 360 / 37;
-    this.finalAngle = 1080 + randomSliceIndex * sliceDegree;
-    console.log(this.tab[randomSliceIndex]);
-    this.animateBall(this.finalAngle);
+    this.getBall().then(randomSliceIndex => {
+      const sliceDegree = 360 / 37;
+      this.finalAngle = 1080 + randomSliceIndex * sliceDegree;
+      console.log(this.tab[randomSliceIndex]);
+      this.animateBall(this.finalAngle);
+    }).catch(error => {
+      console.error('Error during animation:', error);
+    });
   }
 
   animateBall(angle: number) {
