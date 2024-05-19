@@ -11,7 +11,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CreditComponent } from './credit/credit.component';
-
+import { JeuComponent } from './jeu/jeu.component';
+import { TableComponent } from './table/table.component';
 
 
 @NgModule({
@@ -20,7 +21,10 @@ import { CreditComponent } from './credit/credit.component';
     PlayoutComponent,
     LoginComponent,
     RegisterComponent,
-    CreditComponent
+    CreditComponent,
+    JeuComponent,
+    TableComponent
+    
   ],
   imports: [
     CommonModule,

@@ -1,14 +1,8 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Renderer2,
-  AfterViewInit,
-} from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { PlayoutComponent } from "../playout/playout.component";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-roulette",
@@ -17,29 +11,45 @@ import { PlayoutComponent } from "../playout/playout.component";
   templateUrl: "./roulette.component.html",
   styleUrls: ["./roulette.component.css"],
 })
-
 export class RouletteComponent implements OnInit, AfterViewInit {
-
- 
-  
   paths: string[] = [];
   finalAngle: number = 0;
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+  ballFalling: number | undefined;
 
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
 
-  constructor(private renderer: Renderer2,public PLAYERINFO: PlayoutComponent) {
+  constructor(private httpClient: HttpClient, private renderer: Renderer2, public PLAYERINFO: PlayoutComponent) {
     this.PLAYERINFO.pageCharger = 0;
   }
 
   ngOnInit() {
     this.generatePaths();
+    this.startAnimation();
   }
 
   ngAfterViewInit() {
-    this.renderer.listen(this.spinButton.nativeElement, 'click', () => {
-      this.startAnimation();
+    if (this.ball && this.ball.nativeElement && this.spinButton && this.spinButton.nativeElement) {
+      this.renderer.listen(this.spinButton.nativeElement, 'click', () => {
+        this.startAnimation();
+      });
+    } else {
+      console.error('Error: ball or spinButton reference is undefined or their native elements are undefined.');
+    }
+  }
+
+  getBall(): Promise<number> {
+    const url = 'http://localhost:8000/game/ball';
+    return this.httpClient.get<number>(url).toPromise().then(response => {
+      if (typeof response === 'number') {
+        return response;
+      } else {
+        throw new Error('Response is not a number');
+      }
+    }).catch(error => {
+      console.error('Error fetching ball number:', error);
+      return 0; // Return a default value in case of error
     });
   }
 
@@ -59,35 +69,45 @@ export class RouletteComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getRandomInt(max: number): number {
-    const nbr = Math.floor(Math.random() * max);
-    return this.WichIndiceInTab(nbr);
-  }
-
   startAnimation() {
-    const randomSliceIndex = this.getRandomInt(38);
-    const sliceDegree = 360 / 37;
-    this.finalAngle = 1080 + randomSliceIndex * sliceDegree;
-    console.log(this.tab[randomSliceIndex]);
-    this.animateBall(this.finalAngle);
+    this.getBall().then(randomSliceIndex => {
+      const sliceDegree = 360 / 37;
+      this.finalAngle = 1080 + randomSliceIndex * sliceDegree;
+      console.log(this.tab[randomSliceIndex]);
+      this.animateBall(this.finalAngle, this.tab[randomSliceIndex]);
+      
+    }).catch(error => {
+      console.error('Error during animation:', error);
+    });
   }
-
-  animateBall(angle: number) {
-    this.renderer.removeStyle(this.ball.nativeElement, "transition");
-    this.renderer.removeStyle(this.ball.nativeElement, "transform");
-    setTimeout(() => {
-      this.renderer.setStyle(
-        this.ball.nativeElement,
-        "transition",
-        "transform 4s ease-out",
-      );
-      this.renderer.setStyle(
-        this.ball.nativeElement,
-        "transform",
-        `rotate(${angle}deg)`,
-      );
-    }, 100);
+  
+  animateBall(angle: number, ball: number) {
+    if (this.ball && this.ball.nativeElement) {
+      this.renderer.removeStyle(this.ball.nativeElement, 'transition');
+      this.renderer.removeStyle(this.ball.nativeElement, 'transform');
+      setTimeout(() => {
+        this.renderer.setStyle(
+          this.ball.nativeElement,
+          'transition',
+          'transform 4s ease-out',
+        );
+        this.renderer.setStyle(
+          this.ball.nativeElement,
+          'transform',
+          `rotate(${angle}deg)`,
+        );
+      }, 100);
+    
+      // Écouter la fin de la transition
+      this.renderer.listen(this.ball.nativeElement, 'transitionend', () => {
+        // Mettre à jour ballFalling une fois que l'animation est terminée
+        this.ballFalling = ball; 
+      });
+    } else {
+      console.error('Error: ball reference is undefined or its native element is undefined.');
+    }
   }
+  
 
   polarToCartesian(
     radius: number,

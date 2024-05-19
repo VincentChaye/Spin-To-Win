@@ -82,6 +82,20 @@
     margin-bottom: 10px;
 }
 
+
+.componentjeu div a{
+    width: 60%;
+    height: 40px;
+    background-color: #FEB24C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .componentjeu div .pasdispo{
     background-color: #444444;
     color: #fff;

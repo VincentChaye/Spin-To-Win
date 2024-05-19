@@ -3,7 +3,7 @@
 	  <div>
 		<h1>S'inscrire</h1>
 	  </div>
-	  <form ngNoForm>
+	  <form (ngSubmit)="submitForm($event)">
 		<div class="multiinput">
 		  <div class="labelinput">
 			<label for="nom">Nom</label>
@@ -14,7 +14,6 @@
 			<input type="text" id="prenom" name="prenom" [(ngModel)]="Prenom">
 		  </div>
 		</div>
-  
 		<div class="multiinput">
 		  <div class="labelinput">
 			<label for="email">Email</label>
@@ -23,27 +22,20 @@
 		  <div class="labelinput">
 			<label for="dateNaissance">Date de naissance</label>
 			<input type="date" id="dateNaissance" name="dateNaissance" [(ngModel)]="Age">
+		  </div>
 		</div>
-		
-		</div>
-  
 		<div class="multiinput">
 		  <div class="labelinput">
-			
 			<label for="username">Username</label>
-<input type="text" id="username" name="username" [(ngModel)]="Username" (ngModelChange)="checkPseudoValidity()">
+			<input type="text" id="username" name="username" [(ngModel)]="Username" (ngModelChange)="checkPseudoValidity()">
 		  </div>
 		  <div class="labelinput">
 			<label for="password">Password</label>
 			<input type="password" id="password" name="password" [(ngModel)]="Password">
 		  </div>
 		</div>
-  
 		<p>Vous avez déjà un compte ? <br><a href="">Connectez-vous</a></p>
-		<button class="btn btn-warning" [disabled]="!isPseudoIncluded"  (click)="submitForm()">Envoyer</button>
-
-
-
+		<button class="btn btn-warning" [disabled]="!isPseudoIncluded" type="submit">Envoyer</button>
 	  </form>
 	</div>
   </div>
