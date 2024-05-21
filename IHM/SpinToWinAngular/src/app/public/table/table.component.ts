@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 
 @Component({
@@ -7,22 +7,37 @@ import { PlayoutComponent } from '../playout/playout.component';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent {
-  constructor(public PLAYERINFO: PlayoutComponent) {
-    // Définir PLAYERINFO.pageCharger à 1 lorsque le composant est chargé
-    this.PLAYERINFO.pageCharger = 0;
-  }
-  
   selectedToken: { value: number, color: string } | null = null;
   cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
   credit: number = 100;
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
+  previousSelectedTokenElement: HTMLElement | null = null;
+
+  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef) {
+    this.PLAYERINFO.pageCharger = 0;
+  }
 
   creditOp(value: number) {
-    this.credit = this.credit + value;
+    this.credit += value;
   }
 
   onTokenClick(value: number, color: string) {
     this.selectedToken = { value, color };
+    console.log(`Selected token: ${value} of color ${color}`);
+
+    // Reset the previous token's border
+    if (this.previousSelectedTokenElement) {
+      this.previousSelectedTokenElement.classList.remove('selected');
+    }
+
+    // Find the current token element and apply the golden border
+    const tokenElements = this.elRef.nativeElement.querySelectorAll('.token');
+    tokenElements.forEach((tokenElement: HTMLElement) => {
+      if (parseInt(tokenElement.querySelector('text')?.textContent || '0', 10) === value) {
+        tokenElement.classList.add('selected');
+        this.previousSelectedTokenElement = tokenElement;
+      }
+    });
   }
 
   onCellClick(event: MouseEvent) {
@@ -55,43 +70,75 @@ export class TableComponent {
 
       // Update the display of the cell
       this.updateCellDisplay(cellId);
+      
+      // Log the updated tokens data to the console
+      this.logTokensData();
     }
   }
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
-    if (cell) {
+    if (cell) { // Vérifie si l'élément n'est pas nul
       const cellData = this.cellTokens[cellId];
       
-      // Change cell color based on the value
-      if (cellData.count >= 50) {
-        cell.style.backgroundColor = 'blue';
-      } else if (cellData.count >= 20) {
-        cell.style.backgroundColor = 'lightblue';
-      } else if (cellData.count >= 10) {
-        cell.style.backgroundColor = 'purple';
-      } else if (cellData.count >= 5) {
-        cell.style.backgroundColor = 'red';
-      } else if (cellData.count >= 2) {
-        cell.style.backgroundColor = 'orange';
-      } else if (cellData.count >= 1) {
-        cell.style.backgroundColor = 'yellow';
-      } else {
-        cell.style.backgroundColor = cellData.originalColor;
-        cell.innerText = cellData.originalContent;
-      }
-      
-      // Create or update a span element for the token value
+      // Clear existing tokens
+      cell.innerHTML = '';
+
+      // Créer ou mettre à jour un élément span pour la valeur du jeton
       let tokenSpan = cell.querySelector('span.token-value') as HTMLElement;
-      if (!tokenSpan && cellData.count > 0) {
+      if (!tokenSpan) {
         tokenSpan = document.createElement('span');
         tokenSpan.className = 'token-value';
         cell.appendChild(tokenSpan);
       }
       if (tokenSpan) {
-        tokenSpan.innerText = cellData.count > 0 ? `  ${cellData.count}€` : '';
+        tokenSpan.innerText = cellData.count > 0 ? `  (${cellData.count}€)` : '';
+      }
+      
+      // Ajouter le jeton SVG sélectionné à la cellule
+      if (cellData.count > 0) {
+        const tokenSvg = this.createTokenSvg(this.selectedToken!.value, this.selectedToken!.color); // Utilisez l'opérateur non-null assertion (!)
+        tokenSvg.classList.add('token-svg');  // Ajoutez la classe pour le positionnement
+        cell.appendChild(tokenSvg);
       }
     }
+  }
+
+  createTokenSvg(value: number, color: string): SVGSVGElement {
+    const svgNamespace = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNamespace, 'svg') as SVGSVGElement;
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('class', 'token');
+
+    const circle = document.createElementNS(svgNamespace, 'circle') as SVGCircleElement;
+    circle.setAttribute('cx', '50');
+    circle.setAttribute('cy', '50');
+    circle.setAttribute('r', '45');
+    circle.setAttribute('class', 'outer-circle');
+    circle.setAttribute('fill', color);
+
+    const innerCircle = document.createElementNS(svgNamespace, 'circle') as SVGCircleElement;
+    innerCircle.setAttribute('cx', '50');
+    innerCircle.setAttribute('cy', '50');
+    innerCircle.setAttribute('r', '30');
+    innerCircle.setAttribute('fill', color);
+
+    const text = document.createElementNS(svgNamespace, 'text') as SVGTextElement;
+    text.setAttribute('x', '50');
+    text.setAttribute('y', '60');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('class', 'chip-number');
+    text.setAttribute('fill', 'black');
+    text.textContent = `${this.getCellCount('value')}`;
+
+    svg.appendChild(circle);
+    svg.appendChild(text);
+
+    return svg;
+  }
+
+  getCellCount(cellId: string): number {
+    return this.cellTokens[cellId]?.count;
   }
 
   onRemoveAllTokens() {
@@ -107,6 +154,7 @@ export class TableComponent {
     });
     this.cellTokens = {};
     this.actionHistory = [];
+    this.logTokensData(); // Log the updated tokens data to the console
   }
 
   onUndoLastAction() {
@@ -118,6 +166,11 @@ export class TableComponent {
       cellData.color = previousColor;
       this.updateCellDisplay(cellId);
       this.creditOp(tokenValue); // Add the token value back to credit
+      this.logTokensData(); // Log the updated tokens data to the console
     }
+  }
+
+  logTokensData() {
+    console.table(this.cellTokens);
   }
 }
