@@ -6,8 +6,7 @@ import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-roulette",
-  standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  
   templateUrl: "./roulette.component.html",
   styleUrls: ["./roulette.component.css"],
 })
@@ -15,7 +14,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   paths: string[] = [];
   finalAngle: number = 0;
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-  ballFalling: number | undefined;
+  ballFalling: number | null = null; 
 
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
@@ -80,7 +79,6 @@ export class RouletteComponent implements OnInit, AfterViewInit {
       console.error('Error during animation:', error);
     });
   }
-  
   animateBall(angle: number, ball: number) {
     if (this.ball && this.ball.nativeElement) {
       this.renderer.removeStyle(this.ball.nativeElement, 'transition');
@@ -102,6 +100,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
       this.renderer.listen(this.ball.nativeElement, 'transitionend', () => {
         // Mettre à jour ballFalling une fois que l'animation est terminée
         this.ballFalling = ball; 
+        console.log(this.ballFalling);
       });
     } else {
       console.error('Error: ball reference is undefined or its native element is undefined.');
