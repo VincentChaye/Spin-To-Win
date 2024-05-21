@@ -1,9 +1,27 @@
 #bg {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
     background: url("../../../assets/image/backgroundVegaStudio.png") no-repeat center fixed;
     background-size: cover;
     z-index: -1;
+}
+
+.container {
+    margin: 200px auto 100px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: rgba(255,255,255, 0.1);
+    border-radius: 10px;
+    height: calc(100vh - 300px); /* Adjust the height based on your margins */
+    overflow-y:  auto; /* Ensure vertical scroll only */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    color: rgb(255, 255, 255, 1);
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
