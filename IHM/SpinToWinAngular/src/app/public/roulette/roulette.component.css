@@ -16,8 +16,8 @@
     position: absolute;
     background-color: rgba(254, 178, 76, 0.43);
     border: #011b3a 5px solid;
-    top: 110px;
-    left: 620px;
+    top: 10%;
+    left: 33%;
     padding: 50px;
     border-radius: 8px;
   }
