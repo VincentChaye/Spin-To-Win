@@ -1,0 +1,119 @@
+<div class="body">
+  <div class="credit">
+      <p class="p-credit">Crédits : {{credit}}</p>
+  </div>
+  <div class="message">
+      <p class="p-message"><b>Croupière :</b> Faîtes vos jeux et appuyer sur lancer la roulette !</p>
+  </div>
+  <div class="numéro-chauds">
+      <p class="p-numérochaud"> Encore un peu de patience ...<br> Les statistiques seront bientôt disponibles ! </p>
+  </div>
+  <div class="roulette-component">
+    <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;">
+      <p>Lancer la roulette !</p>
+    </div>
+  </div>
+  
+  <div class="table-component">
+      <p class="title-table">Table de jeu :</p>
+      <table class="table" (click)="onCellClick($event)">
+          <tbody>
+              <tr>
+                  <td rowspan="3" id="0" class="O">0</td>
+                  <td id="3" class="noir">3</td>
+                  <td id="6" class="rouge">6</td>
+                  <td id="9" class="noir">9</td>
+                  <td id="12" class="rouge">12</td>
+                  <td id="15" class="noir">15</td>
+                  <td id="18" class="rouge">18</td>
+                  <td id="21" class="noir">21</td>
+                  <td id="24" class="rouge">24</td>
+                  <td id="27" class="noir">27</td>
+                  <td id="30" class="rouge">30</td>
+                  <td id="33" class="noir">33</td>
+                  <td id="36" class="rouge">36</td>
+                  <td id="1er 12 ligne" class="lg">1/3</td>
+              </tr>
+              <tr>
+                  <td id="2" class="rouge">2</td>
+                  <td id="5" class="noir">5</td>
+                  <td id="8" class="rouge">8</td>
+                  <td id="11" class="noir">11</td>
+                  <td id="14" class="rouge">14</td>
+                  <td id="17" class="noir">17</td>
+                  <td id="20" class="rouge">20</td>
+                  <td id="23" class="noir">23</td>
+                  <td id="26" class="rouge">26</td>
+                  <td id="29" class="noir">29</td>
+                  <td id="32" class="rouge">32</td>
+                  <td id="35" class="noir">35</td>
+                  <td id="2ème 12 ligne" class="lg">1/3</td>
+              </tr>
+              <tr>
+                  <td id="1" class="noir">1</td>
+                  <td id="4" class="rouge">4</td>
+                  <td id="7" class="noir">7</td>
+                  <td id="10" class="rouge">10</td>
+                  <td id="13" class="noir">13</td>
+                  <td id="16" class="rouge">16</td>
+                  <td id="19" class="noir">19</td>
+                  <td id="22" class="rouge">22</td>
+                  <td id="25" class="noir">25</td>
+                  <td id="28" class="rouge">28</td>
+                  <td id="31" class="noir">31</td>
+                  <td id="34" class="rouge">34</td>
+                  <td id="3ème 12 ligne" class="lg">1/3</td>
+              </tr>
+              <tr>
+                  <td class="empty"></td>
+                  <td colspan="4" id="1er 12 colonne" class="lg">Tier 1</td>
+                  <td colspan="4" id="2ème 12 colonne" class="lg">2ème tier</td>
+                  <td colspan="4" id="3ème 12 colonne" class="lg">3ème tier</td>
+                  <td class="empty"></td>
+              </tr>
+              <tr>
+                  <td class="empty"></td>
+                  <td colspan="2" id="1er demi">1er demi</td>
+                  <td colspan="2" id="Pair">Pair</td>
+                  <td colspan="2" id="Rouge" class="rouge">Rouge</td>
+                  <td colspan="2" id="Noir" class="noir">Noir</td>
+                  <td colspan="2" id="Impair">Impair</td>
+                  <td colspan="2" id="2ème demi">2ème demi</td>
+              </tr>
+          </tbody>
+      </table>
+      <div class="select1">
+          <svg class="token" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" (click)="onTokenClick(1, 'rgba(215, 190, 0, 0.8)')">
+              <circle cx="50" cy="50" r="50" style="fill: rgba(215, 190, 0, 0.8);"/>
+              <text x="50" y="68" font-size="50" text-anchor="middle" fill="black">1</text>
+          </svg>
+          <svg class="token" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" (click)="onTokenClick(2, 'rgba(218, 91, 0, 0.8)')">
+              <circle cx="50" cy="50" r="50" style="fill: rgba(218, 91, 0, 0.8);"/>
+              <text x="50" y="68" font-size="50" text-anchor="middle" fill="black">2</text>
+          </svg>
+          <svg class="token" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" (click)="onTokenClick(5, 'rgba(255, 0, 0, 0.8)')">
+              <circle cx="50" cy="50" r="50" style="fill: rgba(255, 0, 0, 0.8);"/>
+              <text x="50" y="68" font-size="50" text-anchor="middle" fill="black">5</text>
+          </svg>
+          </div>
+
+      <div class="btn-option">
+          <button (click)="onRemoveAllTokens()">Retirer tous mes jetons</button>
+          <button (click)="onUndoLastAction()">Annuler la dernière action</button>
+      </div>
+      <div class="select2">
+        <svg class="token" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" (click)="onTokenClick(10, 'rgba(225, 0, 255, 0.8)')">
+            <circle cx="50" cy="50" r="50" style="fill: rgba(225, 0, 255, 0.8);"/>
+            <text x="50" y="68" font-size="50" text-anchor="middle" fill="black">10</text>
+        </svg>
+        <svg class="token" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" (click)="onTokenClick(20, 'rgba(0, 191, 255, 0.8)')">
+            <circle cx="50" cy="50" r="50" style="fill: rgba(0, 191, 255, 0.8);"/>
+            <text x="50" y="68" font-size="50" text-anchor="middle" fill="black">20</text>
+        </svg>
+        <svg class="token" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" (click)="onTokenClick(50, 'rgba(21, 0, 255, 0.8)')">
+            <circle cx="50" cy="50" r="50" style="fill: rgba(21, 0, 255, 0.8);"/>
+            <text x="50" y="68" font-size="50" text-anchor="middle" fill="black">50</text>
+        </svg>
+    </div>
+  </div>
+</div>

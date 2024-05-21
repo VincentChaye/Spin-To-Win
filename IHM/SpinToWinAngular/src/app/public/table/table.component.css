@@ -1,0 +1,247 @@
+.body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: url("../../../assets/image/bck.png") no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Titre/Texte */
+.title-table {
+    position: absolute;
+    font-size: 140%;
+    top: 2%;
+    left: 30%;
+    color: black;
+    font-weight: bold;
+}
+
+.title-select {
+    top: -3%;
+    position: absolute;
+    font-size: 130%;
+    left: 73%;
+    color: black;
+    font-weight: bold;
+}
+
+.title-select-mem {
+    position: absolute;
+    font-size: 105%;
+    left: 76%;
+    top: 45%;
+    color: white;
+}
+
+.p-credit {
+    position: absolute;
+    top: 13%;
+    left: 14%;
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+
+.p-message {
+    position: absolute;
+    top: 13%;
+    left: 1%;
+    color: black;
+    font-size: 110%;
+}
+
+.p-numérochaud {
+    position: absolute;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    font-size: 125%;
+    top: 50%;
+    left: 5%;
+}
+
+/* Component */
+.table-component {
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    width: 1255px;
+    height: 400px;
+    bottom: 5px;
+    left: 350px;
+}
+
+.credit {
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    bottom: 400px;
+    left: 350px;
+    width: 150px;
+    height: 50px;
+}
+
+.message {
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    bottom: 400px;
+    left: 495px;
+    width: 1110px;
+    height: 50px;
+}
+
+.numéro-chauds {
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    bottom: 300px;
+    left: 1600px;
+    width: 315px;
+    height: 99%;
+    border-radius: 8px;
+    overflow: hidden;
+    bottom: 5px;
+}
+
+.roulette-component {
+    position: absolute;
+    background-color: rgba(254, 178, 76, 0.6);
+    border: #011b3a 5px solid;
+    bottom: 5px;
+    left: 5px;
+    width: 350px;
+    height: 350px;
+    border-radius: 8px;
+}
+
+.roulette-component:hover {
+    background-color: rgba(254, 178, 76, 0.4);
+}
+
+.roulette-img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url("../../../assets/image/roulette-francaise.png");
+    background-size: cover;
+    cursor: pointer;
+}
+
+.roulette-img p {
+    position: absolute;
+    top: 45%;
+    left: 30%;
+    color: black;
+    font-weight: bold;
+}
+
+.roulette-img p:hover {
+    color: white;
+}
+
+/* Table */
+.table {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    top: 15%;
+    left: 1%;
+}
+
+td {
+    cursor: crosshair;
+    text-align: center;
+    min-width: 70px; /* Ensure minimum width */
+    min-height: 45px; /* Ensure minimum height */
+    vertical-align: middle;
+    border-radius: 5px;
+}
+
+.table td {
+    position: relative;  /* To enable positioning child elements */
+    overflow: hidden;  /* Hide overflow text */
+    text-align: center;  /* Center the text */
+    vertical-align: middle;  /* Center the text vertically */
+}
+
+.table td span.token-value {
+    position: absolute;  /* Position absolutely within the cell */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.7);  /* Slightly transparent background */
+    padding: 2px;
+    font-size: 12px;  /* Adjust font size as needed */
+    white-space: nowrap;  /* Prevent text wrapping */
+    overflow: hidden;  /* Hide overflow text */
+    text-overflow: ellipsis;  /* Show ellipsis (...) for overflow text */
+}
+
+.select2 {
+    position: absolute;
+    width: 210px;
+    height: 130px;
+    left: 55%;
+    top: 74%;
+    text-align: center;
+    overflow: hidden;
+}
+
+.select1 {
+    position: absolute;
+    width: 210px;
+    height: 130px;
+    left: 9%;
+    top: 74%;
+    text-align: center;
+    overflow: hidden;
+}
+
+.btn-option {
+    position: absolute;
+    width: 280px;
+    height: 75px;
+    left: 29%;
+    top: 73%;
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.btn {
+    height: 125px;
+    width: 125px;
+}
+
+/* Remplissage Table */
+
+.empty {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+.O {
+    background-color: green;
+}
+
+.rouge {
+    background-color: rgba(255, 0, 0, 0.7);
+}
+
+.noir {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.lg {
+    background-color: lightgreen;
+    min-width: 100px;
+}
+
+.token {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+}

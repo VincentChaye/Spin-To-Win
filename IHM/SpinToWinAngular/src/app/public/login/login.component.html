@@ -4,15 +4,12 @@
 			<h1>Se Connecter</h1>
 		</div>
 		<form action>
-			<label for="">Username</label>
-			<input type="text">
-			<label for="">Password</label>
-			<input type="password">
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" [(ngModel)]="username">
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password" [(ngModel)]="password">
 			<a href="">Mots de Passes Oublier</a>
-			<input type="submit">
+			<button class="btn btn-warning" (click)="sendData()">Envoyer les données</button>
 		</form>
-
 	</div>
-
 </div>
-

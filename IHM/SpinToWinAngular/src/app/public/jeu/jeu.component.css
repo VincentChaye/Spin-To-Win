@@ -1,0 +1,102 @@
+
+.bg{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: url("../../../assets/image/backgroundVegaStudio.png") no-repeat center fixed;
+    background-size: cover;
+    z-index: -1;
+    color: brown;
+
+}
+
+.element{
+    width: 100%;
+    height: 100%;
+    background-color: #00000098;
+    position: fixed;
+    overflow-y: scroll;
+}
+
+.componentjeu{
+    margin-top: 10%;
+    width: 80%;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    grid-gap: 10px;
+    place-items: center;
+    margin-left: 10%;
+    margin-bottom: 10%;
+    row-gap: 5%;
+}
+
+.componentjeu div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 65%;
+    background-color: #ddd;
+    border-radius: 8px;
+}
+
+.componentjeu div img{
+    width: 100%;
+    height: 100%;
+}
+
+.componentjeu div h1{
+    font-size: 2em;
+    padding-top: 10px;
+    color: #111;
+}
+
+.componentjeu div hr{
+    width: 80%;
+    border: 1px solid #111;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.componentjeu div p{
+    font-size: 1em;
+    color: #444;
+    text-align: left;
+
+}
+
+.componentjeu div button{
+    width: 60%;
+    height: 40px;
+    background-color: #FEB24C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.componentjeu div a{
+    width: 60%;
+    height: 40px;
+    background-color: #FEB24C;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.componentjeu div .pasdispo{
+    background-color: #444444;
+    color: #fff;
+}

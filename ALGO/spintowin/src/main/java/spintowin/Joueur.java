@@ -7,14 +7,33 @@ public class Joueur {
 	private String pseudo;
 	private String nom;
 	private String prenom;
+	private String email;	
 	private Date dateNaissance;
 	private float credit;
 	private String mot_de_passe_hash;
+	
+	
+	
+	public String getEmail() {
+		return email;
+	}
+
+
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
+
+
 
 	
 	
 
-	// Constructeur par défaut
+	
 	public Joueur() {
 	}
 
@@ -105,6 +124,14 @@ public class Joueur {
 
 
 
+	public Joueur(String pseudo) {
+		super();
+		this.pseudo = pseudo;
+	}
+
+
+
+
 	public String getMot_de_passe_hash() {
 		return mot_de_passe_hash;
 	}
@@ -119,12 +146,13 @@ public class Joueur {
 
 
 
-	public Joueur(String pseudo, String nom, String prenom, Date dateNaissance, float credit,
+	public Joueur(String pseudo, String nom, String prenom,String email, Date dateNaissance, float credit,
 			String mot_de_passe_hash) {
 		super();
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.prenom = prenom;
+		this.email = email;
 		this.dateNaissance = dateNaissance;
 		this.credit = credit;
 		this.mot_de_passe_hash = mot_de_passe_hash;
@@ -133,13 +161,28 @@ public class Joueur {
 
 
 
-	public Joueur(int id, String pseudo, String nom, String prenom, Date dateNaissance, float credit,
+	public Joueur(int id, String pseudo, String nom, String prenom, String email, Date dateNaissance, float credit) {
+		super();
+		this.id = id;
+		this.pseudo = pseudo;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.email = email;
+		this.dateNaissance = dateNaissance;
+		this.credit = credit;
+	}
+
+
+
+
+	public Joueur(int id, String pseudo, String nom,String email, String prenom, Date dateNaissance, float credit,
 			String mot_de_passe_hash) {
 		super();
 		this.id = id;
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.prenom = prenom;
+		this.email = email;
 		this.dateNaissance = dateNaissance;
 		this.credit = credit;
 		this.mot_de_passe_hash = mot_de_passe_hash;
@@ -150,8 +193,14 @@ public class Joueur {
 
 	@Override
 	public String toString() {
-		return "Joueur [id=" + id + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom=" + prenom + ", dateNaissance="
-				+ dateNaissance + ", credit=" + credit + ", mot_de_passe_hash=" + mot_de_passe_hash + "]";
+		return "Joueur [id=" + id + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email
+				+ ", dateNaissance=" + dateNaissance + ", credit=" + credit + ", mot_de_passe_hash=" + mot_de_passe_hash
+				+ "]";
 	}
+
+
+
+
+	
 
 }

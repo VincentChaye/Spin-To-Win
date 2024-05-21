@@ -8,6 +8,8 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { CreditComponent } from './credit/credit.component';
 import { SpintowinComponent } from './spintowin/spintowin.component';
+import { TableComponent } from './table/table.component';
+import { JeuComponent } from './jeu/jeu.component';
 import { ProposComponent } from './propos/propos.component';
 
 // Routage des pages du module Public 
@@ -21,7 +23,9 @@ const routes: Routes = [
       { path: 'register', component: RegisterComponent }, // Charge le composant RegisterComponent lorsque le chemin est '/register'
       { path: 'login', component: LoginComponent }, // Charge le composant LoginComponent lorsque le chemin est '/login'
       { path: 'credit', component: CreditComponent }, // Charge le composant CreditComponent lorsque le chemin est '/credit'
-      { path: 'propos', component: ProposComponent },
+      { path: 'table', component: TableComponent }, // Charge le composant CreditComponent lorsque le chemin est '/table'
+      {path: 'Jeu', component: JeuComponent},
+      { path: 'propos', component: ProposComponent }
     ]
   }
 ];
