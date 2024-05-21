@@ -46,3 +46,17 @@
     animation: spin 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
   }
   
+
+
+  .resultat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Assurez-vous que l'élément parent prend toute la hauteur de l'écran */
+    text-align: center;
+  }
+  
+  .roulette-img {
+    margin-top: 20px; /* Espace entre le texte et le bouton */
+  }
