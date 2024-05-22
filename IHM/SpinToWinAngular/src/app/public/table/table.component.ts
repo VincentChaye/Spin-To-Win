@@ -14,9 +14,10 @@ export interface Bet {
 export class TableComponent {
   selectedToken: { value: number, color: string } | null = null;
   cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
-  credit: number = 100;
+  credit: number = 100; //INITIALISATION CREDIT
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
   previousSelectedTokenElement: HTMLElement | null = null;
+  isCreditBlurred: boolean = false;
 
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef) {
     this.PLAYERINFO.pageCharger = 0;
@@ -27,6 +28,14 @@ export class TableComponent {
   }
 
   onTokenClick(value: number, color: string) {
+    if (value === 99) { // Check if the clicked token is MAX
+      if (this.credit > 0) {
+        value = this.credit; // Use all remaining credits
+      } else {
+        alert("Crédit insuffisant pour placer ce pari !");
+        return;
+      }
+    }
     this.selectedToken = { value, color };
     console.log(`Selected token: ${value} of color ${color}`);
 
@@ -36,7 +45,7 @@ export class TableComponent {
 
     const tokenElements = this.elRef.nativeElement.querySelectorAll('.token');
     tokenElements.forEach((tokenElement: HTMLElement) => {
-      if (parseInt(tokenElement.querySelector('text')?.textContent || '0', 10) === value) {
+      if (parseInt(tokenElement.querySelector('text')?.textContent || '0', 10) === value || (value === this.credit && tokenElement.querySelector('text')?.textContent === 'MAX')) {
         tokenElement.classList.add('selected');
         this.previousSelectedTokenElement = tokenElement;
       }
@@ -47,7 +56,13 @@ export class TableComponent {
     const target = event.target as HTMLElement;
     if (this.selectedToken && target.tagName === 'TD' && target.id) {
       const cellId = target.id;
-
+  
+      // Vérifiez si le crédit est suffisant pour placer le jeton
+      if (this.credit < this.selectedToken.value) {
+        alert("Crédit insuffisant pour placer ce pari !");
+        return;
+      }
+  
       if (!this.cellTokens[cellId]) {
         this.cellTokens[cellId] = { 
           count: 0, 
@@ -57,6 +72,7 @@ export class TableComponent {
         };
       }
       
+      // Save current state for undo functionality
       this.actionHistory.push({ 
         cellId, 
         previousCount: this.cellTokens[cellId].count, 
@@ -64,14 +80,17 @@ export class TableComponent {
         tokenValue: this.selectedToken.value 
       });
       
+      // Update the cell data with the selected token value
       this.cellTokens[cellId].count += this.selectedToken.value;
       this.cellTokens[cellId].color = this.selectedToken.color;
       this.creditOp(-this.selectedToken.value);
 
+      // Update the display of the cell
       this.updateCellDisplay(cellId);
       this.logTokensData();
     }
   }
+  
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
@@ -79,21 +98,29 @@ export class TableComponent {
       const cellData = this.cellTokens[cellId];
       cell.innerHTML = '';
 
-      let tokenSpan = cell.querySelector('span.token-value') as HTMLElement;
-      if (!tokenSpan) {
-        tokenSpan = document.createElement('span');
-        tokenSpan.className = 'token-value';
-        cell.appendChild(tokenSpan);
-      }
-      if (tokenSpan) {
-        tokenSpan.innerText = cellData.count > 0 ? `  (${cellData.count}€)` : '';
-      }
-      
-      if (cellData.count > 0) {
-        const tokenSvg = this.createTokenSvg(this.selectedToken!.value, this.selectedToken!.color);
+      if (cellData.count > 0 && this.selectedToken) {
+        const tokenColor = this.getTokenColor(cellData.count);
+        const tokenSvg = this.createTokenSvg(cellData.count, tokenColor);
         tokenSvg.classList.add('token-svg');
         cell.appendChild(tokenSvg);
+      } else {
+        cell.innerText = cellData.originalContent;
+        cell.style.backgroundColor = cellData.originalColor;
       }
+    }
+  }
+
+  getTokenColor(count: number): string {
+    if (count >= 1 && count <= 4) {
+      return 'yellow';
+    } else if (count >= 5 && count <= 9) {
+      return 'orange';
+    } else if (count >= 10 && count <= 19) {
+      return 'red';
+    } else if (count >= 20 && count <= 49) {
+      return 'purple';
+    } else {
+      return 'lightblue';
     }
   }
 
@@ -102,13 +129,15 @@ export class TableComponent {
     const svg = document.createElementNS(svgNamespace, 'svg') as SVGSVGElement;
     svg.setAttribute('viewBox', '0 0 100 100');
     svg.setAttribute('class', 'token');
+    svg.setAttribute('width', '50');
+    svg.setAttribute('height', '50');
 
     const circle = document.createElementNS(svgNamespace, 'circle') as SVGCircleElement;
     circle.setAttribute('cx', '50');
     circle.setAttribute('cy', '50');
     circle.setAttribute('r', '45');
     circle.setAttribute('class', 'outer-circle');
-    circle.setAttribute('fill', color);
+    circle.setAttribute('fill', 'black');
 
     const innerCircle = document.createElementNS(svgNamespace, 'circle') as SVGCircleElement;
     innerCircle.setAttribute('cx', '50');
@@ -119,12 +148,34 @@ export class TableComponent {
     const text = document.createElementNS(svgNamespace, 'text') as SVGTextElement;
     text.setAttribute('x', '50');
     text.setAttribute('y', '60');
+    text.setAttribute('font-size', '150%');
     text.setAttribute('text-anchor', 'middle');
     text.setAttribute('class', 'chip-number');
     text.setAttribute('fill', 'black');
-    text.textContent = `${this.getCellCount('value')}`;
+    text.textContent = `${value}`;
+
+    const segmentsGroup = document.createElementNS(svgNamespace, 'g') as SVGGElement;
+    segmentsGroup.setAttribute('class', 'segments6');
+
+    const createSegment = (rotation: number) => {
+      const rect = document.createElementNS(svgNamespace, 'rect') as SVGRectElement;
+      rect.setAttribute('x', '47');
+      rect.setAttribute('y', '5');
+      rect.setAttribute('width', '6');
+      rect.setAttribute('height', '10');
+      rect.setAttribute('transform', `rotate(${rotation} 50 50)`);
+      rect.setAttribute('fill', color);
+      return rect;
+    };
+
+    for (let i = 0; i < 360; i += 45) {
+      const rect = createSegment(i);
+      segmentsGroup.appendChild(rect);
+    }
 
     svg.appendChild(circle);
+    svg.appendChild(innerCircle);
+    svg.appendChild(segmentsGroup);
     svg.appendChild(text);
 
     return svg;
@@ -176,4 +227,10 @@ export class TableComponent {
 
     console.table(this.PLAYERINFO.tableauparie);
   }
+
+  toggleCreditBlur() {
+    this.isCreditBlurred = !this.isCreditBlurred;
+  }
+
+ 
 }
