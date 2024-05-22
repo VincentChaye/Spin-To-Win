@@ -9,6 +9,8 @@
       </div>
     </div>-->
 
+    <div class="fond"></div>
+
     <div class="bubulle"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p></div>
     
 
@@ -210,10 +212,10 @@
       </div>
 
       <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;"></div>
-
-      <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
-
-      <p class="p-credit" >Crédits disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}</p><p class="p-credit3">€</p>
-    </div>
+      <div class="creditcontainer">
+        <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
+        <p class="p-credit" >Crédits <br>disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}€</p>
+      </div>
+      
   </div>
   
