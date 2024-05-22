@@ -1,6 +1,7 @@
 <div class="body">
 
     <div class="numéro-chauds">
+      <div class="btn" [routerLink]="['/Jeu']" style="cursor: pointer;background-color : rgb(39, 255, 104);">Jeu</div>
       <p class="p-numérochaud">Les numéro les plus tirés s'afficheront prochainement ici !</p>
     </div>
     <!--<div class="roulette-component">
@@ -213,7 +214,7 @@
 
       <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
 
-      <p class="p-credit" >Crédits disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}</p><p class="p-credit3">€</p>
+      <p class="p-credit" >Crédits disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}</p><!-- <p class="p-credit3">€</p> -->
     </div>
   </div>
   

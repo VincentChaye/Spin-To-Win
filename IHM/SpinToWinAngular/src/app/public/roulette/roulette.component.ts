@@ -133,6 +133,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
 
   calculGains(ball: number) {
     if (this.PLAYERINFO.tableauparie) {
+      this.PLAYERINFO.oldCredit=this.PLAYERINFO.playerInfo.credit;
       this.betscopy = this.PLAYERINFO.tableauparie; // Affecter la valeur de this.PLAYERINFO.tableauparie à this.bets
       const formattedJson = {
         name: this.PLAYERINFO.playerInfo.pseudo, // Récupérer le pseudo du joueur
@@ -182,6 +183,10 @@ export class RouletteComponent implements OnInit, AfterViewInit {
 
   isCreditInGreen(): boolean {
     return this.ballFalling !== null && this.green.includes(this.ballFalling);
+  }
+
+  getCreditDifference(): number {
+    return (this.PLAYERINFO.playerInfo.credit || 0) - (this.PLAYERINFO.oldCredit || 0);
   }
 
 }

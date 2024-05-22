@@ -12,6 +12,8 @@ export class PlayoutComponent {
   
   playerInfo: any;
   pageCharger: number = 1;
+  
+  oldCredit : number | undefined;
   tableauparie: Bet[] | undefined; // Utilisation de l'interface Bet
   private reloaderSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public reloader$: Observable<number> = this.reloaderSubject.asObservable();

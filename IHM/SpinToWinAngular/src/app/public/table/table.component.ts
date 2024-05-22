@@ -18,9 +18,12 @@ export class TableComponent {
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
   previousSelectedTokenElement: HTMLElement | null = null;
   isCreditBlurred: boolean = false;
-
+  oldCredit : number | undefined;
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef) {
     this.PLAYERINFO.pageCharger = 0;
+    if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
+      this.credit = this.PLAYERINFO.playerInfo.credit;
+    }
   }
 
   creditOp(value: number) {

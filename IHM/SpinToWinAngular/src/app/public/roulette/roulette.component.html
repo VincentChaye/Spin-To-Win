@@ -18,8 +18,8 @@
     <p *ngIf="isCreditInRed()" style="color: red ;">La balle est tombée sur un nombre rouge : {{ ballFalling }} <p>
     <p *ngIf="isCreditInBlack()" style="color: black ;">La balle est tombée sur un nombre noir : {{ ballFalling }} <p>
     <p *ngIf="isCreditInGreen()" style="color: green;">La balle est tombée sur un nombre vert : {{ ballFalling }} <p>
-    
-    <p >Credit : {{ PLAYERINFO.playerInfo.credit }}</p>
+      <p>Gains : {{ getCreditDifference() }}</p>
+
     <div class="btn btn-warning roulette-img" [routerLink]="['/table']" style="cursor: pointer;">Jouer à nouveau ! </div>
   </div>
 </div>
