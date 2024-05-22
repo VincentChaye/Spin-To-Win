@@ -47,7 +47,7 @@ export class LoginComponent {
          
           this.PLAYERINFO.playerInfo = response;
           console.log('trans', this.PLAYERINFO.playerInfo);
-          this.router.navigate(['/Vegastudio']); // Utilisez le service Router pour la navigation
+          this.router.navigate(['/Jeu']); // Utilisez le service Router pour la navigation
         },
         (error) => {
           console.error('PUT request error:', error);

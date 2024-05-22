@@ -35,7 +35,7 @@ public class H2Database {
             // Insertion de données de test dans la table joueur
             try (Statement stmt = conn.createStatement()) {
                 stmt.execute("INSERT INTO joueur (pseudo, nom, prenom, date_naissance, credit, mot_de_passe_hash) VALUES "
-                        + "('joueur1', 'Doe', 'John', '1990-01-01', 1000.0, 'hash1'), "
+                        + "('dddd', 'Doe', 'John', '1990-01-01', 1000.0, 'ssss'), "
                         + "('joueur2', 'Smith', 'Jane', '1992-05-15', 1500.0, 'hash2'), "
                         + "('joueur3', 'Johnson', 'Michael', '1988-11-30', 800.0, 'hash3'), "
                         + "('joueur4', 'Williams', 'Emily', '1995-03-22', 1200.0, 'hash4'), "

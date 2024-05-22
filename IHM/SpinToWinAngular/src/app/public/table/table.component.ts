@@ -1,6 +1,11 @@
 import { Component, ElementRef } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 
+export interface Bet {
+  betType: string;
+  amount: number;
+}
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -25,12 +30,10 @@ export class TableComponent {
     this.selectedToken = { value, color };
     console.log(`Selected token: ${value} of color ${color}`);
 
-    // Reset the previous token's border
     if (this.previousSelectedTokenElement) {
       this.previousSelectedTokenElement.classList.remove('selected');
     }
 
-    // Find the current token element and apply the golden border
     const tokenElements = this.elRef.nativeElement.querySelectorAll('.token');
     tokenElements.forEach((tokenElement: HTMLElement) => {
       if (parseInt(tokenElement.querySelector('text')?.textContent || '0', 10) === value) {
@@ -45,7 +48,6 @@ export class TableComponent {
     if (this.selectedToken && target.tagName === 'TD' && target.id) {
       const cellId = target.id;
 
-      // Initialize the cell data if not already initialized
       if (!this.cellTokens[cellId]) {
         this.cellTokens[cellId] = { 
           count: 0, 
@@ -55,7 +57,6 @@ export class TableComponent {
         };
       }
       
-      // Save current state for undo functionality
       this.actionHistory.push({ 
         cellId, 
         previousCount: this.cellTokens[cellId].count, 
@@ -63,28 +64,21 @@ export class TableComponent {
         tokenValue: this.selectedToken.value 
       });
       
-      // Update the cell data with the selected token value
       this.cellTokens[cellId].count += this.selectedToken.value;
       this.cellTokens[cellId].color = this.selectedToken.color;
       this.creditOp(-this.selectedToken.value);
 
-      // Update the display of the cell
       this.updateCellDisplay(cellId);
-      
-      // Log the updated tokens data to the console
       this.logTokensData();
     }
   }
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
-    if (cell) { // Vérifie si l'élément n'est pas nul
+    if (cell) {
       const cellData = this.cellTokens[cellId];
-      
-      // Clear existing tokens
       cell.innerHTML = '';
 
-      // Créer ou mettre à jour un élément span pour la valeur du jeton
       let tokenSpan = cell.querySelector('span.token-value') as HTMLElement;
       if (!tokenSpan) {
         tokenSpan = document.createElement('span');
@@ -95,10 +89,9 @@ export class TableComponent {
         tokenSpan.innerText = cellData.count > 0 ? `  (${cellData.count}€)` : '';
       }
       
-      // Ajouter le jeton SVG sélectionné à la cellule
       if (cellData.count > 0) {
-        const tokenSvg = this.createTokenSvg(this.selectedToken!.value, this.selectedToken!.color); // Utilisez l'opérateur non-null assertion (!)
-        tokenSvg.classList.add('token-svg');  // Ajoutez la classe pour le positionnement
+        const tokenSvg = this.createTokenSvg(this.selectedToken!.value, this.selectedToken!.color);
+        tokenSvg.classList.add('token-svg');
         cell.appendChild(tokenSvg);
       }
     }
@@ -144,7 +137,7 @@ export class TableComponent {
   onRemoveAllTokens() {
     Object.keys(this.cellTokens).forEach(cellId => {
       const cellData = this.cellTokens[cellId];
-      this.creditOp(cellData.count); // Add the count back to credit
+      this.creditOp(cellData.count);
       cellData.count = 0;
       const cell = document.getElementById(cellId);
       if (cell) {
@@ -154,7 +147,7 @@ export class TableComponent {
     });
     this.cellTokens = {};
     this.actionHistory = [];
-    this.logTokensData(); // Log the updated tokens data to the console
+    this.logTokensData();
   }
 
   onUndoLastAction() {
@@ -165,12 +158,22 @@ export class TableComponent {
       cellData.count = previousCount;
       cellData.color = previousColor;
       this.updateCellDisplay(cellId);
-      this.creditOp(tokenValue); // Add the token value back to credit
-      this.logTokensData(); // Log the updated tokens data to the console
+      this.creditOp(tokenValue);
+      this.logTokensData();
     }
   }
 
   logTokensData() {
-    console.table(this.cellTokens);
+    // console.table('tab');
+    // console.table(this.cellTokens);
+
+    this.PLAYERINFO.tableauparie = Object.entries(this.cellTokens).map(([key, value]) => {
+        return {
+            betType: value.originalContent,
+            amount: value.count
+        };
+    });
+
+    console.table(this.PLAYERINFO.tableauparie);
   }
 }

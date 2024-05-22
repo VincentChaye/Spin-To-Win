@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PheaderComponent } from '../pheader/pheader.component';
-import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+
+import { Bet } from '../table/table.component';
 
 @Component({
   selector: 'app-playout',
   templateUrl: './playout.component.html',
   styleUrls: ['./playout.component.css']
 })
-@Injectable()
 export class PlayoutComponent {
   
-  playerInfo : any;
-  pageCharger : number = 1;
+  playerInfo: any;
+  pageCharger: number = 1;
+  tableauparie: Bet[] | undefined; // Utilisation de l'interface Bet
   private reloaderSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public reloader$: Observable<number> = this.reloaderSubject.asObservable();
 
@@ -21,4 +20,3 @@ export class PlayoutComponent {
     this.reloaderSubject.next(num);
   }
 }
-

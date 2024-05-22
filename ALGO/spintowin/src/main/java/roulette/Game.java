@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class Game {
+    double bonusAmount = 0;
+    public boolean pickBonus = false;
+    public int pick = 0;
     private Roulette roulette;
     private List<Player> players;
 
@@ -17,13 +21,19 @@ public class Game {
         players.add(player);
     }
 
-    public void playRound() {
+    public void playRound(int ball) {
         for (Player player : players) {
             for (Bet bet : player.getBets()) {
-                System.out.println(Color.CYAN + player.name + " joue " + Color.YELLOW + bet.getAmount() + Color.CYAN + " sur le " + Color.PURPLE + bet.getTarget() + Color.RESET);
+                if (bet.getTarget().equals("bonus")) {
+                    System.out.println(Color.CYAN + player.name + " joue le " + Color.PURPLE + bet.getTarget() + Color.RESET);
+                }
+                else {
+                    System.out.println(Color.CYAN + player.name + " joue " + Color.YELLOW + bet.getAmount() + Color.CYAN + " sur le " + Color.PURPLE + bet.getTarget() + Color.RESET);
+                }
             }
         }
-        int winningNumber = roulette.spin();
+        int winningNumber;
+        winningNumber = ball;
         if (winningNumber == 0) {
             System.out.println(Color.CYAN + "Numéro tombé: " + Color.GREEN + winningNumber + Color.RESET);
         } else if (Roulette.RED_NUMBERS.contains(winningNumber)) {
@@ -32,19 +42,42 @@ public class Game {
             System.out.println(Color.CYAN + "Numéro tombé: " + Color.RESET + winningNumber);
         }
         for (Player player : players) {
-            int winnings = 0;
+            double winnings = 0;
+            boolean bonus = false;
             for (Bet bet : player.getBets()) {
+                if (bet.getTarget().equals("bonus")) {
+                    bonus = true;
+                }
                 winnings += calculateWinnings(bet, winningNumber);
             }
+            if (bonus) {
+                player.updateCredits(-bonusAmount);
+            }
+            if (pickBonus && bonus) {
+                bonusAmount = ((36/pick)*0.48) * bonusAmount;
+                winnings += bonusAmount;
+                System.out.println(Color.CYAN + "Bonus de " + Color.YELLOW + bonusAmount + Color.CYAN + " crédits récupérés!" + Color.RESET);
+                pickBonus = false;
+                pick = 0;
+                bonusAmount = 0;
+                bonus = false;
+            }
             player.updateCredits(winnings);
+            double creditFinal = player.getCredits();
+            String pseudo = player.getName();
+            spintowin.DatabaseManager.updateCredit(pseudo, creditFinal);
             System.out.println(Color.CYAN + "Crédits: " + Color.YELLOW + player.getCredits() + Color.RESET);
             player.getBets().clear();
         }
+        
     }
 
     private int calculateWinnings(Bet bet, int winningNumber) {
         if (Roulette.NUMBERS.contains(bet.getTarget())) {
+            pick += 1;
+            bonusAmount += bet.getAmount() /2;
             if (Integer.parseInt(bet.getTarget()) == winningNumber) {
+                pickBonus = true;
                 return 36 * bet.getAmount();
             }
         } else if (winningNumber == 0 && Roulette.SIMPLES.contains(bet.getTarget())) {
@@ -69,7 +102,7 @@ public class Game {
                 return 2 * bet.getAmount();
             }
         } else if (Roulette.TIERS.contains(bet.getTarget())) {
-            if (bet.getTarget().equals("tier1") && winningNumber >= 1 && winningNumber <= 12) {
+            if (bet.getTarget().equals("tiers1") && winningNumber >= 1 && winningNumber <= 12) {
                 return 3 * bet.getAmount();
             } else if (bet.getTarget().equals("tiers2") && winningNumber >= 13 && winningNumber <= 24) {
                 return 3 * bet.getAmount();
