@@ -1,6 +1,7 @@
 <div class="body">
 
     <div class="numéro-chauds">
+      <div class="btn" [routerLink]="['/Jeu']" style="cursor: pointer;background-color : rgb(39, 255, 104);">Jeu</div>
       <p class="p-numérochaud">Les numéro les plus tirés s'afficheront prochainement ici !</p>
     </div>
     <!--<div class="roulette-component">
@@ -31,7 +32,7 @@
             <td id="30" class="rouge" (click)="onCellClick($event)">30</td>
             <td id="33" class="noir" (click)="onCellClick($event)">33</td>
             <td id="36" class="rouge" (click)="onCellClick($event)">36</td>
-            <td id="1er 12 ligne" class="lg" (click)="onCellClick($event)">1/3</td>
+            <td id="ligne1" class="lg" (click)="onCellClick($event)">ligne1</td>
           </tr>
           <tr>
             <td id="2" class="noir" (click)="onCellClick($event)">2</td>
@@ -46,7 +47,7 @@
             <td id="29" class="noir" (click)="onCellClick($event)">29</td>
             <td id="32" class="rouge" (click)="onCellClick($event)">32</td>
             <td id="35" class="noir" (click)="onCellClick($event)">35</td>
-            <td id="2ème 12 ligne" class="lg" (click)="onCellClick($event)">1/3</td>
+            <td id="ligne2" class="lg" (click)="onCellClick($event)">ligne2</td>
           </tr>
           <tr>
             <td id="1" class="rouge" (click)="onCellClick($event)">1</td>
@@ -61,23 +62,23 @@
             <td id="28" class="noir" (click)="onCellClick($event)">28</td>
             <td id="31" class="noir" (click)="onCellClick($event)">31</td>
             <td id="34" class="rouge" (click)="onCellClick($event)">34</td>
-            <td id="3ème 12 ligne" class="lg" (click)="onCellClick($event)">1/3</td>
+            <td id="ligne3" class="lg" (click)="onCellClick($event)">ligne3</td>
           </tr>
           <tr>
             <td class="empty"></td>
-            <td colspan="4" id="1er 12 colonne" class="lg" (click)="onCellClick($event)">1er tier</td>
-            <td colspan="4" id="2ème 12 colonne" class="lg" (click)="onCellClick($event)">2ème tier</td>
-            <td colspan="4" id="3ème 12 colonne" class="lg" (click)="onCellClick($event)">3ème tier</td>
+            <td colspan="4" id="tiers1" class="lg" (click)="onCellClick($event)">tiers1</td>
+            <td colspan="4" id="tiers2" class="lg" (click)="onCellClick($event)">tiers2</td>
+            <td colspan="4" id="tiers3" class="lg" (click)="onCellClick($event)">tiers3</td>
             <td class="empty"></td>
           </tr>
           <tr>
             <td class="empty"></td>
-            <td colspan="2" id="1er demi" class="lg" (click)="onCellClick($event)">1er demi</td>
-            <td colspan="2" id="Pair" class="lg" (click)="onCellClick($event)">Pair</td>
-            <td colspan="2" id="Rouge" class="rouge" (click)="onCellClick($event)">Rouge</td>
-            <td colspan="2" id="Noir" class="noir" (click)="onCellClick($event)">Noir</td>
-            <td colspan="2" id="Impair" class="lg" (click)="onCellClick($event)">Impair</td>
-            <td colspan="2" id="2ème demi" class="lg" (click)="onCellClick($event)">2ème demi</td>
+            <td colspan="2" id="low" class="lg" (click)="onCellClick($event)">low</td>
+            <td colspan="2" id="even" class="lg" (click)="onCellClick($event)">even</td>
+            <td colspan="2" id="red" class="rouge" (click)="onCellClick($event)">red</td>
+            <td colspan="2" id="black" class="noir" (click)="onCellClick($event)">black</td>
+            <td colspan="2" id="odd" class="lg" (click)="onCellClick($event)">odd</td>
+            <td colspan="2" id="high" class="lg" (click)="onCellClick($event)">high</td>
             <td class="empty"></td>
           </tr>
         </tbody>

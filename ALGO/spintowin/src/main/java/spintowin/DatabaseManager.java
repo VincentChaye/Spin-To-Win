@@ -80,18 +80,21 @@ public class DatabaseManager {
         return joueur;
     }
     
-    public static Joueur updateCredit(String pseudo, int credit) {
+    public static Joueur updateCredit(String pseudo, double credit) {
         Joueur joueur = null;
         String sql = "UPDATE joueur SET credit = ? WHERE pseudo = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // Convertir le crédit de double à float
+            float creditFloat = (float) credit;
+
             // Définir les paramètres de la requête SQL
-            pstmt.setInt(1, credit); // Crédit à mettre à jour
-            pstmt.setString(2, pseudo); // ID du joueur à mettre à jour
-            
+            pstmt.setFloat(1, creditFloat); // Crédit à mettre à jour
+            pstmt.setString(2, pseudo); // Pseudo du joueur à mettre à jour
+
             // Exécuter la mise à jour
             int rowsUpdated = pstmt.executeUpdate();
-            
+
             // Vérifier si la mise à jour a réussi
             if (rowsUpdated > 0) {
                 // Récupérer le joueur mis à jour à partir de la base de données
@@ -103,7 +106,7 @@ public class DatabaseManager {
         }
         return joueur;
     }
-    
+
     public static Joueur verifieMotDePasse(String joueurPseudo, String MotDePasse) {
         Joueur newPlayer = null;
         String motDePasseCrypte = crypterMotDePasse(MotDePasse);

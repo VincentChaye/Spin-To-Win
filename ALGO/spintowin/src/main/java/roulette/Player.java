@@ -6,11 +6,21 @@ import java.util.List;
  
 
 public class Player {
-    public String name;
-    private int credits;
+    
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String name;
+    private double credits;
     private List<Bet> bets;
 
-    public Player(String name, int initialCredits) {
+    public Player(String name, double initialCredits) {
         this.name = name;
         this.credits = initialCredits;
         this.bets = new ArrayList<>();
@@ -25,7 +35,7 @@ public class Player {
         }
     }
 
-    public void updateCredits(int amount) {
+    public void updateCredits(double amount) {
         credits += amount;
     }
 
@@ -33,8 +43,7 @@ public class Player {
         return bets;
     }
 
-    public int getCredits() {
+    public double getCredits() {
         return credits;
     }
 }
-
