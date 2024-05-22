@@ -10,6 +10,10 @@ public class Bet {
         this.target = target;
     }
 
+    public Bet(String target) {
+        this(0, target);
+    }
+
     public int getAmount() {
         return amount;
     }

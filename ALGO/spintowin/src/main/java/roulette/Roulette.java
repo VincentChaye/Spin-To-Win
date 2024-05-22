@@ -3,7 +3,6 @@ package roulette;
 
 import java.util.Arrays;
 import java.util.List;
-
 public class Roulette {
     private static final int MAX_NUMBER = 36;
 
@@ -25,7 +24,4 @@ public class Roulette {
 
     public static final List<Integer> BLACK_NUMBERS = Arrays.asList(2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35);
 
-    public int spin() {
-        return (int) (Math.random() * (MAX_NUMBER + 1));
-    }
 }

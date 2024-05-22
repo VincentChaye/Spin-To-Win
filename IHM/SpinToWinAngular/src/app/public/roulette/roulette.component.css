@@ -49,14 +49,23 @@
 
 
   .resultat {
+    
+    color: #EEEEEE;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Assurez-vous que l'élément parent prend toute la hauteur de l'écran */
+    background-color: rgba(254, 178, 76, 0.7); /* Fond blanc */
+    width: 50%; /* Taille de 50% de la largeur de l'écran */
+    height: 50%; /* Taille de 50% de la hauteur de l'écran */
+    position: absolute;
+    top: 25%; /* Centrage vertical */
+    left: 25%; /* Centrage horizontal */
+    border-radius: 80px; /* Coins arrondis */
     text-align: center;
+    z-index: 999; /* Assurez-vous que cette div apparaît au-dessus des autres éléments */
+    padding: 20px; /* Ajoutez un peu d'espace intérieur */
   }
   
-  .roulette-img {
-    margin-top: 20px; /* Espace entre le texte et le bouton */
-  }
+  
+  

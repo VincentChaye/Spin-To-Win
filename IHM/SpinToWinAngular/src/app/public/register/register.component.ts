@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
         response.dateNaissance = new Date(response.dateNaissance).toISOString().split('T')[0];
         console.log('API POST réussi :', response);
         this.PLAYERINFO.playerInfo = response;
-        this.router.navigate(['/Vegastudio']);
+        this.router.navigate(['/Jeu']);
       },
       (error: any) => {
         console.error('Erreur lors de l\'appel API POST :', error);

@@ -1,7 +1,7 @@
+<!-- roulette.component.html -->
 <div class="body">
-  <div *ngIf="ballFalling == null"  class="container-roulette">
-     
-      <svg width="600" height="600" viewBox="-100 -100 200 200">
+  <div *ngIf="ballFalling == null" class="container-roulette">
+    <svg width="600" height="600" viewBox="-100 -100 200 200">
       <g transform="rotate(-90)">
         <path *ngFor="let path of paths; let i = index"
               [attr.d]="path"
@@ -11,11 +11,15 @@
       </g>
     </svg>
     <!-- <button #spinButton>Spin</button> -->
- </div>
-<!-- roulette.component.html -->
-<div *ngIf="ballFalling !== null" class="resultat" style="background-color: aliceblue;">
-  <p>La balle est tombée sur : {{ ballFalling }}</p>
-  <div class="roulette-img" [routerLink]="['/table']" style="cursor: pointer;">Jouer à nouveau ! </div>
-</div>
+  </div>
 
-</div>  
+  <div *ngIf="ballFalling !== null" class="resultat">
+    
+    <p *ngIf="isCreditInRed()" style="color: red ;">La balle est tombée sur un nombre rouge : {{ ballFalling }} <p>
+    <p *ngIf="isCreditInBlack()" style="color: black ;">La balle est tombée sur un nombre noir : {{ ballFalling }} <p>
+    <p *ngIf="isCreditInGreen()" style="color: green;">La balle est tombée sur un nombre vert : {{ ballFalling }} <p>
+      <p>Gains : {{ getCreditDifference() }}</p>
+
+    <div class="btn btn-warning roulette-img" [routerLink]="['/table']" style="cursor: pointer;">Jouer à nouveau ! </div>
+  </div>
+</div>

@@ -1,6 +1,11 @@
 import { Component, ElementRef } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 
+export interface Bet {
+  betType: string;
+  amount: number;
+}
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -13,9 +18,12 @@ export class TableComponent {
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
   previousSelectedTokenElement: HTMLElement | null = null;
   isCreditBlurred: boolean = false;
-
+  oldCredit : number | undefined;
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef) {
     this.PLAYERINFO.pageCharger = 0;
+    if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
+      this.credit = this.PLAYERINFO.playerInfo.credit;
+    }
   }
 
   creditOp(value: number) {
@@ -66,18 +74,21 @@ export class TableComponent {
           originalColor: target.style.backgroundColor || '' 
         };
       }
-  
+      
+      // Save current state for undo functionality
       this.actionHistory.push({ 
         cellId, 
         previousCount: this.cellTokens[cellId].count, 
         previousColor: this.cellTokens[cellId].color,
         tokenValue: this.selectedToken.value 
       });
-  
+      
+      // Update the cell data with the selected token value
       this.cellTokens[cellId].count += this.selectedToken.value;
       this.cellTokens[cellId].color = this.selectedToken.color;
       this.creditOp(-this.selectedToken.value);
-  
+
+      // Update the display of the cell
       this.updateCellDisplay(cellId);
       this.logTokensData();
     }
@@ -207,10 +218,22 @@ export class TableComponent {
   }
 
   logTokensData() {
-    console.table(this.cellTokens);
+    // console.table('tab');
+    // console.table(this.cellTokens);
+
+    this.PLAYERINFO.tableauparie = Object.entries(this.cellTokens).map(([key, value]) => {
+        return {
+            betType: value.originalContent,
+            amount: value.count
+        };
+    });
+
+    console.table(this.PLAYERINFO.tableauparie);
   }
 
   toggleCreditBlur() {
     this.isCreditBlurred = !this.isCreditBlurred;
   }
+
+ 
 }

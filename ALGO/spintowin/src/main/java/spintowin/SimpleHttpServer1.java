@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 public class SimpleHttpServer1 {
@@ -418,12 +419,8 @@ class PlayerHandlerNew implements HttpHandler {
                     }
                 }
             }
-          
-            
-            
-              
-    
             class PlayerPlaye implements HttpHandler {
+
                 @Override
                 public void handle(HttpExchange exchange) throws IOException {
                     if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
@@ -432,19 +429,56 @@ class PlayerHandlerNew implements HttpHandler {
                         return;
                     }
                     Utils.setCorsHeaders(exchange);
-                    System.out.println("Updating player credit...");
+                    System.out.println("Play game");
 
-                    // Récupérer les données du corps de la requête
+                    // Lire les données du corps de la requête
+                    InputStream requestBody = exchange.getRequestBody();
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode jsonNode = objectMapper.readTree(requestBody);
 
+                    // Extraire les informations du JSON
+                    String playerName = jsonNode.get("name").asText();
+                    int playerCredits = jsonNode.get("credits").asInt();
+                    int ballNumber = jsonNode.get("ballNumber").asInt();
+                    List<Bet> bets = new ArrayList<>();
+                    JsonNode betsNode = jsonNode.get("bets");
+                    if (betsNode.isArray()) {
+                        for (JsonNode betNode : betsNode) {
+                            int amount = betNode.get("amount").asInt();
+                            String betType = betNode.get("betType").asText();
+                            Bet bet = new Bet(amount, betType);
+                            bets.add(bet);
+                        }
+                    }
+
+                    // Créer un jeu et un joueur avec les crédits initiaux
                     Game game = new Game();
-                    Player player1 = new Player("Elio", 1000);
-                    game.addPlayer(player1);
+                    Player player = new Player(playerName, playerCredits);
+                    System.out.println("Player name: " + player.name);
+                    System.out.println("Player credits: " + player.getCredits());
+                    game.addPlayer(player);
 
-                    player1.placeBet(new Bet(100, "noir"));
-                    game.playRound();
+                    // Placer les paris
+                    for (Bet bet : bets) {
+                        player.placeBet(bet);
+                    }
 
-                    // Envoyer une réponse
-                    String response = "Player credit updated!";
+                    // Jouer une ronde avec le numéro de ball spécifié
+                    game.playRound(ballNumber);
+
+                    // Récupérer le joueur mis à jour par son nom
+                    Joueur updatedJoueur = DatabaseManager.getJoueurByName(playerName);
+                    if (updatedJoueur == null) {
+                        String response = "Player not found!";
+                        exchange.sendResponseHeaders(404, response.getBytes().length);
+                        OutputStream outputStream = exchange.getResponseBody();
+                        outputStream.write(response.getBytes());
+                        outputStream.close();
+                        return;
+                    }
+
+                    // Préparer la réponse JSON avec les informations mises à jour du joueur
+                    String response = objectMapper.writeValueAsString(updatedJoueur);
                     exchange.sendResponseHeaders(200, response.getBytes().length);
                     OutputStream outputStream = exchange.getResponseBody();
                     outputStream.write(response.getBytes());
@@ -457,17 +491,9 @@ class PlayerHandlerNew implements HttpHandler {
                         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
                         exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
                     }
-                }
-            }
-        
-    
-    
-        
- 
-    
-
-
-        class GenerateBallHandler implements HttpHandler {
+                }}
+            
+            class GenerateBallHandler implements HttpHandler {
             @Override
             public void handle(HttpExchange exchange) throws IOException {
                 if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
