@@ -1,3 +1,7 @@
+*{
+    user-select: none;
+}
+
 .body {
     position: fixed;
     top: 0;
@@ -36,10 +40,36 @@
     color: white;
 }
 
+.hide-button{
+    width: 64px;
+    height: 48px;
+
+    background-color: rgb(48, 48, 48);
+    position: absolute;
+    top: 71%;
+    left: 93%;
+}
+
 .p-credit {
     position: absolute;
-    top: 13%;
-    left: 14%;
+    top: 73%;
+    left: 78%;
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+.p-credit2 {
+    position: absolute;
+    top: 73%;
+    left: 89%;
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+.p-credit3 {
+    position: absolute;
+    top: 73%;
+    left: 91%;
     color: black;
     font-weight: bold;
     font-size: 110%;
@@ -58,49 +88,67 @@
     text-align: center;
     color: black;
     font-weight: bold;
-    font-size: 125%;
-    top: 50%;
-    left: 5%;
+    font-size: 115%;
+    top: 18%;
+    left: 35%;
 }
 
 /* Component */
 .table-component {
     position: absolute;
-    background-color: rgba(254, 178, 76, 0.6);
+    background: url("../../../assets/image/texture\ tapis.jpg");
     border: #011b3a 2px solid;
-    width: 1255px;
-    height: 400px;
+    width: 1600px;
+    height: 480px;
     bottom: 5px;
-    left: 350px;
+    left: 155px;
+    transform: perspective(800px) rotateX(30deg);
+    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.murtest{
+    position: absolute;
+    background-color: black;
+    border: #011b3a 2px solid;
+    bottom: 280px;
+    left: 700px;
+    width:18000px;
+    height: 55px;
+    transform: rotateX(20deg) rotateY(84.5deg);
+    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .credit {
+
     position: absolute;
-    background-color: rgba(254, 178, 76, 0.6);
-    border: #011b3a 2px solid;
-    bottom: 400px;
-    left: 350px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: black 2px solid;
+    bottom: 447px;
+    left: 408px;
     width: 150px;
     height: 50px;
 }
 
 .message {
     position: absolute;
-    background-color: rgba(254, 178, 76, 0.6);
+    /*background-color: rgba(254, 178, 76, 0.6);*/
+    background-image: url(../../../assets/image/gold.jpg);
     border: #011b3a 2px solid;
-    bottom: 400px;
-    left: 495px;
-    width: 1110px;
+    bottom: 447px;
+    left: 556px;
+    width: 991px;
     height: 50px;
 }
 
 .numéro-chauds {
     position: absolute;
-    background-color: rgba(254, 178, 76, 0.6);
+    background: url("../../../assets/image/texture\ tapis.jpg");
     border: #011b3a 2px solid;
-    left: 1600px;
-    width: 300px;
-    height: 99%;
+    left: 0px;
+    width: 100%;
+    height: 5%;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -109,11 +157,12 @@
     position: absolute;
     background-color: rgba(254, 178, 76, 0.6);
     border: #011b3a 2px solid;
-    bottom: 5px;
-    left: 5px;
-    width: 350px;
-    height: 350px;
+    top: 1px;
+    left: 1px;
+    width: 200px;
+    height: 200px;
     border-radius: 4px;
+    padding:20px;
 }
 
 .roulette-component:hover {
@@ -121,10 +170,13 @@
 }
 
 .roulette-img {
-    width: 100%;
-    height: 100%;
+    border: 2px solid black;
+    left: 78%;
+    top: 5%;
+    width: 300px;
+    height: 300px;
     position: absolute;
-    background-image: url("../../../assets/image/roulette-francaise.png");
+    background-image: url("../../../assets/image/roulette2.png");
     background-size: cover;
     cursor: pointer;
 }
@@ -143,23 +195,24 @@
 
 /* Table */
 .table {
-    background-color: lightgreen;
     position: absolute;
     width: 350px;
     height: 200px;
     top: 3%;
     left: 5%;
     border-radius: 8px;
-    transform: perspective(800px) rotateX(20deg);
+    /*transform: perspective(800px) rotateX(20deg);
     transition: transform 0.5s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
 }
 
 
 td {
+    font-weight: bold;
     cursor: crosshair;
     min-width: 80px; /* Ensure minimum width */
-    height: 55px; /* Ensure minimum height */
+    height: 70px; /* Ensure minimum height */
+    border: 2px solid black;
 
     
 }
@@ -168,89 +221,90 @@ td {
     overflow: hidden;  /* Hide overflow text */
     text-align: center;  /* Center the text */
     vertical-align: middle;  /* Center the text vertically */
-    border: 2px solid black;
+
     border-radius: 5px;
-    z-index: 2;
+    z-index: 1;  /* Ensure it's below the token */
 }
 
 .token-svg {
     position: absolute;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);  /* Center the SVG within the cell */
-    width: 50px;  /* Adjust size as needed */
-    height: 50px;  /* Adjust size as needed */
-    z-index: 1;  /* Ensure it's above the background but below the text */
+    width: 40px;  /* Taille fixe */
+    height: 40px;  /* Taille fixe */
 }
 
 .token-value {
-    position: relative;  /* Ensure it's above the SVG */
-    z-index: 2;
+    position: absolute;  /* Ensure it's above the background but below the token */
+
     background-color: rgba(255, 255, 255, 0.7);  /* Slightly transparent background */
     padding: 2px;
-    font-size: 12px;  /* Adjust font size as needed */
+    font-size: 20px;  /* Adjust font size as needed */
     white-space: nowrap;  /* Prevent text wrapping */
     overflow: hidden;  /* Hide overflow text */
     text-overflow: ellipsis;  /* Show ellipsis (...) for overflow text */
+    top: 5px;
+    left: 5px;
 }
 
 
-.table td span.token-value {
-    position: absolute;  /* Position absolutely within the cell */
+/*.table td span.token-value {
+    position: absolute;  
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 0.7);  /* Slightly transparent background */
+    background-color: rgba(255, 255, 255, 0.7);  
     padding: 2px;
-    font-size: 12px;  /* Adjust font size as needed */
-    white-space: nowrap;  /* Prevent text wrapping */
-    overflow: hidden;  /* Hide overflow text */
-    text-overflow: ellipsis;  /* Show ellipsis (...) for overflow text */
-}
+    font-size: 12px;  
+    white-space: nowrap;  
+    overflow: hidden; 
+    text-overflow: ellipsis;  
+}*/
 
 .select2 {
     position: absolute;
-    width: 260px;
-    height: 130px;
+    width: 300px;
+    height: 90px;
     left: 55%;
-    top: 74%;
+    top: 79%;
     text-align: center;
     overflow: hidden;
+    /*transform: perspective(800px) rotateX(20deg);
+    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);*/
 }
 
 .select1 {
     position: absolute;
-    width: 260px;
-    height: 130px;
-    left: 9%;
-    top: 74%;
+    width: 300px;
+    height: 90px;
+    left: 6%;
+    top: 79%;
     text-align: center;
     overflow: hidden;
+    /*transform: perspective(800px) rotateX(20deg);
+    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);*/
 }
 
 .btn-option {
     position: absolute;
-    width: 280px;
+    width: 500px;
     height: 75px;
-    left: 29%;
-    top: 73%;
+    left: 26%;
+    top: 81%;
     display: flex;
     gap: 10px;
     overflow: hidden;
 }
 
-.btn {
-    height: 125px;
-    width: 125px;
-}
-
 /* Remplissage Table */
 
-.empty {
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
-}
+
 
 .O {
-    background-color: green;
+    background-color: darkgreen;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
@@ -260,7 +314,7 @@ td {
 }
 
 .noir {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(41, 41, 41, 0.747);
 }
 
 .arrondi-haut-droit {
@@ -280,17 +334,18 @@ td {
     background-color: rgba(0,0,0,0);
 }
   .token.selected {
-    filter: drop-shadow(rgb(0, 0, 0) 0px 0px 6px );
+    filter: drop-shadow(rgb(255, 195, 29) 0px 0px 12px );
   }
 
 .token {
     cursor: pointer;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     margin: 10px;
     border: 2px solid transparent; /* Default border */
 }
 .token:hover{
+    margin-top: 2px;
     filter: drop-shadow(rgb(0, 0, 0) 0px 0px 8px );
 }
 
@@ -357,4 +412,88 @@ td {
     font-family: Arial, sans-serif;
     font-weight: bold;
 }
+.chip-number2 {
+    fill: black;
+    font-size: 25px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.back-button {
+    background-color: red;
+    color: white;
+    border: 2px solid black;
+    border-radius: 4%;
+    min-width: 140px;
+    height: 75px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+h2{
+    font-size: 15px;
+    color: black;
+}
+
+.back-button:hover {
+    background-color: darkred;
+}
+
+.back-button:active {
+    transform: scale(0.9);
+}
+.empty {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+}
+
+.bubulle p{
+    top: 30%;
+    left: 30%;
+    font-weight: bold;
+    font-size: 150%;
+    color: black;
+    position: absolute;
+}
+
+.bubulle img{
+    top: 20%;
+    left: 25%;
+    position: absolute;
+    width: 400px;
+    height: 200px;
+    
+}
+
+.btn-im{
+position: inherit;
+left: 5%;
+top: 25px;
+}
+
+h2{
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.blurred {
+    filter: blur(3px);
+  }
+
+  
+  .p-credit {
+    transition: filter 0.8s;
+  }
+  
