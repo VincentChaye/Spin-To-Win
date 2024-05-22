@@ -2,11 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } fr
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { PlayoutComponent } from "../playout/playout.component";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Component({
   selector: "app-roulette",
-  
   templateUrl: "./roulette.component.html",
   styleUrls: ["./roulette.component.css"],
 })
@@ -15,7 +14,9 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   finalAngle: number = 0;
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
   ballFalling: number | null = null; 
-
+  betscopy: any[] = []; // Définition de la propriété bets
+  private allServerURL = 'http://localhost:8000/game/playe';
+  
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
 
@@ -99,6 +100,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
       // Écouter la fin de la transition
       this.renderer.listen(this.ball.nativeElement, 'transitionend', () => {
         // Mettre à jour ballFalling une fois que l'animation est terminée
+        this.calculGains(ball);
         this.ballFalling = ball; 
         console.log(this.ballFalling);
       });
@@ -128,4 +130,63 @@ export class RouletteComponent implements OnInit, AfterViewInit {
     }
     return -1;
   }
+
+  calculGains(ball: number) {
+    if (this.PLAYERINFO.tableauparie) {
+      this.PLAYERINFO.oldCredit=this.PLAYERINFO.playerInfo.credit;
+      this.betscopy = this.PLAYERINFO.tableauparie; // Affecter la valeur de this.PLAYERINFO.tableauparie à this.bets
+      const formattedJson = {
+        name: this.PLAYERINFO.playerInfo.pseudo, // Récupérer le pseudo du joueur
+        credits: this.PLAYERINFO.playerInfo.credit, // Récupérer les crédits du joueur
+        ballNumber: ball,
+        bets: this.betscopy
+      };
+  
+      console.log(JSON.stringify(formattedJson));
+  
+      // Appeler la fonction pour envoyer les données au serveur
+      this.gameResult(formattedJson);
+    } else {
+      console.error('Error: this.PLAYERINFO.tableauparie is undefined.');
+    }
+  }
+  
+  gameResult(data: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Correction du type de contenu
+  
+    this.httpClient.put<any>(this.allServerURL, data, { headers: headers })
+      .subscribe(
+        (response) => {
+          console.log('PUT request successful:', response);
+          delete response.mot_de_passe_hash;
+  
+          // Mettre à jour les informations du joueur
+          this.PLAYERINFO.playerInfo = response;
+        },
+        (error) => {
+          console.error('PUT request error:', error);
+        }
+      );
+  }
+  
+ red = [6, 12, 18, 24, 30, 36, 2, 8, 14, 20, 26, 32, 4, 10, 16, 22, 28, 34];
+ black = [3, 9, 15, 21, 27, 33, 5, 11, 17, 23, 29, 35, 1, 7, 13, 19, 25, 31];
+ green = [0];
+
+ isCreditInRed(): boolean {
+    return this.ballFalling !== null && this.red.includes(this.ballFalling);
+  }
+
+  isCreditInBlack(): boolean {
+    return this.ballFalling !== null && this.black.includes(this.ballFalling);
+  }
+
+  isCreditInGreen(): boolean {
+    return this.ballFalling !== null && this.green.includes(this.ballFalling);
+  }
+
+  getCreditDifference(): number {
+    return (this.PLAYERINFO.playerInfo.credit || 0) - (this.PLAYERINFO.oldCredit || 0);
+  }
+
 }

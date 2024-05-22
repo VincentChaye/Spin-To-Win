@@ -1,6 +1,11 @@
 import { Component, ElementRef } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 
+export interface Bet {
+  betType: string;
+  amount: number;
+}
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -9,12 +14,16 @@ import { PlayoutComponent } from '../playout/playout.component';
 export class TableComponent {
   selectedToken: { value: number, color: string } | null = null;
   cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
-  credit: number = 100;
+  credit: number = 100; //INITIALISATION CREDIT
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
   previousSelectedTokenElement: HTMLElement | null = null;
-
+  isCreditBlurred: boolean = false;
+  oldCredit : number | undefined;
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef) {
     this.PLAYERINFO.pageCharger = 0;
+    if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
+      this.credit = this.PLAYERINFO.playerInfo.credit;
+    }
   }
 
   creditOp(value: number) {
@@ -22,18 +31,24 @@ export class TableComponent {
   }
 
   onTokenClick(value: number, color: string) {
+    if (value === 99) { // Check if the clicked token is MAX
+      if (this.credit > 0) {
+        value = this.credit; // Use all remaining credits
+      } else {
+        alert("Crédit insuffisant pour placer ce pari !");
+        return;
+      }
+    }
     this.selectedToken = { value, color };
     console.log(`Selected token: ${value} of color ${color}`);
 
-    // Reset the previous token's border
     if (this.previousSelectedTokenElement) {
       this.previousSelectedTokenElement.classList.remove('selected');
     }
 
-    // Find the current token element and apply the golden border
     const tokenElements = this.elRef.nativeElement.querySelectorAll('.token');
     tokenElements.forEach((tokenElement: HTMLElement) => {
-      if (parseInt(tokenElement.querySelector('text')?.textContent || '0', 10) === value) {
+      if (parseInt(tokenElement.querySelector('text')?.textContent || '0', 10) === value || (value === this.credit && tokenElement.querySelector('text')?.textContent === 'MAX')) {
         tokenElement.classList.add('selected');
         this.previousSelectedTokenElement = tokenElement;
       }
@@ -44,8 +59,13 @@ export class TableComponent {
     const target = event.target as HTMLElement;
     if (this.selectedToken && target.tagName === 'TD' && target.id) {
       const cellId = target.id;
-
-      // Initialize the cell data if not already initialized
+  
+      // Vérifiez si le crédit est suffisant pour placer le jeton
+      if (this.credit < this.selectedToken.value) {
+        alert("Crédit insuffisant pour placer ce pari !");
+        return;
+      }
+  
       if (!this.cellTokens[cellId]) {
         this.cellTokens[cellId] = { 
           count: 0, 
@@ -70,37 +90,40 @@ export class TableComponent {
 
       // Update the display of the cell
       this.updateCellDisplay(cellId);
-      
-      // Log the updated tokens data to the console
       this.logTokensData();
     }
   }
+  
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
-    if (cell) { // Vérifie si l'élément n'est pas nul
+    if (cell) {
       const cellData = this.cellTokens[cellId];
-      
-      // Clear existing tokens
       cell.innerHTML = '';
 
-      // Créer ou mettre à jour un élément span pour la valeur du jeton
-      let tokenSpan = cell.querySelector('span.token-value') as HTMLElement;
-      if (!tokenSpan) {
-        tokenSpan = document.createElement('span');
-        tokenSpan.className = 'token-value';
-        cell.appendChild(tokenSpan);
-      }
-      if (tokenSpan) {
-        tokenSpan.innerText = cellData.count > 0 ? `  (${cellData.count}€)` : '';
-      }
-      
-      // Ajouter le jeton SVG sélectionné à la cellule
-      if (cellData.count > 0) {
-        const tokenSvg = this.createTokenSvg(this.selectedToken!.value, this.selectedToken!.color); // Utilisez l'opérateur non-null assertion (!)
-        tokenSvg.classList.add('token-svg');  // Ajoutez la classe pour le positionnement
+      if (cellData.count > 0 && this.selectedToken) {
+        const tokenColor = this.getTokenColor(cellData.count);
+        const tokenSvg = this.createTokenSvg(cellData.count, tokenColor);
+        tokenSvg.classList.add('token-svg');
         cell.appendChild(tokenSvg);
+      } else {
+        cell.innerText = cellData.originalContent;
+        cell.style.backgroundColor = cellData.originalColor;
       }
+    }
+  }
+
+  getTokenColor(count: number): string {
+    if (count >= 1 && count <= 4) {
+      return 'yellow';
+    } else if (count >= 5 && count <= 9) {
+      return 'orange';
+    } else if (count >= 10 && count <= 19) {
+      return 'red';
+    } else if (count >= 20 && count <= 49) {
+      return 'purple';
+    } else {
+      return 'lightblue';
     }
   }
 
@@ -109,13 +132,15 @@ export class TableComponent {
     const svg = document.createElementNS(svgNamespace, 'svg') as SVGSVGElement;
     svg.setAttribute('viewBox', '0 0 100 100');
     svg.setAttribute('class', 'token');
+    svg.setAttribute('width', '50');
+    svg.setAttribute('height', '50');
 
     const circle = document.createElementNS(svgNamespace, 'circle') as SVGCircleElement;
     circle.setAttribute('cx', '50');
     circle.setAttribute('cy', '50');
     circle.setAttribute('r', '45');
     circle.setAttribute('class', 'outer-circle');
-    circle.setAttribute('fill', color);
+    circle.setAttribute('fill', 'black');
 
     const innerCircle = document.createElementNS(svgNamespace, 'circle') as SVGCircleElement;
     innerCircle.setAttribute('cx', '50');
@@ -126,12 +151,34 @@ export class TableComponent {
     const text = document.createElementNS(svgNamespace, 'text') as SVGTextElement;
     text.setAttribute('x', '50');
     text.setAttribute('y', '60');
+    text.setAttribute('font-size', '150%');
     text.setAttribute('text-anchor', 'middle');
     text.setAttribute('class', 'chip-number');
     text.setAttribute('fill', 'black');
-    text.textContent = `${this.getCellCount('value')}`;
+    text.textContent = `${value}`;
+
+    const segmentsGroup = document.createElementNS(svgNamespace, 'g') as SVGGElement;
+    segmentsGroup.setAttribute('class', 'segments6');
+
+    const createSegment = (rotation: number) => {
+      const rect = document.createElementNS(svgNamespace, 'rect') as SVGRectElement;
+      rect.setAttribute('x', '47');
+      rect.setAttribute('y', '5');
+      rect.setAttribute('width', '6');
+      rect.setAttribute('height', '10');
+      rect.setAttribute('transform', `rotate(${rotation} 50 50)`);
+      rect.setAttribute('fill', color);
+      return rect;
+    };
+
+    for (let i = 0; i < 360; i += 45) {
+      const rect = createSegment(i);
+      segmentsGroup.appendChild(rect);
+    }
 
     svg.appendChild(circle);
+    svg.appendChild(innerCircle);
+    svg.appendChild(segmentsGroup);
     svg.appendChild(text);
 
     return svg;
@@ -144,7 +191,7 @@ export class TableComponent {
   onRemoveAllTokens() {
     Object.keys(this.cellTokens).forEach(cellId => {
       const cellData = this.cellTokens[cellId];
-      this.creditOp(cellData.count); // Add the count back to credit
+      this.creditOp(cellData.count);
       cellData.count = 0;
       const cell = document.getElementById(cellId);
       if (cell) {
@@ -154,7 +201,7 @@ export class TableComponent {
     });
     this.cellTokens = {};
     this.actionHistory = [];
-    this.logTokensData(); // Log the updated tokens data to the console
+    this.logTokensData();
   }
 
   onUndoLastAction() {
@@ -165,12 +212,28 @@ export class TableComponent {
       cellData.count = previousCount;
       cellData.color = previousColor;
       this.updateCellDisplay(cellId);
-      this.creditOp(tokenValue); // Add the token value back to credit
-      this.logTokensData(); // Log the updated tokens data to the console
+      this.creditOp(tokenValue);
+      this.logTokensData();
     }
   }
 
   logTokensData() {
-    console.table(this.cellTokens);
+    // console.table('tab');
+    // console.table(this.cellTokens);
+
+    this.PLAYERINFO.tableauparie = Object.entries(this.cellTokens).map(([key, value]) => {
+        return {
+            betType: value.originalContent,
+            amount: value.count
+        };
+    });
+
+    console.table(this.PLAYERINFO.tableauparie);
   }
+
+  toggleCreditBlur() {
+    this.isCreditBlurred = !this.isCreditBlurred;
+  }
+
+ 
 }
