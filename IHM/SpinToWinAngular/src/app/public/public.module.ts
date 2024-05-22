@@ -13,6 +13,7 @@ import { RegisterComponent } from './register/register.component';
 import { CreditComponent } from './credit/credit.component';
 import { JeuComponent } from './jeu/jeu.component';
 import { TableComponent } from './table/table.component';
+import { RouletteComponent } from './roulette/roulette.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { TableComponent } from './table/table.component';
     RegisterComponent,
     CreditComponent,
     JeuComponent,
-    TableComponent
+    TableComponent,
+    RouletteComponent
     
   ],
   imports: [

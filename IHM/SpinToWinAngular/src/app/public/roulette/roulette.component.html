@@ -1,6 +1,6 @@
 <div class="body">
-  <div class="container-roulette">
-      <p *ngIf="ballFalling !== null">La balle est tombée sur : {{ ballFalling }}</p>
+  <div *ngIf="ballFalling == null"  class="container-roulette">
+     
       <svg width="600" height="600" viewBox="-100 -100 200 200">
       <g transform="rotate(-90)">
         <path *ngFor="let path of paths; let i = index"
@@ -11,7 +11,11 @@
       </g>
     </svg>
     <!-- <button #spinButton>Spin</button> -->
-  
+ </div>
+<!-- roulette.component.html -->
+<div *ngIf="ballFalling !== null" class="resultat" style="background-color: aliceblue;">
+  <p>La balle est tombée sur : {{ ballFalling }}</p>
+  <div class="roulette-img" [routerLink]="['/table']" style="cursor: pointer;">Jouer à nouveau ! </div>
+</div>
 
-  </div>
 </div>  

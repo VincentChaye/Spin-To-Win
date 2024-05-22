@@ -1,13 +1,20 @@
 
 <div id="bg">
-	<div class="info" *ngIf="PLAYERINFO.playerInfo">
-    <p>Pseudo: {{ PLAYERINFO.playerInfo.pseudo }}</p>
-    <p>Nom: {{ PLAYERINFO.playerInfo.nom }}</p>
-    <p>Prénom: {{ PLAYERINFO.playerInfo.prenom }}</p>
-    <p>Crédit: {{ PLAYERINFO.playerInfo.credit }}</p>
+	<div id="connected" class="info" *ngIf="PLAYERINFO.playerInfo">
+    <h1>Crédit</h1>
+    <div>
+      <p>Pseudo: {{ PLAYERINFO.playerInfo.pseudo }}</p>
+      <p>Nom: {{ PLAYERINFO.playerInfo.nom }}</p>
+    </div>
+    <div>
+      <p>Prénom: {{ PLAYERINFO.playerInfo.prenom }}</p>
+      <p>Crédit: {{ PLAYERINFO.playerInfo.credit }}</p>
+    </div>
   </div>
-
-  <div class="info" *ngIf="!PLAYERINFO.playerInfo">
-	<p>Vous n'êtes pas connecté</p>
-
+  
+  <div id="notconnected" class="info" *ngIf="!PLAYERINFO.playerInfo">
+    <h1>Erreur !</h1>
+    <p>Vous n'êtes pas connecté</p>
+    <button >Se connecté</button>
+  </div>
 </div>
