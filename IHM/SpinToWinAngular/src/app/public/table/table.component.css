@@ -1,10 +1,12 @@
 .body {
-    padding: 0;
-    margin: 0;
+    position: fixed;
+    top: 0;
     width: 100%;
-    height: 100%;
-    background: url("../../../assets/image/bck.png") no-repeat center center fixed;
+    height: 100vh;
+    background: url("../../../assets/image/bck.png") no-repeat center fixed;
     background-size: cover;
+    z-index: -1;
+    
 }
 
 /* Titre/Texte */
@@ -65,7 +67,7 @@
 .table-component {
     position: absolute;
     background-color: rgba(254, 178, 76, 0.6);
-    border: #011b3a 5px solid;
+    border: #011b3a 2px solid;
     width: 1255px;
     height: 400px;
     bottom: 5px;
@@ -75,7 +77,7 @@
 .credit {
     position: absolute;
     background-color: rgba(254, 178, 76, 0.6);
-    border: #011b3a 5px solid;
+    border: #011b3a 2px solid;
     bottom: 400px;
     left: 350px;
     width: 150px;
@@ -85,7 +87,7 @@
 .message {
     position: absolute;
     background-color: rgba(254, 178, 76, 0.6);
-    border: #011b3a 5px solid;
+    border: #011b3a 2px solid;
     bottom: 400px;
     left: 495px;
     width: 1110px;
@@ -95,25 +97,23 @@
 .numéro-chauds {
     position: absolute;
     background-color: rgba(254, 178, 76, 0.6);
-    border: #011b3a 5px solid;
-    bottom: 300px;
+    border: #011b3a 2px solid;
     left: 1600px;
-    width: 315px;
+    width: 300px;
     height: 99%;
     border-radius: 8px;
     overflow: hidden;
-    bottom: 5px;
 }
 
 .roulette-component {
     position: absolute;
     background-color: rgba(254, 178, 76, 0.6);
-    border: #011b3a 5px solid;
+    border: #011b3a 2px solid;
     bottom: 5px;
     left: 5px;
     width: 350px;
     height: 350px;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 .roulette-component:hover {
@@ -143,28 +143,55 @@
 
 /* Table */
 .table {
+    background-color: lightgreen;
     position: absolute;
-    width: 300px;
+    width: 350px;
     height: 200px;
-    top: 15%;
-    left: 1%;
+    top: 3%;
+    left: 5%;
+    border-radius: 8px;
+    transform: perspective(800px) rotateX(20deg);
+    transition: transform 0.5s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 
 td {
     cursor: crosshair;
-    text-align: center;
-    min-width: 70px; /* Ensure minimum width */
-    min-height: 45px; /* Ensure minimum height */
-    vertical-align: middle;
-    border-radius: 5px;
-}
+    min-width: 80px; /* Ensure minimum width */
+    height: 55px; /* Ensure minimum height */
 
+    
+}
 .table td {
     position: relative;  /* To enable positioning child elements */
     overflow: hidden;  /* Hide overflow text */
     text-align: center;  /* Center the text */
     vertical-align: middle;  /* Center the text vertically */
+    border: 2px solid black;
+    border-radius: 5px;
+    z-index: 2;
 }
+
+.token-svg {
+    position: absolute;
+    transform: translate(-50%, -50%);  /* Center the SVG within the cell */
+    width: 50px;  /* Adjust size as needed */
+    height: 50px;  /* Adjust size as needed */
+    z-index: 1;  /* Ensure it's above the background but below the text */
+}
+
+.token-value {
+    position: relative;  /* Ensure it's above the SVG */
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.7);  /* Slightly transparent background */
+    padding: 2px;
+    font-size: 12px;  /* Adjust font size as needed */
+    white-space: nowrap;  /* Prevent text wrapping */
+    overflow: hidden;  /* Hide overflow text */
+    text-overflow: ellipsis;  /* Show ellipsis (...) for overflow text */
+}
+
 
 .table td span.token-value {
     position: absolute;  /* Position absolutely within the cell */
@@ -181,7 +208,7 @@ td {
 
 .select2 {
     position: absolute;
-    width: 210px;
+    width: 260px;
     height: 130px;
     left: 55%;
     top: 74%;
@@ -191,7 +218,7 @@ td {
 
 .select1 {
     position: absolute;
-    width: 210px;
+    width: 260px;
     height: 130px;
     left: 9%;
     top: 74%;
@@ -224,6 +251,8 @@ td {
 
 .O {
     background-color: green;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
 .rouge {
@@ -234,14 +263,98 @@ td {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-.lg {
-    background-color: lightgreen;
+.arrondi-haut-droit {
     min-width: 100px;
+    border-top-right-radius: 8px;
+    background-color: rgba(0,0,0,0);
 }
+
+.arrondi-bas-droit {
+    min-width: 100px;
+    border-bottom-right-radius: 8px;
+    background-color: rgba(0,0,0,0);
+}
+
+.lg{
+
+    background-color: rgba(0,0,0,0);
+}
+  .token.selected {
+    filter: drop-shadow(rgb(0, 0, 0) 0px 0px 6px );
+  }
 
 .token {
     cursor: pointer;
     width: 50px;
     height: 50px;
     margin: 10px;
+    border: 2px solid transparent; /* Default border */
 }
+.token:hover{
+    filter: drop-shadow(rgb(0, 0, 0) 0px 0px 8px );
+}
+
+#casino-chip {
+    width: 60px;
+    height: 60px;
+}
+
+.outer-circle {
+    fill: black;
+}
+
+.inner-circle1 {
+    fill: #fff53a;
+}
+
+.segments1 rect {
+    fill: #fff53a;
+}
+
+.inner-circle2 {
+    fill: #ffc933;
+}
+
+.segments2 rect {
+    fill: #ffc933;
+}
+
+.inner-circle3 {
+    fill: rgb(253, 42, 42);
+}
+
+.segments3 rect {
+    fill: rgb(253, 42, 42);
+}
+
+.inner-circle4 {
+    fill: rgb(156, 34, 255);
+}
+
+.segments4 rect {
+    fill: rgb(156, 34, 255);
+}
+
+.inner-circle5 {
+    fill: rgb(49, 145, 255);
+}
+
+.segments5 rect {
+    fill: rgb(49, 145, 255);
+}
+
+.inner-circle6 {
+    fill: rgb(39, 255, 104);
+}
+
+.segments6 rect {
+    fill: rgb(39, 255, 104);
+}
+
+.chip-number {
+    fill: black;
+    font-size: 35px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
