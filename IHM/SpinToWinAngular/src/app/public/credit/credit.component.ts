@@ -11,6 +11,8 @@ export class CreditComponent {
  
   constructor( public PLAYERINFO: PlayoutComponent) {}
   
-  
+  deconexion() {
+    this.PLAYERINFO.playerInfo = null; // Vider playerInfo
+  }
 
 }
