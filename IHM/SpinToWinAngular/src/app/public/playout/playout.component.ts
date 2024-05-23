@@ -12,7 +12,7 @@ export class PlayoutComponent {
   
   playerInfo: any;
   pageCharger: number = 1;
-  
+  pedro: boolean = false;
   oldCredit : number | undefined;
   tableauparie: Bet[] | undefined; // Utilisation de l'interface Bet
   private reloaderSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);

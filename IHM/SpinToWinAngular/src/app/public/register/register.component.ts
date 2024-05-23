@@ -12,16 +12,36 @@ export class RegisterComponent implements OnInit {
   constructor(private httpClient: HttpClient, public PLAYERINFO: PlayoutComponent, private router: Router) {}
 
   pseudos: string[] = [];
+  emails: string[] = [];
   Nom: string = '';
   Prenom: string = '';
   Email: string = '';
   Age: string = '';
   Username: string = '';
   Password: string = '';
-  isPseudoIncluded: boolean = false; // Propriété pour vérifier si le pseudo est inclus dans la liste
+  isPseudoIncluded: boolean = false;
+  isEmailIncluded: boolean = false;
 
   ngOnInit(): void {
     this.getAllPseudo();
+    this.getAllEmails();
+  }
+
+  getAllEmails() {
+    const url = 'http://localhost:8000/player/mail';
+    this.httpClient.get<string[]>(url).subscribe(
+      (response: string[]) => {
+        this.emails = response;
+        this.checkEmailValidity();
+      },
+      (error: any) => {
+        console.error('Une erreur s\'est produite :', error);
+      }
+    );
+  }
+
+  checkEmailValidity() {
+    this.isEmailIncluded = this.emails.includes(this.Email);
   }
 
   getAllPseudo() {
@@ -29,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.httpClient.get<string[]>(url).subscribe(
       (response: string[]) => {
         this.pseudos = response;
-        this.checkPseudoValidity(); // Vérifiez la validité du pseudo après avoir obtenu les pseudos
+        this.checkPseudoValidity();
       },
       (error: any) => {
         console.error('Une erreur s\'est produite :', error);
@@ -41,11 +61,25 @@ export class RegisterComponent implements OnInit {
     this.isPseudoIncluded = !this.pseudos.includes(this.Username);
   }
 
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
+
+  isFormValid(): boolean {
+    return !!this.Nom && !!this.Prenom && this.isValidEmail(this.Email) && !!this.Age && !!this.Username && !!this.Password && this.isPseudoIncluded && !this.isEmailIncluded;
+  }
+
   submitForm(event: Event): void {
-    event.preventDefault(); // Empêche le rechargement de la page
+    event.preventDefault();
 
     if (!this.isPseudoIncluded) {
       console.log('Le pseudo est déjà inclus dans la liste.');
+      return;
+    }
+
+    if (this.isEmailIncluded) {
+      console.log('L\'adresse email est déjà enregistrée.');
       return;
     }
 
@@ -84,4 +118,6 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
+
+  isEmailTouched: boolean = false;
 }

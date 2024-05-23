@@ -240,6 +240,21 @@ public class DatabaseManager {
         return pseudos;
     }
 
-    
+    public static List<String> getAllMail() {
+        List<String> pseudos = new ArrayList<>();
+        String sql = "SELECT pseudo FROM joueur";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String pseudo = rs.getString("email");
+                pseudos.add(pseudo);
+            }
+            return pseudos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pseudos;
+    }
     // Autres méthodes pour gérer les opérations de base de données ici...
 }

@@ -215,6 +215,13 @@ export class TableComponent implements OnInit {
     return this.cellTokens[cellId]?.count;
   }
 
+
+  getPedro(){
+    this.PLAYERINFO.pedro=!this.PLAYERINFO.pedro;
+    console.log("pedro");
+    console.log(this.PLAYERINFO.pedro);
+  }
+
   onRemoveAllTokens() {
     Object.keys(this.cellTokens).forEach(cellId => {
       const cellData = this.cellTokens[cellId];

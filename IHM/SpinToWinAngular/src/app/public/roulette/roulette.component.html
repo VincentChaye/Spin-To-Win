@@ -9,9 +9,31 @@
               [attr.id]="tab[i]"></path>
         <circle #ball cx="3" cy="-70" r="3" fill="white"></circle>
       </g>
+      <!-- Image avec animation de rotation -->
+      <g transform="rotate(-90)">
+        <g transform="translate(0 0)">
+          <image *ngIf="PLAYERINFO.pedro" class="PEDROIMG" xlink:href="../../../assets/image/PEDRO.png" width="140" height="140" x="-70" y="-70">
+            <!-- Animation de rotation de l'image -->
+            <animateTransform attributeName="transform"
+                               attributeType="XML"
+                               type="rotate"
+                               from="0 0 0"
+                               to="360 0 0"
+                               dur="20s"
+                               repeatCount="indefinite"/>
+          </image>
+        </g>
+      </g>
     </svg>
-    <!-- <button #spinButton>Spin</button> -->
   </div>
+  
+
+
+
+
+
+
+
 
   <div *ngIf="ballFalling !== null" class="resultat">
     

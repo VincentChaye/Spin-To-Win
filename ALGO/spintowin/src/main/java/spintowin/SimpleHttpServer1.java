@@ -34,6 +34,7 @@ public class SimpleHttpServer1 {
         server.createContext("/player/name", new PlayerHandlerName());
         server.createContext("/player/new", new PlayerHandlerNew());
         server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
+        server.createContext("/player/mail", new PlayerHandlerAllMail());
         server.createContext("/player/auth", new PlayerHandlerAuth());
         server.createContext("/game/playe", new PlayerPlaye());
         server.createContext("/player/update", new PlayerUpdateCredit());
@@ -529,5 +530,49 @@ class PlayerHandlerNew implements HttpHandler {
             }
             }
 
+            class PlayerHandlerAllMail implements HttpHandler {
+            	@Override
+        	    public void handle(HttpExchange exchange) throws IOException {
+        	        if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+        	            Utils.setCorsHeaders(exchange);
+        	            exchange.sendResponseHeaders(200, -1);
+        	            return;
+        	        }
 
+        	        Utils.setCorsHeaders(exchange);
+        	        System.out.println("All player...");
+
+
+                    try {
+                        // Appeler getAllPseudo pour récupérer la liste des pseudonymes
+                        List<String> playerPseudos = DatabaseManager.getAllPseudo();
+
+                        // Convertir la liste de pseudonymes en JSON
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        ArrayNode pseudoArray = objectMapper.createArrayNode();
+                        for (String pseudo : playerPseudos) {
+                            pseudoArray.add(pseudo);
+                        }
+                        String jsonResponse = objectMapper.writeValueAsString(pseudoArray);
+
+                        // Envoyer les pseudonymes en tant que réponse JSON
+                        byte[] responseBytes = jsonResponse.getBytes();
+                        exchange.getResponseHeaders().set("Content-Type", "application/json");
+                        exchange.sendResponseHeaders(200, responseBytes.length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(responseBytes);
+                        }
+                    } catch (NumberFormatException e) {
+                        // Envoyer une réponse 400 si l'ID n'est pas valide
+                        exchange.sendResponseHeaders(400, 0);
+                    }
+                }
+                static class Utils {
+        	        public static void setCorsHeaders(HttpExchange exchange) {
+        	            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        	            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        	            exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        	        }
+        	    }
+                }
 
