@@ -10,11 +10,14 @@
       <p>Prénom: {{ PLAYERINFO.playerInfo.prenom }}</p>
       <p>Crédit: {{ PLAYERINFO.playerInfo.credit }}</p>
     </div>
+    <button class="btn btn-lg btn-warning"  [routerLink]="['/Vegastudio']" (click)="deconexion()">Se déconnecter</button>
+
   </div>
   
   <div id="notconnected" class="info" *ngIf="!PLAYERINFO.playerInfo">
     <h1>Erreur !</h1>
     <p>Vous n'êtes pas connecté</p>
-    <button >Se connecté</button>
+    <button class="btn btn-lg btn-warning" [routerLink]="['/login']">Se connecter</button>
+
   </div>
 </div>
