@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterOutlet } from "@angular/router";
-import { PlayoutComponent } from "../playout/playout.component";
+import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { PlayoutComponent } from "../playout/playout.component";
 
 @Component({
   selector: "app-roulette",
@@ -20,15 +19,23 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
 
-  constructor(private httpClient: HttpClient, private renderer: Renderer2, public PLAYERINFO: PlayoutComponent) {
+  constructor(
+    private httpClient: HttpClient,
+    private renderer: Renderer2,
+    private router: Router,
+    public PLAYERINFO: PlayoutComponent
+  ) {
     this.PLAYERINFO.pageCharger = 0;
   }
 
   ngOnInit() {
-    this.generatePaths();
-    this.startAnimation();
+    if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
+      this.router.navigate(['/login']); // Redirisgez vers le composant login
+    } else {
+      this.generatePaths();
+      this.startAnimation();
+    }
   }
-
   ngAfterViewInit() {
     if (this.ball && this.ball.nativeElement && this.spinButton && this.spinButton.nativeElement) {
       this.renderer.listen(this.spinButton.nativeElement, 'click', () => {
