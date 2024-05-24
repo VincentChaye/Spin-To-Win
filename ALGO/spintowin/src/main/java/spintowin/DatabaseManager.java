@@ -20,15 +20,23 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseManager {
-    private static final String DB_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
-    private static final String DB_USER = "sa";
-    private static final String DB_PASSWORD = "password";
+	 private static final String DB_URL = "jdbc:mysql://localhost:3306/VegaStudio_DB";
+	    private static final String DB_USER = "Compte_API";
+	    private static final String DB_PASSWORD = "FKf1VF6HiRyi1";
 
-    // Méthode pour établir une connexion à la base de données
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-    }
+	    // Chargement du pilote JDBC MySQL
+	    static {
+	        try {
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	        } catch (ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
+	    // Méthode pour établir une connexion à la base de données
+	    private static Connection getConnection() throws SQLException {
+	        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+	    }
     // Méthode pour récupérer un joueur par son ID
     public static Joueur getJoueurById(int joueurId) {
         Joueur joueur = null;

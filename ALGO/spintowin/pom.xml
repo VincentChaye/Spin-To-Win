@@ -34,6 +34,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.12.5</version> <!-- Utilisez la dernière version disponible -->
         </dependency>
+        <dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.28</version> <!-- Assurez-vous de choisir la version appropriée -->
+</dependency>
+
         <!-- Dépendance pour CorsFilter -->
         <dependency>
             <groupId>javax.servlet</groupId>

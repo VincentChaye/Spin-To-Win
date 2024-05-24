@@ -4,6 +4,9 @@ CREATE DATABASE IF NOT EXISTS VegaStudio_DB CHARACTER SET 'utf8mb4' COLLATE 'utf
 
 USE VegaStudio_DB;
 
+DROP USER IF EXISTS 'Compte_API'@'localhost';
+CREATE USER 'Compte_API'@'localhost' IDENTIFIED BY 'FKf1VF6HiRyi1';
+GRANT SELECT ON VegaStudio_DB.joueur TO 'Compte_API'@'localhost';
 
 CREATE TABLE IF NOT EXISTS joueur (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,3 +18,5 @@ CREATE TABLE IF NOT EXISTS joueur (
     credit FLOAT,
     mot_de_passe_hash VARCHAR(255)
 );
+
+
