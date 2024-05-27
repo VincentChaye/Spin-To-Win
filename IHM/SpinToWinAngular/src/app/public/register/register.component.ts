@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
   Password: string = '';
   isPseudoIncluded: boolean = false;
   isEmailIncluded: boolean = false;
+  isAgeValid: boolean = true;
 
   ngOnInit(): void {
     this.getAllPseudo();
@@ -61,13 +62,28 @@ export class RegisterComponent implements OnInit {
     this.isPseudoIncluded = !this.pseudos.includes(this.Username);
   }
 
+  checkAgeValidity() {
+    if (this.Age) {
+      const today = new Date();
+      const birthDate = new Date(this.Age);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      this.isAgeValid = age >= 18 && birthDate.getFullYear() > 1500;
+    } else {
+      this.isAgeValid = true;
+    }
+  }
+
   isValidEmail(email: string): boolean {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
 
   isFormValid(): boolean {
-    return !!this.Nom && !!this.Prenom && this.isValidEmail(this.Email) && !!this.Age && !!this.Username && !!this.Password && this.isPseudoIncluded && !this.isEmailIncluded;
+    return !!this.Nom && !!this.Prenom && this.isValidEmail(this.Email) && !!this.Age && !!this.Username && !!this.Password && this.isPseudoIncluded && !this.isEmailIncluded && this.isAgeValid;
   }
 
   submitForm(event: Event): void {
@@ -80,6 +96,11 @@ export class RegisterComponent implements OnInit {
 
     if (this.isEmailIncluded) {
       console.log('L\'adresse email est déjà enregistrée.');
+      return;
+    }
+
+    if (!this.isAgeValid) {
+      console.log('L\'utilisateur doit avoir au moins 18 ans et être né après 1500.');
       return;
     }
 

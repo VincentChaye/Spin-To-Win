@@ -8,6 +8,7 @@ DROP USER IF EXISTS 'Compte_API'@'localhost';
 CREATE USER 'Compte_API'@'localhost' IDENTIFIED BY 'FKf1VF6HiRyi1';
 GRANT SELECT ON VegaStudio_DB.joueur TO 'Compte_API'@'localhost';
 
+
 CREATE TABLE IF NOT EXISTS joueur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pseudo VARCHAR(255) UNIQUE,
