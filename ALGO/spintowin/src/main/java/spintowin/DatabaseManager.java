@@ -142,8 +142,20 @@ public class DatabaseManager {
         return newPlayer;
     }
 
-    
-    
+    public static void updateEvolutionCredit(int joueurId, float credit) {
+        String sql = "INSERT INTO evolutionCredit (joueur_id, credit) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, joueurId);
+            pstmt.setFloat(2, credit);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     void createPlayerFromRequestData(Joueur newPlayer) {
         try {
             // Convertir la java.util.Date en java.sql.Date
@@ -248,6 +260,25 @@ public class DatabaseManager {
         return pseudos;
     }
 
+    public static List<Float> getAllEvolutionCredit(int id) {
+        List<Float> credits = new ArrayList<>();
+        String sql = "SELECT credit FROM evolutionCredit WHERE joueur_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setInt(1, id);  
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                float credit = rs.getFloat("credit");  
+                credits.add(credit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return credits;
+    }
+
+    
     public static List<String> getAllMail() {
         List<String> pseudos = new ArrayList<>();
         String sql = "SELECT pseudo FROM joueur";
