@@ -2,18 +2,17 @@ package WebGestion;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.corundumstudio.socketio.SocketIOClient;
 import spintowin.Joueur;
 
 public class Salon {
     private int identifiantSalon;
-    private Joueur[] joueurs;
-    private int nbJoueurEnLigne;
-    private List<String> chatMessages; // List to store chat messages
+    private List<SocketIOClient> joueurs;
+    private List<String> chatMessages;
 
     public Salon(int identifiantSalon) {
         this.identifiantSalon = identifiantSalon;
-        this.joueurs = new Joueur[10];
-        this.nbJoueurEnLigne = 0;
+        this.joueurs = new ArrayList<>();
         this.chatMessages = new ArrayList<>();
     }
 
@@ -21,42 +20,32 @@ public class Salon {
         return identifiantSalon;
     }
 
-    public Joueur[] getJoueurs() {
+    public List<SocketIOClient> getJoueurs() {
         return joueurs;
     }
 
-    public int getNbJoueurEnLigne() {
-        return nbJoueurEnLigne;
+    public void ajouterJoueur(SocketIOClient joueur) {
+        joueurs.add(joueur);
+        joueur.sendEvent("message", "Vous avez rejoint le salon " + identifiantSalon);
     }
 
-    public void ajouterJoueur(Joueur joueur) {
-        if (nbJoueurEnLigne < joueurs.length) {
-            joueurs[nbJoueurEnLigne++] = joueur;
-        } else {
-            System.out.println("Le salon est plein.");
-        }
+    public void retirerJoueur(SocketIOClient joueur) {
+        joueurs.remove(joueur);
+        joueur.sendEvent("message", "Vous avez quitté le salon " + identifiantSalon);
     }
 
-    public void retirerJoueur(Joueur joueur) {
-        for (int i = 0; i < nbJoueurEnLigne; i++) {
-            if (joueurs[i].equals(joueur)) {
-                for (int j = i; j < nbJoueurEnLigne - 1; j++) {
-                    joueurs[j] = joueurs[j + 1];
-                }
-                joueurs[nbJoueurEnLigne - 1] = null;
-                nbJoueurEnLigne--;
-                return;
-            }
-        }
-        System.out.println("Le joueur n'est pas présent dans le salon.");
+    public boolean estDansSalon(SocketIOClient joueur) {
+        return joueurs.contains(joueur);
     }
 
-    // Method to add chat message
     public void ajouterMessage(String message) {
         chatMessages.add(message);
+        // Envoyer le message à tous les joueurs dans le salon
+        for (SocketIOClient joueur : joueurs) {
+            joueur.sendEvent("chatMessage", message);
+        }
     }
 
-    // Method to get chat messages
     public List<String> getChatMessages() {
         return chatMessages;
     }

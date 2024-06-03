@@ -597,8 +597,8 @@ class PlayerHandlerNew implements HttpHandler {
         	    System.out.println("Ball generate");
                 
                 // Générer un nombre aléatoire entre 0 et 36
-                Random random = new Random();
-                int randomNumber = random.nextInt(37); // 0 inclus, 37 exclu
+                
+                int randomNumber = RandomNumberUtil.generateRandomNumber(); // 0 inclus, 37 exclu
 
                 // Convertir le nombre en JSON
                 ObjectMapper objectMapper = new ObjectMapper();

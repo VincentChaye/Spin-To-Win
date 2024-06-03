@@ -3,6 +3,7 @@ package spintowin;
 import java.io.IOException;
 
 import com.sun.net.httpserver.HttpServer;
+
 public class Main {
     public static void main(String[] args) {
         // Création des threads pour chaque serveur
@@ -20,9 +21,15 @@ public class Main {
             H2Database.main(new String[]{});
         });
 
+        Thread socketIOServerThread = new Thread(() -> {
+            // Lancement du serveur Socket.IO
+            RandomNumberAPI.main(new String[]{});
+        });
+
         // Démarrage des threads
         httpServerThread.start();
         h2DatabaseThread.start();
+        socketIOServerThread.start();
 
         // Attendez que le serveur HTTP démarre avant d'ajouter le gestionnaire de contexte CORS
         try {
@@ -34,5 +41,9 @@ public class Main {
         // Ajout du gestionnaire de contexte CORS au chemin racine du serveur HTTP
         HttpServer server = SimpleHttpServer1.getServer();
         server.createContext("/", new CorsHandler());
+
+        // Exemple d'utilisation de la génération de nombre aléatoire
+        int randomNumber = RandomNumberUtil.generateRandomNumber();
+        System.out.println("Generated random number in main: " + randomNumber);
     }
 }
