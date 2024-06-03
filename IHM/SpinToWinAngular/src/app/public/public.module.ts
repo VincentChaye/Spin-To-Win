@@ -14,7 +14,6 @@ import { CreditComponent } from './credit/credit.component';
 import { JeuComponent } from './jeu/jeu.component';
 import { TableComponent } from './table/table.component';
 import { RouletteComponent } from './roulette/roulette.component';
-import { TestComponent } from './test/test.component';  // Assurez-vous d'importer TestComponent
  
 
 @NgModule({
@@ -27,7 +26,6 @@ import { TestComponent } from './test/test.component';  // Assurez-vous d'import
     JeuComponent,
     TableComponent,
     RouletteComponent,
-    TestComponent // Ajouter le TestComponent aux déclarations
   ],
   imports: [
     CommonModule,
