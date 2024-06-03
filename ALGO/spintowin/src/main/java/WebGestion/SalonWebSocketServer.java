@@ -1,0 +1,117 @@
+package WebGestion;
+
+import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
+
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class SalonWebSocketServer extends WebSocketServer {
+    private List<Salon> salons;
+    private int salonNumber;
+
+    public SalonWebSocketServer(InetSocketAddress address) {
+        super(address);
+        this.salons = new ArrayList<>();
+        this.salonNumber = 1;
+
+        // Planifier la génération du numéro de salon toutes les 10 secondes
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                generateSalonNumber();
+            }
+        }, 0, 10000);
+    }
+
+    private void generateSalonNumber() {
+        salonNumber++;
+        System.out.println("Nouveau numéro de salon généré : " + salonNumber);
+        
+        // Envoyer le numéro et l'identifiant du salon aux clients connectés
+        String salonData = "{\"salonNumber\": " + salonNumber + ", \"salonId\": " + salonNumber + "}";
+        broadcast(salonData); // Méthode pour envoyer des données à tous les clients connectés
+    }
+
+
+    public void broadcast(String message) {
+        for (WebSocket conn : getConnections()) {
+            conn.send(message);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        System.out.println("Serveur WebSocket démarré sur le port: " + getPort());
+    }
+
+    @Override
+    public void onOpen(WebSocket conn, ClientHandshake handshake) {
+        System.out.println("Nouvelle connexion de: " + conn.getRemoteSocketAddress());
+
+        // Trouver un salon avec de la place ou créer un nouveau salon
+        Salon salonDisponible = trouverSalonDisponible();
+        if (salonDisponible == null) {
+            salonDisponible = creerNouveauSalon();
+        }
+
+        // Ajouter le joueur au salon
+        boolean ajoutReussi = salonDisponible.ajouterJoueur(conn);
+        if (ajoutReussi) {
+            System.out.println("Joueur ajouté au salon numéro " + salonDisponible.getNumero());
+            envoyerNumeroSalon(conn, salonDisponible.getNumero());
+        } else {
+            System.out.println("Le salon est plein.");
+            // Gérer le cas où tous les salons sont pleins
+        }
+    }
+
+    private Salon trouverSalonDisponible() {
+        for (Salon salon : salons) {
+            if (salon.getJoueurs().size() < 10) {
+                return salon;
+            }
+        }
+        return null;
+    }
+
+    private Salon creerNouveauSalon() {
+        Salon nouveauSalon = new Salon();
+        salons.add(nouveauSalon);
+        return nouveauSalon;
+    }
+
+    private void envoyerNumeroSalon(WebSocket conn, int numeroSalon) {
+        conn.send("Vous êtes dans le salon numéro " + numeroSalon);
+    }
+
+    @Override
+    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+        System.out.println("Connexion fermée par " + (remote ? "le client" : "le serveur") + ": " + reason);
+
+        // Retirer le joueur de tous les salons
+        for (Salon salon : salons) {
+            salon.retirerJoueur(conn);
+        }
+    }
+
+    @Override
+    public void onMessage(WebSocket conn, String message) {
+        System.out.println("Message reçu: " + message);
+    }
+
+    @Override
+    public void onError(WebSocket conn, Exception ex) {
+        ex.printStackTrace();
+    }
+
+    public static void main(String[] args) {
+        SalonWebSocketServer server = new SalonWebSocketServer(new InetSocketAddress(8888)); // Utiliser le port 8888
+        server.start();
+    }
+}

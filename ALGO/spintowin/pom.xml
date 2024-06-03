@@ -10,38 +10,10 @@
     <dependencies>
         <!-- Dépendances pour HTTPServer -->
         <dependency>
-            <groupId>com.thetransactioncompany</groupId>
-            <artifactId>cors-filter</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.java-websocket</groupId>
-            <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.socket</groupId>
-            <artifactId>socket.io-server</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <!-- Dépendance pour SLF4J (Logging) -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-        <!-- Utilisation de logback-classic pour SLF4J -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.10</version>
-        </dependency>
-        <!-- Dépendance pour netty-socketio -->
-        <dependency>
-            <groupId>com.corundumstudio.socketio</groupId>
-            <artifactId>netty-socketio</artifactId>
-            <version>1.7.19</version>
-        </dependency>
+  <groupId>com.thetransactioncompany</groupId>
+  <artifactId>cors-filter</artifactId>
+  <version>2.2.1</version>
+</dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
@@ -60,36 +32,27 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.12.5</version> <!-- Utilisez la dernière version disponible -->
+            <version>2.12.5</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version> <!-- Assurez-vous de choisir la version appropriée -->
-        </dependency>
-        <dependency>
-    <groupId>com.corundumstudio.socketio</groupId>
-    <artifactId>netty-socketio</artifactId>
-    <version>1.7.19</version>
-</dependency>
-<dependency>
-    <groupId>io.netty</groupId>
-    <artifactId>netty-all</artifactId>
-    <version>4.1.75.Final</version>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.28</version> <!-- Assurez-vous de choisir la version appropriée -->
 </dependency>
 
         <!-- Dépendance pour CorsFilter -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version> <!-- Remplacez par la dernière version disponible -->
+            <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
-        </dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>javax.mail</artifactId>
+    <version>1.6.2</version>
+</dependency>
+
     </dependencies>
 
     <build>
@@ -106,7 +69,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>spintowin.SimpleHttpServer1</mainClass>
+                    <mainClass>online.vegastudio.spintowin.NumberWebSocketServer</mainClass>
                 </configuration>
             </plugin>
         </plugins>

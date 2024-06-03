@@ -2,51 +2,36 @@ package WebGestion;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.corundumstudio.socketio.SocketIOClient;
-import spintowin.Joueur;
+import org.java_websocket.WebSocket;
 
 public class Salon {
-    private int identifiantSalon;
-    private List<SocketIOClient> joueurs;
-    private List<String> chatMessages;
+    private static int count = 0;
+    private int numero;
+    private List<WebSocket> joueurs;
 
-    public Salon(int identifiantSalon) {
-        this.identifiantSalon = identifiantSalon;
+    public Salon() {
+        this.numero = ++count;
         this.joueurs = new ArrayList<>();
-        this.chatMessages = new ArrayList<>();
     }
 
-    public int getIdentifiantSalon() {
-        return identifiantSalon;
-    }
-
-    public List<SocketIOClient> getJoueurs() {
-        return joueurs;
-    }
-
-    public void ajouterJoueur(SocketIOClient joueur) {
-        joueurs.add(joueur);
-        joueur.sendEvent("message", "Vous avez rejoint le salon " + identifiantSalon);
-    }
-
-    public void retirerJoueur(SocketIOClient joueur) {
-        joueurs.remove(joueur);
-        joueur.sendEvent("message", "Vous avez quitté le salon " + identifiantSalon);
-    }
-
-    public boolean estDansSalon(SocketIOClient joueur) {
-        return joueurs.contains(joueur);
-    }
-
-    public void ajouterMessage(String message) {
-        chatMessages.add(message);
-        // Envoyer le message à tous les joueurs dans le salon
-        for (SocketIOClient joueur : joueurs) {
-            joueur.sendEvent("chatMessage", message);
+    public boolean ajouterJoueur(WebSocket joueur) {
+        if (joueurs.size() < 10) {
+            joueurs.add(joueur);
+            return true;
         }
+        return false;
     }
 
-    public List<String> getChatMessages() {
-        return chatMessages;
+    public void retirerJoueur(WebSocket joueur) {
+        joueurs.remove(joueur);
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    // Méthode pour accéder à la liste des joueurs
+    public List<WebSocket> getJoueurs() {
+        return joueurs;
     }
 }
