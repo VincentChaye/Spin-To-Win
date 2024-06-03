@@ -10,6 +10,7 @@ import { CreditComponent } from './credit/credit.component';
 import { SpintowinComponent } from './spintowin/spintowin.component';
 import { TableComponent } from './table/table.component';
 import { JeuComponent } from './jeu/jeu.component';
+import { WebSocketComponent } from './web-socket/web-socket.component';
 
 // Routage des pages du module Public 
 const routes: Routes = [
@@ -23,7 +24,8 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent }, // Charge le composant LoginComponent lorsque le chemin est '/login'
       { path: 'credit', component: CreditComponent }, // Charge le composant CreditComponent lorsque le chemin est '/credit'
       { path: 'table', component: TableComponent }, // Charge le composant CreditComponent lorsque le chemin est '/table'
-      {path: 'Jeu', component: JeuComponent},
+      {path: 'Jeu', component: JeuComponent},// Charge le composant CreditComponent lorsque le chemin est '/table'
+      {path: 'web', component: WebSocketComponent},
     ]
   }
 ];
