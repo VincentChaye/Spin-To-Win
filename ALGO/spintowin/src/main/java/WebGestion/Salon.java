@@ -1,3 +1,4 @@
+
 package WebGestion;
 
 import java.util.ArrayList;
@@ -33,5 +34,12 @@ public class Salon {
     // Méthode pour accéder à la liste des joueurs
     public List<WebSocket> getJoueurs() {
         return joueurs;
+    }
+
+    // Méthode pour envoyer un message à tous les joueurs du salon
+    public void broadcast(String message) {
+        for (WebSocket joueur : joueurs) {
+            joueur.send(message);
+        }
     }
 }
