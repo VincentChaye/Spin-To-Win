@@ -2,7 +2,8 @@
 
     <div class="numéro-chauds">
       <div class="btn" [routerLink]="['/Jeu']" style="cursor: pointer;background-color : rgb(39, 255, 104);">Jeu</div>
-      <p class="p-numérochaud">Les numéro les plus tirés s'afficheront prochainement ici !</p>
+      <p class="p-numérochaud">  Le numéro de salon actuel est : {{ PLAYERINFO.salonNumber }} , {{ PLAYERINFO.etatPartie }}</p> 
+      
     </div>
     <!--<div class="roulette-component">
       <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;">

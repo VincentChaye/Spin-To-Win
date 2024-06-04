@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, SimpleChanges } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -36,17 +36,13 @@ export class TableComponent implements OnInit {
   }
   
 
-  ngOnInit() {
-    // Établissement de la connexion WebSocket dans ngOnInit
-    this.webSocketService.connect(); // Méthode pour établir la connexion WebSocket
+  ngOnInit() { 
+
     
     // Abonnement aux messages WebSocket
-    this.subscription = this.webSocketService.connect().subscribe(data => {
-      console.log('WebSocket message received:', data);
-      if (data.etatPartie === 2) {
-        this.router.navigate(['/roulette']); // Redirige vers le composant '/table' lorsque etatPartie est 1
-      }
-    });
+    if (this.PLAYERINFO.etatPartie === 2) {
+      this.router.navigate(['/roulette']); // Redirige vers le composant '/table' lorsque etatPartie est 1
+    }
 
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
@@ -55,6 +51,15 @@ export class TableComponent implements OnInit {
       this.openModal();
     }
   }
+  ngOnChanges(changes: SimpleChanges) {
+    // Vérifiez si la propriété etatPartie a changé et si sa nouvelle valeur est égale à 2
+    if (changes['PLAYERINFO'] && changes['PLAYERINFO'].currentValue && changes['PLAYERINFO'].currentValue.etatPartie === 2) {
+      // Redirigez vers le composant '/roulette'
+      this.router.navigate(['/roulette']);
+    }
+}
+
+
   
   redirectToLogin() {
     // Vérifier si le joueur est connecté

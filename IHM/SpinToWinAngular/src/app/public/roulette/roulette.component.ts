@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, OnDestroy, SimpleChanges } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { PlayoutComponent } from "../playout/playout.component";
@@ -32,24 +32,22 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.PLAYERINFO.pageCharger = 0;
   }
 
-ngOnInit() {
-  if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
-    this.router.navigate(['/login']); // Redirigez vers le composant login si les informations du joueur ne sont pas disponibles
-  } else {
-    // Génération des chemins et démarrage de l'animation
-    this.generatePaths();
-    this.startAnimation();
+  ngOnInit() {
+    if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
+      this.router.navigate(['/login']); // Redirigez vers le composant login si les informations du joueur ne sont pas disponibles
+    } else {
+      // Génération des chemins et démarrage de l'animation
+      this.generatePaths();
+      this.startAnimation();
+    }
   }
 
-  // Connexion au WebSocket et abonnement aux messages
-  this.subscription = this.webSocketService.connect().subscribe(data => {
-    console.log('WebSocket message received:', data);
-    if (data.etatPartie === 1) {
+  ngOnChanges(changes: SimpleChanges) {
+    // Vérifiez si la propriété etatPartie a changé
+    if (changes["PLAYERINFO"] && changes["PLAYERINFO"].currentValue && changes["PLAYERINFO"].currentValue.etatPartie === 1) {
       this.router.navigate(['/table']); // Redirige vers le composant '/table' lorsque etatPartie est 1
     }
-  });
-}
-
+  }
 
   ngAfterViewInit() {
     if (this.ball && this.ball.nativeElement && this.spinButton && this.spinButton.nativeElement) {
