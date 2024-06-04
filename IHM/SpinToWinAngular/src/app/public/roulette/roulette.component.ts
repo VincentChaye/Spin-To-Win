@@ -1,20 +1,23 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { PlayoutComponent } from "../playout/playout.component";
+import { WebSocketService } from '../web-socket.service';  // Importez le service WebSocket
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-roulette",
   templateUrl: "./roulette.component.html",
   styleUrls: ["./roulette.component.css"],
 })
-export class RouletteComponent implements OnInit, AfterViewInit {
+export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   paths: string[] = [];
   finalAngle: number = 0;
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
   ballFalling: number | null = null; 
-  betscopy: any[] = []; // Définition de la propriété bets
+  betscopy: any[] = []; 
   private allServerURL = 'http://localhost:8000/game/playe';
+  private subscription: Subscription | null = null;  // Ajout de la souscription
   
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
@@ -23,19 +26,31 @@ export class RouletteComponent implements OnInit, AfterViewInit {
     private httpClient: HttpClient,
     private renderer: Renderer2,
     private router: Router,
-    public PLAYERINFO: PlayoutComponent
+    public PLAYERINFO: PlayoutComponent,
+    private webSocketService: WebSocketService  // Injection du service WebSocket
   ) {
     this.PLAYERINFO.pageCharger = 0;
   }
 
-  ngOnInit() {
-    if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
-      this.router.navigate(['/login']); // Redirisgez vers le composant login
-    } else {
-      this.generatePaths();
-      this.startAnimation();
-    }
+ngOnInit() {
+  if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
+    this.router.navigate(['/login']); // Redirigez vers le composant login si les informations du joueur ne sont pas disponibles
+  } else {
+    // Génération des chemins et démarrage de l'animation
+    this.generatePaths();
+    this.startAnimation();
   }
+
+  // Connexion au WebSocket et abonnement aux messages
+  this.subscription = this.webSocketService.connect().subscribe(data => {
+    console.log('WebSocket message received:', data);
+    if (data.etatPartie === 1) {
+      this.router.navigate(['/table']); // Redirige vers le composant '/table' lorsque etatPartie est 1
+    }
+  });
+}
+
+
   ngAfterViewInit() {
     if (this.ball && this.ball.nativeElement && this.spinButton && this.spinButton.nativeElement) {
       this.renderer.listen(this.spinButton.nativeElement, 'click', () => {
@@ -44,6 +59,12 @@ export class RouletteComponent implements OnInit, AfterViewInit {
     } else {
       console.error('Error: ball or spinButton reference is undefined or their native elements are undefined.');
     }
+  }
+
+  ngOnDestroy(): void {
+    // if (this.subscription) {
+    //   this.subscription.unsubscribe();
+    // }
   }
 
   getBall(): Promise<number> {
@@ -104,9 +125,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
         );
       }, 100);
     
-      // Écouter la fin de la transition
       this.renderer.listen(this.ball.nativeElement, 'transitionend', () => {
-        // Mettre à jour ballFalling une fois que l'animation est terminée
         this.calculGains(ball);
         this.ballFalling = ball; 
         console.log(this.ballFalling);
@@ -141,17 +160,16 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   calculGains(ball: number) {
     if (this.PLAYERINFO.tableauparie) {
       this.PLAYERINFO.oldCredit=this.PLAYERINFO.playerInfo.credit;
-      this.betscopy = this.PLAYERINFO.tableauparie; // Affecter la valeur de this.PLAYERINFO.tableauparie à this.bets
+      this.betscopy = this.PLAYERINFO.tableauparie; 
       const formattedJson = {
-        name: this.PLAYERINFO.playerInfo.pseudo, // Récupérer le pseudo du joueur
-        credits: this.PLAYERINFO.playerInfo.credit, // Récupérer les crédits du joueur
+        name: this.PLAYERINFO.playerInfo.pseudo, 
+        credits: this.PLAYERINFO.playerInfo.credit, 
         ballNumber: ball,
         bets: this.betscopy
       };
   
       console.log(JSON.stringify(formattedJson));
   
-      // Appeler la fonction pour envoyer les données au serveur
       this.gameResult(formattedJson);
     } else {
       console.error('Error: this.PLAYERINFO.tableauparie is undefined.');
@@ -159,7 +177,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   }
   
   gameResult(data: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Correction du type de contenu
+    const headers = new HttpHeaders().set('Content-Type', 'application/json'); 
   
     this.httpClient.put<any>(this.allServerURL, data, { headers: headers })
       .subscribe(
@@ -167,7 +185,6 @@ export class RouletteComponent implements OnInit, AfterViewInit {
           console.log('PUT request successful:', response);
           delete response.mot_de_passe_hash;
   
-          // Mettre à jour les informations du joueur
           this.PLAYERINFO.playerInfo = response;
         },
         (error) => {
@@ -176,11 +193,11 @@ export class RouletteComponent implements OnInit, AfterViewInit {
       );
   }
   
- red = [6, 12, 18, 24, 30, 36, 2, 8, 14, 20, 26, 32, 4, 10, 16, 22, 28, 34];
- black = [3, 9, 15, 21, 27, 33, 5, 11, 17, 23, 29, 35, 1, 7, 13, 19, 25, 31];
- green = [0];
+  red = [6, 12, 18, 24, 30, 36, 2, 8, 14, 20, 26, 32, 4, 10, 16, 22, 28, 34];
+  black = [3, 9, 15, 21, 27, 33, 5, 11, 17, 23, 29, 35, 1, 7, 13, 19, 25, 31];
+  green = [0];
 
- isCreditInRed(): boolean {
+  isCreditInRed(): boolean {
     return this.ballFalling !== null && this.red.includes(this.ballFalling);
   }
 

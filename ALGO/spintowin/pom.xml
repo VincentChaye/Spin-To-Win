@@ -10,10 +10,10 @@
     <dependencies>
         <!-- Dépendances pour HTTPServer -->
         <dependency>
-  <groupId>com.thetransactioncompany</groupId>
-  <artifactId>cors-filter</artifactId>
-  <version>2.2.1</version>
-</dependency>
+            <groupId>com.thetransactioncompany</groupId>
+            <artifactId>cors-filter</artifactId>
+            <version>2.2.1</version>
+        </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
@@ -35,12 +35,10 @@
             <version>2.12.5</version>
         </dependency>
         <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.28</version> <!-- Assurez-vous de choisir la version appropriée -->
-</dependency>
-
-        <!-- Dépendance pour CorsFilter -->
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.28</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -48,9 +46,30 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-    <groupId>com.sun.mail</groupId>
-    <artifactId>javax.mail</artifactId>
-    <version>1.6.2</version>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <!-- Dépendances pour WebSocket -->
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.tyrus</groupId>
+            <artifactId>tyrus-server</artifactId>
+            <version>1.13</version>
+        </dependency>
+        <dependency>
+    <groupId>org.java-websocket</groupId>
+    <artifactId>Java-WebSocket</artifactId>
+    <version>1.5.2</version> <!-- ou une version appropriée -->
+</dependency>
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.2.6</version> <!-- ou une version appropriée -->
 </dependency>
 
     </dependencies>
