@@ -12,11 +12,13 @@ import { TableComponent } from './table/table.component';
 import { JeuComponent } from './jeu/jeu.component';
 import { ProposComponent } from './propos/propos.component';
 import { WebSocketComponent } from './web-socket/web-socket.component';
+import { ProposComponent } from './propos/propos.component';
 
 // Routage des pages du module Public 
 const routes: Routes = [
   {
     path: '', component: PlayoutComponent, children: [ 
+      { path: '', redirectTo: 'Vegastudio', pathMatch: 'full' }, // Redirige vers la page d'accueil lorsque le chemin est vide
       { path: '', redirectTo: 'Vegastudio', pathMatch: 'full' }, // Redirige vers la page d'accueil lorsque le chemin est vide
       { path: 'Vegastudio', component: VegastudioComponent }, // Charge le composant VegastudioComponent lorsque le chemin est '/Vegastudio'
       { path: 'SpinToWin', component: SpintowinComponent }, // Charge le composant HomeComponent lorsque le chemin est '/home'
