@@ -10,6 +10,7 @@ import { Observable, Observer, Subscription } from 'rxjs';
 export class WebSocketComponent implements OnInit, OnDestroy {
   public randomNumber: string = '';
   public salonNumber: number | null = null;
+  public etatPartie: number | null = null; // Ajout de la variable pour l'état de la partie
   private socket: WebSocket | null = null;
   private observer: Observer<string> | null = null;
   private subscription: Subscription | null = null;
@@ -42,8 +43,9 @@ export class WebSocketComponent implements OnInit, OnDestroy {
   private onMessage(event: MessageEvent) {
     this.ngZone.run(() => {
       const data = JSON.parse(event.data);
-      this.randomNumber = data.randomNumber;
-      this.salonNumber = data.salonNumber;
+      this.randomNumber = data.NbAlea;
+      this.salonNumber = data.salonId;
+      this.etatPartie = data.etatPartie; // Assignation de l'état de la partie
     });
   }
 }
