@@ -36,6 +36,8 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     // Vérifiez si vous êtes actuellement sur la page de la table
     if (this.router.url === '/table') {
       // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table

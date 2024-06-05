@@ -81,5 +81,6 @@ export class CreditComponent implements OnInit {
 
   deconexion() {
     this.PLAYERINFO.playerInfo = null; // Vider playerInfo
+    this.PLAYERINFO.joueurConnecter=false;
   }
 }

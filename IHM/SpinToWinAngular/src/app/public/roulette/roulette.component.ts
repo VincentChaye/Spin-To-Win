@@ -33,8 +33,8 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
     this.PLAYERINFO.pageCharger = 0;
   }
 
-  ngOnInit() {
-    // Vérifie si le joueur est connecté, sinon redirige vers la page de connexion
+  ngOnInit() { 
+    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     if ( this.router.url === '/roulette') {
       // Si le joueur est connecté, commencez à générer les chemins et démarrez l'animation
       this.generatePaths();
