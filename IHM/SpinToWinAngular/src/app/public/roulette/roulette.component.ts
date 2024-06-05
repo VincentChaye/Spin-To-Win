@@ -171,7 +171,9 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   
       console.log(JSON.stringify(formattedJson));
   
-      this.gameResult(formattedJson);
+      if (this.PLAYERINFO.playerInfo) {
+        this.gameResult(formattedJson);
+      }
     } else {
       console.error('Error: this.PLAYERINFO.tableauparie is undefined.');
     }
