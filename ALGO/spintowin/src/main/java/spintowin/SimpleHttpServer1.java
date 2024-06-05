@@ -24,8 +24,8 @@ public class SimpleHttpServer1 {
     private static HttpServer server; // Ajout d'un champ statique pour stocker l'instance du serveur
 
     public static void main(String[] args) throws IOException {
-        // Créez le serveur HTTP sur le port 8000
-        server = HttpServer.create(new InetSocketAddress(8000), 0);
+        // Créez le serveur HTTP sur l'adresse 0.0.0.0 et le port 8000
+        server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8000), 0);
 
         // Définissez les gestionnaires de requêtes pour les différents chemins
         server.createContext("/resource1", new Resource1Handler());
@@ -39,10 +39,8 @@ public class SimpleHttpServer1 {
         server.createContext("/game/playe", new PlayerPlaye());
         server.createContext("/player/update", new PlayerUpdateCredit());
         server.createContext("/player/evolution/", new StattistiqueJoueur());
+        server.createContext("/game/ball", new GenerateBallHandler());
 
-        
-    server.createContext("/game/ball", new GenerateBallHandler());
- 
         // Activez le CORS globalement
         server.setExecutor(null); // Utilisation d'un gestionnaire d'exécution null pour un démarrage par défaut
 

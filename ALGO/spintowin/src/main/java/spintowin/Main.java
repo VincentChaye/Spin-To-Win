@@ -24,9 +24,17 @@ public class Main {
             H2Database.main(new String[]{});
         });
 
+        Thread webSocketServerThread = new Thread(() -> {
+            // Démarrage du serveur WebSocket
+            InetSocketAddress socketAddress = new InetSocketAddress("0.0.0.0", 8888);
+            SalonWebSocketServer salonWebSocketServer = new SalonWebSocketServer(socketAddress);
+            salonWebSocketServer.start();
+        });
+
         // Démarrage des threads
         httpServerThread.start();
         h2DatabaseThread.start();
+        webSocketServerThread.start();
 
         // Attendez que le serveur HTTP démarre avant d'ajouter le gestionnaire de contexte CORS
         try {
@@ -37,14 +45,12 @@ public class Main {
 
         // Ajout du gestionnaire de contexte CORS au chemin racine du serveur HTTP
         HttpServer server = SimpleHttpServer1.getServer();
-        server.createContext("/", new CorsHandler());
-
-        // Démarrage du serveur WebSocket
-        SalonWebSocketServer salonWebSocketServer = new SalonWebSocketServer(new InetSocketAddress(8888));
-        salonWebSocketServer.start();
-
-        // Exemple d'utilisation de la génération de nombre aléatoire
-        int randomNumber = RandomNumberUtil.generateRandomNumber();
-        System.out.println("Generated random number in main: " + randomNumber);
+        if (server != null) {
+            server.createContext("/", new CorsHandler());
+        } else {
+            System.err.println("HTTP server not initialized. CORS handler not added.");
+        }
+ 
+        
     }
 }

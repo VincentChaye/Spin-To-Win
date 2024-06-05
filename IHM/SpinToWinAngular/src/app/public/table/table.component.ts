@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
   previousSelectedTokenElement: HTMLElement | null = null;
   isCreditBlurred: boolean = false;
   openReloadCredit: boolean = false;
-  private allServerURL = 'http://localhost:8000/player/update';
+  private allServerURL = 'http://valentin:8000/player/update';
   subscription: any;
 
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
