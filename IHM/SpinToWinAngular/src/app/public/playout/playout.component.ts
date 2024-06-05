@@ -18,6 +18,8 @@ export class PlayoutComponent implements OnInit {
   tableauparie: Bet[] | undefined; // Utilisation de l'interface Bet
   private reloaderSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public reloader$: Observable<number> = this.reloaderSubject.asObservable();
+  private etatPartieSubject: BehaviorSubject<number | undefined> = new BehaviorSubject<number | undefined>(undefined);
+  public etatPartie$: Observable<number | undefined> = this.etatPartieSubject.asObservable();
   subscription: any;
 
   // Variables pour stocker les données WebSocket
@@ -29,6 +31,7 @@ export class PlayoutComponent implements OnInit {
 
   updateReloader(num: number): void {
     this.reloaderSubject.next(num);
+    this.etatPartieSubject.next(num); // Mettre à jour etatPartie avec la nouvelle valeur
   }
 
   ngOnInit(){
@@ -38,6 +41,7 @@ export class PlayoutComponent implements OnInit {
       this.randomNumber = data.NbAlea;
       this.salonNumber = data.salonId;
       this.etatPartie = data.etatPartie;
+      this.etatPartieSubject.next(data.etatPartie); // Mettre à jour etatPartie avec la nouvelle valeur reçue du WebSocket
     });
   }
 }

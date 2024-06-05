@@ -21,6 +21,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
+  etatPartieService: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -33,21 +34,23 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
-      this.router.navigate(['/login']); // Redirigez vers le composant login si les informations du joueur ne sont pas disponibles
-    } else {
-      // Génération des chemins et démarrage de l'animation
+    // Vérifie si le joueur est connecté, sinon redirige vers la page de connexion
+    if ( this.router.url === '/roulette') {
+      // Si le joueur est connecté, commencez à générer les chemins et démarrez l'animation
       this.generatePaths();
       this.startAnimation();
-    }
+     
+  
+     
+    this.subscription = this.PLAYERINFO.etatPartie$.subscribe((num: number | undefined) => {
+      if (num === 1) {
+        // Redirigez vers le composant '/table' si l'état de la partie est 1
+        this.router.navigate(['/table']);
+      }
+    });
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // Vérifiez si la propriété etatPartie a changé
-    if (changes["PLAYERINFO"] && changes["PLAYERINFO"].currentValue && changes["PLAYERINFO"].currentValue.etatPartie === 1) {
-      this.router.navigate(['/table']); // Redirige vers le composant '/table' lorsque etatPartie est 1
-    }
   }
+  
 
   ngAfterViewInit() {
     if (this.ball && this.ball.nativeElement && this.spinButton && this.spinButton.nativeElement) {
@@ -59,25 +62,25 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    // if (this.subscription) {
-    //   this.subscription.unsubscribe();
-    // }
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   getBall(): Promise<number> {
-    const url = 'http://localhost:8000/game/ball';
-    return this.httpClient.get<number>(url).toPromise().then(response => {
-      if (typeof response === 'number') {
-        return response;
+    return new Promise<number>((resolve, reject) => {
+      // Vérifiez si randomNumber est défini
+      if (this.PLAYERINFO.randomNumber !== undefined) {
+        // Si randomNumber est défini, résolvez la promesse avec sa valeur
+        resolve(this.PLAYERINFO.randomNumber);
       } else {
-        throw new Error('Response is not a number');
+        // Si randomNumber est indéfini, rejetez la promesse avec un message d'erreur
+        reject(new Error("Le nombre aléatoire n'est pas défini."));
       }
-    }).catch(error => {
-      console.error('Error fetching ball number:', error);
-      return 0; // Return a default value in case of error
     });
   }
+  
 
   generatePaths(): void {
     const numSlices = 37;

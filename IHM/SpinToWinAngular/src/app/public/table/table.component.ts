@@ -34,16 +34,19 @@ export class TableComponent implements OnInit {
       this.openModal();
     }
   }
-  
 
-  ngOnInit() { 
-
-    
-    // Abonnement aux messages WebSocket
-    if (this.PLAYERINFO.etatPartie === 2) {
-      this.router.navigate(['/roulette']); // Redirige vers le composant '/table' lorsque etatPartie est 1
+  ngOnInit() {
+    // Vérifiez si vous êtes actuellement sur la page de la table
+    if (this.router.url === '/table') {
+      // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table
+      this.subscription = this.PLAYERINFO.etatPartie$.subscribe((num: number | undefined) => {
+        if (num === 2) {
+          // Redirigez vers le composant '/roulette' si l'état de partie est 2
+          this.router.navigate(['/roulette']);
+        }
+      });
     }
-
+  
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
     }
@@ -51,15 +54,13 @@ export class TableComponent implements OnInit {
       this.openModal();
     }
   }
-  ngOnChanges(changes: SimpleChanges) {
-    // Vérifiez si la propriété etatPartie a changé et si sa nouvelle valeur est égale à 2
-    if (changes['PLAYERINFO'] && changes['PLAYERINFO'].currentValue && changes['PLAYERINFO'].currentValue.etatPartie === 2) {
-      // Redirigez vers le composant '/roulette'
-      this.router.navigate(['/roulette']);
+
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
-}
-
-
+  }
   
   redirectToLogin() {
     // Vérifier si le joueur est connecté
