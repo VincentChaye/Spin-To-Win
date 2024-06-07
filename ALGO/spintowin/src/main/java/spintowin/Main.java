@@ -26,7 +26,7 @@ public class Main {
 
         Thread webSocketServerThread = new Thread(() -> {
             // Démarrage du serveur WebSocket
-            InetSocketAddress socketAddress = new InetSocketAddress(8888);
+            InetSocketAddress socketAddress = new InetSocketAddress("0.0.0.0", 8888);
             SalonWebSocketServer salonWebSocketServer = new SalonWebSocketServer(socketAddress);
             salonWebSocketServer.start();
         });
@@ -50,7 +50,9 @@ public class Main {
         } else {
             System.err.println("HTTP server not initialized. CORS handler not added.");
         }
- 
-        
+
+        // Exemple d'utilisation de la génération de nombre aléatoire
+        int randomNumber = RandomNumberUtil.generateRandomNumber();
+        System.out.println("Generated random number in main: " + randomNumber);
     }
 }
