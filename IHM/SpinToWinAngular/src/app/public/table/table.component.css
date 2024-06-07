@@ -427,7 +427,7 @@ body {
     background-color: #f0f0f0;
 }
 .btn-bonus{
-    background-image: url("../../../assets/image/motifbonus.jpg");
+    background-image: url("../../../assets/image/gold.jpg");
 }
 
 .back-button {
@@ -563,7 +563,32 @@ h2{
   
   .p-credit {
     transition: filter 0.8s;
-  } 
+  }
+  .creditcontainer{
+    top: 70%;
+    left: 78%;
+    width: 300px;
+    height: 130px;
+    position: absolute;
+    border: 2px black solid;
+    background-color: rgba(255, 192, 57, 0.3);
+  }
+  .btn-bonus:hover{
+    cursor: pointer;
+  }
+  .btn-bonus:active{
+    border: inset;
+  }
+
+  .active {
+    color: darkgreen;
+  }
+  
+  .inactive {
+    color: darkred;
+  }
+
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -605,38 +630,3 @@ h2{
     background-color: #e69500; /* Changement de couleur au survol */
     cursor: pointer; /* Curseur pointeur */
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-   
-  .creditcontainer{
-    top: 70%;
-    left: 78%;
-    width: 300px;
-    height: 130px;
-    position: absolute;
-    border: 2px black solid;
-    background-color: rgba(255, 192, 57, 0.3);
-  }
-  .btn-bonus:hover{
-    cursor: pointer;
-  }
-  .btn-bonus:active{
-    border: inset;
-  }
-
-  .active {
-    color: darkgreen;
-  }
-  
-  .inactive {
-    color: darkred;
-  } 
