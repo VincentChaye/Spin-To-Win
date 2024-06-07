@@ -1,8 +1,8 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, SimpleChanges } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { WebSocketService } from '../web-socket.service'; // Importez le service WebSocket
 
 export interface Bet {
   betType: string;
@@ -23,8 +23,9 @@ export class TableComponent implements OnInit {
   isCreditBlurred: boolean = false;
   openReloadCredit: boolean = false;
   private allServerURL = 'http://localhost:8000/player/update';
+  subscription: any;
 
-  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router) {
+  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
     this.PLAYERINFO.pageCharger = 0;
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
@@ -33,14 +34,31 @@ export class TableComponent implements OnInit {
       this.openModal();
     }
   }
-  
 
   ngOnInit() {
+    // Vérifiez si vous êtes actuellement sur la page de la table
+    if (this.router.url === '/table') {
+      // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table
+      this.subscription = this.PLAYERINFO.etatPartie$.subscribe((num: number | undefined) => {
+        if (num === 2) {
+          // Redirigez vers le composant '/roulette' si l'état de partie est 2
+          this.router.navigate(['/roulette']);
+        }
+      });
+    }
+  
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
     }
     if (this.credit <= 0) {
       this.openModal();
+    }
+  }
+
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
   

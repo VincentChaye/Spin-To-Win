@@ -1,8 +1,12 @@
 package spintowin;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpServer;
+
+import WebGestion.SalonWebSocketServer; // Assurez-vous d'importer la classe SalonWebSocketServer
+
 public class Main {
     public static void main(String[] args) {
         // Création des threads pour chaque serveur
@@ -34,5 +38,13 @@ public class Main {
         // Ajout du gestionnaire de contexte CORS au chemin racine du serveur HTTP
         HttpServer server = SimpleHttpServer1.getServer();
         server.createContext("/", new CorsHandler());
+
+        // Démarrage du serveur WebSocket
+        SalonWebSocketServer salonWebSocketServer = new SalonWebSocketServer(new InetSocketAddress(8888));
+        salonWebSocketServer.start();
+
+        // Exemple d'utilisation de la génération de nombre aléatoire
+        int randomNumber = RandomNumberUtil.generateRandomNumber();
+        System.out.println("Generated random number in main: " + randomNumber);
     }
 }

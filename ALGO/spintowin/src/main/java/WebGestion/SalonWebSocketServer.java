@@ -44,7 +44,7 @@ public class SalonWebSocketServer extends WebSocketServer {
                     System.out.println("Etat de la partie changé à 1");
                     envoyerEtatPartie();
                 }
-            }, 15000); // 15 secondes
+            }, 20000); // 15 secondes
         }
     }
 

@@ -2,8 +2,19 @@
 
     <div class="numéro-chauds">
       <div class="btn" [routerLink]="['/Jeu']" style="cursor: pointer;background-color : rgb(39, 255, 104);">Jeu</div>
-      <p class="p-numérochaud">Les numéro les plus tirés s'afficheront prochainement ici !</p>
-    </div>
+      <p class="p-numérochaud">  Le numéro de salon actuel est : {{ PLAYERINFO.salonNumber }} , {{ PLAYERINFO.etatPartie }}</p> 
+     
+      <ng-container  *ngIf="!PLAYERINFO.playerInfo">
+        <a [routerLink]="['/login']" class="btn"  style="cursor: pointer;background-color : rgb(39, 255, 104);">Connexion</a>
+        <a [routerLink]="['/register']" class="btn"  style="cursor: pointer;background-color : rgb(39, 255, 104);">Inscription</a>
+      </ng-container>
+      
+      <!-- Afficher le bouton alternatif si playerInfo n'est pas vide -->
+      <ng-container *ngIf="PLAYERINFO.playerInfo">
+      
+      <a [routerLink]="['/credit']" class="btn mx-2 bg inscription">Compte</a></ng-container>
+     
+  </div>
     <!--<div class="roulette-component">
       <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;">
         <p>Lancer la roulette !</p>

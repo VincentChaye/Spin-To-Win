@@ -16,7 +16,7 @@ import { WebSocketComponent } from './web-socket/web-socket.component';
 const routes: Routes = [
   {
     path: '', component: PlayoutComponent, children: [ 
-      { path: '', redirectTo: 'Vegastudio', pathMatch: 'full' }, // Redirige vers la page d'accueil lorsque le chemin est vide
+      { path: '', redirectTo: 'test', pathMatch: 'full' }, // Redirige vers la page d'accueil lorsque le chemin est vide
       { path: 'Vegastudio', component: VegastudioComponent }, // Charge le composant VegastudioComponent lorsque le chemin est '/Vegastudio'
       { path: 'SpinToWin', component: SpintowinComponent }, // Charge le composant HomeComponent lorsque le chemin est '/home'
       { path: 'roulette', component: RouletteComponent }, // Charge le composant RouletteComponent lorsque le chemin est '/roulette'

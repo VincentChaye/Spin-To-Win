@@ -1,3 +1,4 @@
+/* Arrière-plan */
 #bg {
     position: fixed;
     top: 0;
@@ -6,41 +7,39 @@
     background: url("../../../assets/image/backgroundVegaStudio.png") no-repeat center fixed;
     background-size: cover;
     z-index: -1;
-    color: brown;
 }
 
-.info{
-	z-index: 1;
-	margin-top: 1%;
-	background-color: white;
-	width: 50%;
-}
-
-
-#notconnected{
+/* Conteneur général */
+.info {
     z-index: 1;
-    margin-top: 11%;
-    background-color: white;
-    margin-left: 30%;
-    width: 40%;
-    height: 40%;
+    margin-top: 5%; /* Ajustement pour centrage vertical */
+    background-color: rgba(255, 255, 255, 0.9); /* Utilisation de rgba pour la transparence */
+    width: 50%;
+    margin-left: 25%; /* Ajustement pour centrage horizontal */
+    padding: 2%; /* Ajout de marges internes */
     border-radius: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#notconnected h1{
-    margin-top: 2%;
+/* Conteneur "non connecté" */
+#notconnected {
+    margin-top: 10%; /* Ajustement pour espacement entre les conteneurs */
+    width: 40%;
+    max-height: 80vh; /* Limite la hauteur pour éviter le débordement */
+    overflow-y: auto; /* Activation du défilement vertical si nécessaire */
+}
+
+#notconnected h1 {
     color: red;
 }
 
-#notconnected p{
-    margin-top: 10%;
+#notconnected p {
     color: black;
 }
 
-#notconnected button{
+#notconnected button {
     background-color: #4CAF50;
     color: white;
     padding: 14px 20px;
@@ -49,35 +48,48 @@
     cursor: pointer;
     width: 50%;
     border-radius: 16px;
-    margin-top: 15%;
+    margin-top: 5%; /* Ajustement pour l'espacement */
 }
 
-#connected{
-    z-index: 1;
-    margin-top: 11%;
-    background-color: white;
-    margin-left: 30%;
+/* Conteneur "connecté" */
+#connected {
+    margin-top: 7%; /* Ajustement pour espacement entre les conteneurs */
     width: 40%;
-    height: 40%;
-    border-radius: 16px;
+    height: auto; /* Réglage de la hauteur automatique pour s'adapter au contenu */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Centrage horizontal des éléments */
 }
 
-#connected div{
+#connected .row {
     display: flex;
-    width: 110%;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#connected .col {
+    flex: 1; /* Chaque colonne prendra la même largeur */
+    text-align: center; /* Centrage horizontal du texte */
+}
+
+#connected div {
+    width: 100%; /* Ajustement de la largeur */
     justify-content: space-around;
     margin-top: 3%;
     margin-bottom: 5%;
 }
 
-#connected div p{
+#connected div p {
     margin-top: 2%;
     color: black;
 }
 
-#connected h1{
+#connected h1 {
     margin-top: 2%;
+}
+
+/* Masquer la barre de défilement WebKit */
+#notconnected::-webkit-scrollbar,
+#connected::-webkit-scrollbar {
+    display: none;
 }

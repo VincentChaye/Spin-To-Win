@@ -1,23 +1,24 @@
-
 <div id="bg">
-	<div id="connected" class="info" *ngIf="PLAYERINFO.playerInfo">
+  <div id="connected" style="top: 50px;" class="info" *ngIf="PLAYERINFO.playerInfo">
     <h1>Crédit</h1>
-    <div>
-      <p>Pseudo: {{ PLAYERINFO.playerInfo.pseudo }}</p>
-      <p>Nom: {{ PLAYERINFO.playerInfo.nom }}</p>
+    <div class="row">
+      <p class="col">Pseudo: {{ PLAYERINFO.playerInfo.pseudo }}</p>
+      <p class="col">Nom: {{ PLAYERINFO.playerInfo.nom }}</p>
     </div>
-    <div>
-      <p>Prénom: {{ PLAYERINFO.playerInfo.prenom }}</p>
-      <p>Crédit: {{ PLAYERINFO.playerInfo.credit }}</p>
+    <div class="row">
+      <p class="col">Prénom: {{ PLAYERINFO.playerInfo.prenom }}</p>
+      <p class="col">Crédit: {{ PLAYERINFO.playerInfo.credit }}</p>
     </div>
-    <button class="btn btn-lg btn-warning"  [routerLink]="['/Vegastudio']" (click)="deconexion()">Se déconnecter</button>
-
+  
+  
+    <canvas id="creditChart" width="600" height="400"></canvas> 
+    
+    <button class="btn btn-lg btn-warning" [routerLink]="['/Vegastudio']" (click)="deconexion()">Se déconnecter</button>
   </div>
   
   <div id="notconnected" class="info" *ngIf="!PLAYERINFO.playerInfo">
     <h1>Erreur !</h1>
     <p>Vous n'êtes pas connecté</p>
     <button class="btn btn-lg btn-warning" [routerLink]="['/login']">Se connecter</button>
-
   </div>
 </div>

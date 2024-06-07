@@ -1,41 +1,57 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit, OnDestroy, SimpleChanges } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { PlayoutComponent } from "../playout/playout.component";
+import { WebSocketService } from '../web-socket.service';  // Importez le service WebSocket
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-roulette",
   templateUrl: "./roulette.component.html",
   styleUrls: ["./roulette.component.css"],
 })
-export class RouletteComponent implements OnInit, AfterViewInit {
+export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   paths: string[] = [];
   finalAngle: number = 0;
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
   ballFalling: number | null = null; 
-  betscopy: any[] = []; // Définition de la propriété bets
+  betscopy: any[] = []; 
   private allServerURL = 'http://localhost:8000/game/playe';
+  private subscription: Subscription | null = null;  // Ajout de la souscription
   
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
   @ViewChild("spinButton") spinButton!: ElementRef<HTMLButtonElement>;
+  etatPartieService: any;
 
   constructor(
     private httpClient: HttpClient,
     private renderer: Renderer2,
     private router: Router,
-    public PLAYERINFO: PlayoutComponent
+    public PLAYERINFO: PlayoutComponent,
+    private webSocketService: WebSocketService  // Injection du service WebSocket
   ) {
     this.PLAYERINFO.pageCharger = 0;
   }
 
   ngOnInit() {
-    if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.credit) {
-      this.router.navigate(['/login']); // Redirisgez vers le composant login
-    } else {
+    // Vérifie si le joueur est connecté, sinon redirige vers la page de connexion
+    if ( this.router.url === '/roulette') {
+      // Si le joueur est connecté, commencez à générer les chemins et démarrez l'animation
       this.generatePaths();
       this.startAnimation();
-    }
+     
+  
+     
+    this.subscription = this.PLAYERINFO.etatPartie$.subscribe((num: number | undefined) => {
+      if (num === 1) {
+        // Redirigez vers le composant '/table' si l'état de la partie est 1
+        this.router.navigate(['/table']);
+      }
+    });
   }
+  }
+  
+
   ngAfterViewInit() {
     if (this.ball && this.ball.nativeElement && this.spinButton && this.spinButton.nativeElement) {
       this.renderer.listen(this.spinButton.nativeElement, 'click', () => {
@@ -46,19 +62,25 @@ export class RouletteComponent implements OnInit, AfterViewInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   getBall(): Promise<number> {
-    const url = 'http://localhost:8000/game/ball';
-    return this.httpClient.get<number>(url).toPromise().then(response => {
-      if (typeof response === 'number') {
-        return response;
+    return new Promise<number>((resolve, reject) => {
+      // Vérifiez si randomNumber est défini
+      if (this.PLAYERINFO.randomNumber !== undefined) {
+        // Si randomNumber est défini, résolvez la promesse avec sa valeur
+        resolve(this.PLAYERINFO.randomNumber);
       } else {
-        throw new Error('Response is not a number');
+        // Si randomNumber est indéfini, rejetez la promesse avec un message d'erreur
+        reject(new Error("Le nombre aléatoire n'est pas défini."));
       }
-    }).catch(error => {
-      console.error('Error fetching ball number:', error);
-      return 0; // Return a default value in case of error
     });
   }
+  
 
   generatePaths(): void {
     const numSlices = 37;
@@ -104,9 +126,7 @@ export class RouletteComponent implements OnInit, AfterViewInit {
         );
       }, 100);
     
-      // Écouter la fin de la transition
       this.renderer.listen(this.ball.nativeElement, 'transitionend', () => {
-        // Mettre à jour ballFalling une fois que l'animation est terminée
         this.calculGains(ball);
         this.ballFalling = ball; 
         console.log(this.ballFalling);
@@ -141,25 +161,26 @@ export class RouletteComponent implements OnInit, AfterViewInit {
   calculGains(ball: number) {
     if (this.PLAYERINFO.tableauparie) {
       this.PLAYERINFO.oldCredit=this.PLAYERINFO.playerInfo.credit;
-      this.betscopy = this.PLAYERINFO.tableauparie; // Affecter la valeur de this.PLAYERINFO.tableauparie à this.bets
+      this.betscopy = this.PLAYERINFO.tableauparie; 
       const formattedJson = {
-        name: this.PLAYERINFO.playerInfo.pseudo, // Récupérer le pseudo du joueur
-        credits: this.PLAYERINFO.playerInfo.credit, // Récupérer les crédits du joueur
+        name: this.PLAYERINFO.playerInfo.pseudo, 
+        credits: this.PLAYERINFO.playerInfo.credit, 
         ballNumber: ball,
         bets: this.betscopy
       };
   
       console.log(JSON.stringify(formattedJson));
   
-      // Appeler la fonction pour envoyer les données au serveur
-      this.gameResult(formattedJson);
+      if (this.PLAYERINFO.playerInfo) {
+        this.gameResult(formattedJson);
+      }
     } else {
       console.error('Error: this.PLAYERINFO.tableauparie is undefined.');
     }
   }
   
   gameResult(data: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Correction du type de contenu
+    const headers = new HttpHeaders().set('Content-Type', 'application/json'); 
   
     this.httpClient.put<any>(this.allServerURL, data, { headers: headers })
       .subscribe(
@@ -167,7 +188,6 @@ export class RouletteComponent implements OnInit, AfterViewInit {
           console.log('PUT request successful:', response);
           delete response.mot_de_passe_hash;
   
-          // Mettre à jour les informations du joueur
           this.PLAYERINFO.playerInfo = response;
         },
         (error) => {
@@ -176,11 +196,11 @@ export class RouletteComponent implements OnInit, AfterViewInit {
       );
   }
   
- red = [6, 12, 18, 24, 30, 36, 2, 8, 14, 20, 26, 32, 4, 10, 16, 22, 28, 34];
- black = [3, 9, 15, 21, 27, 33, 5, 11, 17, 23, 29, 35, 1, 7, 13, 19, 25, 31];
- green = [0];
+  red = [6, 12, 18, 24, 30, 36, 2, 8, 14, 20, 26, 32, 4, 10, 16, 22, 28, 34];
+  black = [3, 9, 15, 21, 27, 33, 5, 11, 17, 23, 29, 35, 1, 7, 13, 19, 25, 31];
+  green = [0];
 
- isCreditInRed(): boolean {
+  isCreditInRed(): boolean {
     return this.ballFalling !== null && this.red.includes(this.ballFalling);
   }
 
