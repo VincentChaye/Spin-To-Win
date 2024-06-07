@@ -1,14 +1,15 @@
 <div id="bg">
 	<div id="item" class="mx-auto">
 		<div>
-			<h1>Se Connecter</h1>
+			<h1>Connexion</h1>
 		</div>
 		<form action>
 			<label for="username">Username</label>
 			<input type="text" id="username" name="username" [(ngModel)]="username">
 			<label for="password">Password</label>
 			<input type="password" id="password" name="password" [(ngModel)]="password">
-			<a href="">Mots de Passes Oublier</a>
+			<a href="">Mot de passe oublié</a>
+			<br>
 			<button class="btn btn-warning" (click)="sendData()">Envoyer les données</button>
 		</form>
 	</div>

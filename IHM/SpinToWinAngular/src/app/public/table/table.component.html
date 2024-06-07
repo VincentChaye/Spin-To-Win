@@ -1,7 +1,7 @@
 <div class="body">
-
     <div class="numéro-chauds">
-      <div class="btn" [routerLink]="['/Jeu']" style="cursor: pointer;background-color : rgb(39, 255, 104);">Jeu</div>
+      <div class="btn" [routerLink]="['/Jeu']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: (39, 255, 104,0.4);left:1px; border: 2px black solid; top:1px;">Quitter le jeu</div>
+      <div class="btn" [routerLink]="['/credit']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: (39, 255, 104,0.4);right:1px; border: 2px black solid; top:1px;">Mon compte</div>
       <p class="p-numérochaud">Les numéro les plus tirés s'afficheront prochainement ici !</p>
     </div>
     <!--<div class="roulette-component">
@@ -10,7 +10,19 @@
       </div>
     </div>-->
 
-    <div class="bubulle"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p></div>
+    <div class="fond"></div>
+
+    <div class="bubulle"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p><div class="container">
+      <div class="circle-background">
+        <div class="circle-progress" [ngStyle]="{ 'background': 'conic-gradient(#78C000 ' + progress + '%, transparent ' + progress + '%)' }">
+        </div>
+        <div class="circle-inner">
+          <div class="timer">{{ currentTime }} s</div>
+        </div>
+      </div>
+    </div>
+    
+    </div>
     
 
     <div class="table-component">
@@ -63,7 +75,11 @@
             <td id="ligne3" class="lg" (click)="onCellClick($event)">ligne3</td>
           </tr>
           <tr>
-            <td class="empty"></td>
+            <td class="btn-bonus" (click)="toggleBonus()">Bonus<div [ngClass]="{ 'active': isBonusActive, 'inactive': !isBonusActive }">
+              {{ isBonusActive ? 'ON' : 'OFF' }}
+            </div></td>
+
+            
             <td colspan="4" id="tiers1" class="lg" (click)="onCellClick($event)">tiers1</td>
             <td colspan="4" id="tiers2" class="lg" (click)="onCellClick($event)">tiers2</td>
             <td colspan="4" id="tiers3" class="lg" (click)="onCellClick($event)">tiers3</td>
@@ -147,7 +163,11 @@
 
         <button class="back-button" (click)="onUndoLastAction()" ><img src="../../../assets/image/back.png" class="btn-im"><h2> &nbsp;Annuler <br>&nbsp;le dernier<br>&nbsp;placement</h2></button>
         <button class="back-button" (click)="onRemoveAllTokens()"><img src="../../../assets/image/annul.png" class="btn-im"><h2>&nbsp;&nbsp;Annuler<br>&nbsp;tous les <br>paris</h2></button>
-        <button class="back-button" ><img src="../../../assets/image/rejouer.png" class="btn-im"><h2> Rejouer <br> le pari <br> précédent</h2></button>
+        <button class="replay-button" (click)="onReplayLastBet()">
+          <img src="../../../assets/image/rejouer.png" class="btn-im">
+          <h2>Rejouer <br> le pari <br> précédent</h2>
+        </button>
+        
 
       </div>
       <div class="select2">
@@ -211,10 +231,10 @@
       </div>
 
       <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;"></div>
-
-      <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
-
-      <p class="p-credit" >Crédits disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}</p><!-- <p class="p-credit3">€</p> -->
-    </div>
+      <div class="creditcontainer">
+        <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
+        <p class="p-credit" >Crédits <br>disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}€</p>
+      </div>
+      
   </div>
   
