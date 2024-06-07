@@ -426,6 +426,9 @@ body {
     margin: 0;
     background-color: #f0f0f0;
 }
+.btn-bonus{
+    background-image: url("../../../assets/image/motifbonus.jpg");
+}
 
 .back-button {
     background-color: red;
@@ -440,7 +443,66 @@ body {
     align-items: center;
     transition: transform 0.2s, background-color 0.2s;
 }
+.replay-button {
+    background: rgb(73,73,73);
+    background: linear-gradient(315deg, rgba(73,73,73,1) 0%, rgba(179,179,179,0.8435749299719888) 10%, rgba(73,73,73,1) 20%, rgba(179,179,179,0.8435749299719888) 30%,rgba(73,73,73,1) 40%, rgba(179,179,179,0.8435749299719888) 50%,rgba(73,73,73,1) 60%, rgba(179,179,179,0.8435749299719888) 70%,rgba(73,73,73,1) 80%, rgba(179,179,179,0.8435749299719888) 90%,rgba(73,73,73,1) 100%);
+    color: white;
+    border: 2px solid black;
+    border-radius: 4%;
+    min-width: 140px;
+    height: 75px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
 
+.container {
+    position: absolute;
+    top: -18%;
+    left: 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .circle-background {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .circle-progress {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(darkred 0%, transparent 0%);
+  }
+  
+  .circle-inner {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .timer {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
 .fond{
     position: absolute;
     height: 425px;
@@ -466,8 +528,8 @@ h2{
 }
 
 .bubulle p{
-    top: 30%;
-    left: 30%;
+    top: 29.5%;
+    left: 28%;
     font-weight: bold;
     font-size: 150%;
     color: black;
@@ -495,7 +557,7 @@ h2{
 }
 
 .blurred {
-    filter: blur(3px);
+    filter: blur(5px);
   }
 
   
@@ -510,4 +572,18 @@ h2{
     position: absolute;
     border: 2px black solid;
     background-color: rgba(255, 192, 57, 0.3);
+  }
+  .btn-bonus:hover{
+    cursor: pointer;
+  }
+  .btn-bonus:active{
+    border: inset;
+  }
+
+  .active {
+    color: darkgreen;
+  }
+  
+  .inactive {
+    color: darkred;
   }

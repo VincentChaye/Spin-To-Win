@@ -1,6 +1,6 @@
 <!-- roulette.component.html -->
 <div class="body">
-  <div *ngIf="ballFalling == null" class="container-roulette">
+  <div class="container-roulette">
     <svg width="600" height="600" viewBox="-100 -100 200 200">
       <g transform="rotate(-90)">
         <path *ngFor="let path of paths; let i = index"
@@ -11,15 +11,29 @@
       </g>
     </svg>
     <!-- <button #spinButton>Spin</button> -->
+
+
+
   </div>
 
   <div *ngIf="ballFalling !== null" class="resultat">
-    
-    <p *ngIf="isCreditInRed()" style="color: red ;">La balle est tombée sur un nombre rouge : {{ ballFalling }} <p>
-    <p *ngIf="isCreditInBlack()" style="color: black ;">La balle est tombée sur un nombre noir : {{ ballFalling }} <p>
-    <p *ngIf="isCreditInGreen()" style="color: green;">La balle est tombée sur un nombre vert : {{ ballFalling }} <p>
-      <p>Gains : {{ getCreditDifference() }}</p>
 
-    <div class="btn btn-warning roulette-img" [routerLink]="['/table']" style="cursor: pointer;">Jouer à nouveau ! </div>
+    <div *ngIf="isCreditInGreen()" class="resultat resultat-vert">
+      <p class="numres">{{ ballFalling }}</p>
+  </div>
+  <div *ngIf="isCreditInBlack()" class="resultat resultat-noir">
+      <p class="numres">{{ ballFalling }}</p>
+  </div>
+  <div *ngIf="isCreditInRed()" class="resultat resultat-rouge">
+      <p class="numres">{{ ballFalling }}</p>
+  </div>
+  
+    <p class="gain" *ngIf="getCreditDifference() > 0">Vous avez gagné {{ getCreditDifference() }} crédit !</p>
+    <p class="gain" *ngIf="getCreditDifference() > 1">Vous avez gagné {{ getCreditDifference() }} crédits !</p>
+    <p class="gain" *ngIf="getCreditDifference() < 0">Vous avez perdu {{ -getCreditDifference() }} crédit.</p>
+    <p class="gain" *ngIf="getCreditDifference() < -1">Vous avez perdu {{ -getCreditDifference() }} crédits.</p>
+    <p class="gain" *ngIf="getCreditDifference() === 0">Votre crédit n'a pas bougé.</p>
+
+    <p class="warn">Préparez vous pour le prochain tour</p>
   </div>
 </div>
