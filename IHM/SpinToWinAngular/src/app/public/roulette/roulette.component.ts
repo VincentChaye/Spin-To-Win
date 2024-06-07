@@ -198,12 +198,12 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
   }
-  
-  red = [6, 12, 18, 24, 30, 36, 2, 8, 14, 20, 26, 32, 4, 10, 16, 22, 28, 34];
-  black = [3, 9, 15, 21, 27, 33, 5, 11, 17, 23, 29, 35, 1, 7, 13, 19, 25, 31];
+   
+  red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+  black = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   green = [0];
-
-  isCreditInRed(): boolean {
+  
+ isCreditInRed(): boolean { 
     return this.ballFalling !== null && this.red.includes(this.ballFalling);
   }
 
