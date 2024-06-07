@@ -28,12 +28,12 @@ export class TableComponent implements OnInit  {
   openReloadCredit: boolean = false;
   private allServerURL = 'http://valentin:8000/player/update';
   subscription: any;
-
-  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
- 
-  oldCredit : number | undefined;
+oldCredit : number | undefined;
   isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
   lastBet: { [key: string]: { count: number, color: string } } | null = null;
+  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
+ 
+  
  
     this.PLAYERINFO.pageCharger = 0;
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
