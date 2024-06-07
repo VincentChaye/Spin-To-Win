@@ -66,6 +66,9 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (this.PLAYERINFO && this.PLAYERINFO.tableauparie && this.PLAYERINFO.tableauparie.length > 0) {
+      this.PLAYERINFO.tableauparie = []; // Clear the tableauparie array
+    }
   }
 
   getBall(): Promise<number> {

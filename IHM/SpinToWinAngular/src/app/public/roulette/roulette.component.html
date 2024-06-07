@@ -1,5 +1,6 @@
 <!-- roulette.component.html -->
 <div class="body">
+  <h2 *ngIf="PLAYERINFO.tableauparie?.length === 0" class="partieEnCours">Une partie est en cours, attendez le prochain tour pour jouer !</h2>
   <div *ngIf="ballFalling == null" class="container-roulette">
     <svg width="600" height="600" viewBox="-100 -100 200 200">
       <g transform="rotate(-90)">
@@ -49,6 +50,5 @@
     <p *ngIf="isCreditInGreen()" style="color: green;">La balle est tombée sur un nombre vert : {{ ballFalling }} <p>
       <p>Gains : {{ getCreditDifference() }}</p>
 
-    <div class="btn btn-warning roulette-img" [routerLink]="['/table']" style="cursor: pointer;">Jouer à nouveau ! </div>
   </div>
 </div>

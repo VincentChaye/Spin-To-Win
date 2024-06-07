@@ -41,7 +41,7 @@
             <td id="30" class="rouge" (click)="onCellClick($event)">30</td>
             <td id="33" class="noir" (click)="onCellClick($event)">33</td>
             <td id="36" class="rouge" (click)="onCellClick($event)">36</td>
-            <td id="tiers1" class="lg" (click)="onCellClick($event)">tiers1</td>
+            <td id="ligne1" class="lg" (click)="onCellClick($event)">ligne1</td>
           </tr>
           <tr>
             <td id="2" class="noir" (click)="onCellClick($event)">2</td>
@@ -56,7 +56,7 @@
             <td id="29" class="noir" (click)="onCellClick($event)">29</td>
             <td id="32" class="rouge" (click)="onCellClick($event)">32</td>
             <td id="35" class="noir" (click)="onCellClick($event)">35</td>
-            <td id="tiers2" class="lg" (click)="onCellClick($event)">tiers2</td>
+            <td id="ligne2" class="lg" (click)="onCellClick($event)">ligne2</td>
           </tr>
           <tr>
             <td id="1" class="rouge" (click)="onCellClick($event)">1</td>
@@ -71,13 +71,13 @@
             <td id="28" class="noir" (click)="onCellClick($event)">28</td>
             <td id="31" class="noir" (click)="onCellClick($event)">31</td>
             <td id="34" class="rouge" (click)="onCellClick($event)">34</td>
-            <td id="tiers3" class="lg" (click)="onCellClick($event)">tiers3</td>
+            <td id="ligne3" class="lg" (click)="onCellClick($event)">ligne3</td>
           </tr>
           <tr>
             <td class="empty"></td>
-            <td colspan="4" id="ligne1" class="lg" (click)="onCellClick($event)">ligne1</td>
-            <td colspan="4" id="ligne2" class="lg" (click)="onCellClick($event)">ligne2</td>
-            <td colspan="4" id="ligne3" class="lg" (click)="onCellClick($event)">ligne3</td>
+            <td colspan="4" id="tiers1" class="lg" (click)="onCellClick($event)">tiers1</td>
+            <td colspan="4" id="tiers2" class="lg" (click)="onCellClick($event)">tiers2</td>
+            <td colspan="4" id="tiers3" class="lg" (click)="onCellClick($event)">tiers3</td>
             <td class="empty"></td>
           </tr>
           <tr>
@@ -221,7 +221,7 @@
         </svg>
       </div>
 
-      <div class="roulette-img" (click)="redirectToLogin()" style="cursor: pointer;"></div>
+      <div class="roulette-img" style="cursor: pointer;"></div>
 
 
       <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
