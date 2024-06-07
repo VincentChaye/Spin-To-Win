@@ -563,7 +563,60 @@ h2{
   
   .p-credit {
     transition: filter 0.8s;
+  } 
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    z-index: 999; /* Assurez-vous que cette div apparaît au-dessus des autres éléments */
   }
+  
+  .modal-content {
+    background-color: #fefefe; /* Fond blanc */
+    padding: 30px;
+    border-radius: 20px; /* Coins arrondis */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre pour un effet de profondeur */
+    max-width: 400px; /* Largeur maximale du modal */
+    width: 90%; /* Largeur du modal */
+    animation: fadeIn 0.3s ease-out; /* Animation d'apparition */
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px; /* Espacement en bas du titre */
+    color: #333; /* Couleur du texte du titre */
+  }
+  
+  .modal-content .btn {
+    padding: 10px 20px;
+    font-size: 16px; /* Taille de la police */
+    border: none; /* Pas de bordure */
+    border-radius: 5px; /* Coins arrondis du bouton */
+    transition: background-color 0.3s ease; /* Transition de couleur de fond */
+  }
+  
+  .modal-content .btn:hover {
+    background-color: #e69500; /* Changement de couleur au survol */
+    cursor: pointer; /* Curseur pointeur */
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+   
   .creditcontainer{
     top: 70%;
     left: 78%;
@@ -586,4 +639,4 @@ h2{
   
   .inactive {
     color: darkred;
-  }
+  } 

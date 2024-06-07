@@ -71,14 +71,22 @@
     height: 200px;
     font-size: 300%;
     font-weight: bold;
-    text-align: center;
-    display: flex; /* Utilisation de flexbox pour centrer le texte */
-    justify-content: center; /* Centre horizontalement */
-    align-items: center; /* Centre verticalement */
-    color: white; /* Couleur du texte par défaut */
-    border: 1px solid #000000;
-}
-
+    text-align: center; 
+    z-index: 999; /* Assurez-vous que cette div apparaît au-dessus des autres éléments */
+    padding: 20px; /* Ajoutez un peu d'espace intérieur */
+  }
+  
+  
+  .partieEnCours {
+    color: red;
+    font-weight: bold;
+    white-space: nowrap;         /* Empêche le retour à la ligne */
+    overflow: hidden;            /* Cache le texte qui déborde */
+    text-overflow: ellipsis;    
+    text-align: center; /* Ajoute des points de suspension (...) si le texte déborde */
+  }
+  
+ 
 .resultat-rouge {
     background-color: darkred;
 }
@@ -106,4 +114,4 @@
   font-size: 140%;
   top: 75%;
   left: 13%;
-}
+} 

@@ -1,5 +1,8 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, SimpleChanges } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { WebSocketService } from '../web-socket.service'; // Importez le service WebSocket
 
 export interface Bet {
   betType: string;
@@ -10,25 +13,56 @@ export interface Bet {
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
-})
-export class TableComponent {
+}) 
+
+export class TableComponent implements OnInit  {
   totalTime: number = 30; // Temps total en secondes
   currentTime: number = this.totalTime;
-  interval: any;
+  interval: any; 
   selectedToken: { value: number, color: string } | null = null;
   cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
   credit: number = 100; //INITIALISATION CREDIT
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
   previousSelectedTokenElement: HTMLElement | null = null;
-  isCreditBlurred: boolean = false;
+  isCreditBlurred: boolean = false; 
+  openReloadCredit: boolean = false;
+  private allServerURL = 'http://valentin:8000/player/update';
+  subscription: any;
+
+  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
+ 
   oldCredit : number | undefined;
   isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
   lastBet: { [key: string]: { count: number, color: string } } | null = null;
-
-  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef) {
+ 
     this.PLAYERINFO.pageCharger = 0;
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
+    }
+    if(this.credit <= 0){
+      this.openModal();
+    }
+  }
+
+  ngOnInit() {
+    
+    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
+    // Vérifiez si vous êtes actuellement sur la page de la table
+    if (this.router.url === '/table') {
+      // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table
+      this.subscription = this.PLAYERINFO.etatPartie$.subscribe((num: number | undefined) => {
+        if (num === 2) {
+          // Redirigez vers le composant '/roulette' si l'état de partie est 2
+          this.router.navigate(['/roulette']);
+        }
+      });
+    }
+  
+    if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
+      this.credit = this.PLAYERINFO.playerInfo.credit;
+    }
+    if (this.credit <= 0) {
+      this.openModal();
     }
   }
   startCountdown() {
@@ -45,6 +79,23 @@ export class TableComponent {
     return (this.currentTime / this.totalTime) * 100;
   }
 
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  
+  redirectToLogin() {
+    // Vérifier si le joueur est connecté
+    if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.pseudo) {
+      // Rediriger vers le composant de connexion
+      this.router.navigate(['/login']);
+    } else {
+      // Rediriger vers la page de la roulette
+      this.router.navigate(['/roulette']);
+    }
+  }
   creditOp(value: number) {
     this.credit += value;
   }
@@ -112,12 +163,8 @@ export class TableComponent {
       this.logTokensData();
    // Save the current bet as the last bet
     }
-  }
-
-  saveLastBet() {
-    this.lastBet = { ...this.cellTokens };
-    console.log("save");
-  }
+  } 
+ 
 
   onReplayLastBet() {
     alert("Option indisponible pour le moment.");
@@ -161,7 +208,7 @@ export class TableComponent {
 
   toggleBonus() {
     this.isBonusActive = !this.isBonusActive;
-  }
+  } 
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
@@ -256,6 +303,13 @@ export class TableComponent {
     return this.cellTokens[cellId]?.count;
   }
 
+
+  getPedro(){
+    this.PLAYERINFO.pedro=!this.PLAYERINFO.pedro;
+    console.log("pedro");
+    console.log(this.PLAYERINFO.pedro);
+  }
+
   onRemoveAllTokens() {
     Object.keys(this.cellTokens).forEach(cellId => {
       const cellData = this.cellTokens[cellId];
@@ -298,5 +352,40 @@ export class TableComponent {
 
   toggleCreditBlur() {
     this.isCreditBlurred = !this.isCreditBlurred;
+  } 
+
+  openModal(){
+    this.openReloadCredit=true;
   }
+  closeModal(){
+    this.openReloadCredit=false;
+  }
+
+  reloadCredit() {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+  
+    // Préparez les données avec le pseudo du joueur et le crédit mis à jour
+    const data = {
+      pseudo: this.PLAYERINFO.playerInfo.pseudo,
+      credit: 100
+    };
+  
+    this.httpClient.put<any>(this.allServerURL, data, { headers: headers })
+      .subscribe(
+        (response: { mot_de_passe_hash: any; }) => {
+          console.log('PUT request successful:', response);
+          delete response.mot_de_passe_hash;
+  
+          // Mettre à jour les informations du joueur
+          this.PLAYERINFO.playerInfo = response;
+          if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
+            this.credit = this.PLAYERINFO.playerInfo.credit;
+          }
+        },
+        (error: any) => {
+          console.error('PUT request error:', error);
+        }
+      );
+  }
+ 
 }

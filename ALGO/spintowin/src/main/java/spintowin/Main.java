@@ -1,8 +1,12 @@
 package spintowin;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 import com.sun.net.httpserver.HttpServer;
+
+import WebGestion.SalonWebSocketServer; // Assurez-vous d'importer la classe SalonWebSocketServer
+
 public class Main {
     public static void main(String[] args) {
         // Création des threads pour chaque serveur
@@ -20,9 +24,17 @@ public class Main {
             H2Database.main(new String[]{});
         });
 
+        Thread webSocketServerThread = new Thread(() -> {
+            // Démarrage du serveur WebSocket
+            InetSocketAddress socketAddress = new InetSocketAddress("0.0.0.0", 8888);
+            SalonWebSocketServer salonWebSocketServer = new SalonWebSocketServer(socketAddress);
+            salonWebSocketServer.start();
+        });
+
         // Démarrage des threads
         httpServerThread.start();
         h2DatabaseThread.start();
+        webSocketServerThread.start();
 
         // Attendez que le serveur HTTP démarre avant d'ajouter le gestionnaire de contexte CORS
         try {
@@ -33,6 +45,12 @@ public class Main {
 
         // Ajout du gestionnaire de contexte CORS au chemin racine du serveur HTTP
         HttpServer server = SimpleHttpServer1.getServer();
-        server.createContext("/", new CorsHandler());
+        if (server != null) {
+            server.createContext("/", new CorsHandler());
+        } else {
+            System.err.println("HTTP server not initialized. CORS handler not added.");
+        }
+ 
+        
     }
 }

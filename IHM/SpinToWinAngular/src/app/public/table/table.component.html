@@ -1,18 +1,19 @@
 <div class="body">
-    <div class="numéro-chauds">
+    <div class="numéro-chauds"> 
       <div class="btn" [routerLink]="['/Jeu']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: (39, 255, 104,0.4);left:1px; border: 2px black solid; top:1px;">Quitter le jeu</div>
       <div class="btn" [routerLink]="['/credit']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: (39, 255, 104,0.4);right:1px; border: 2px black solid; top:1px;">Mon compte</div>
       <p class="p-numérochaud">Les numéro les plus tirés s'afficheront prochainement ici !</p>
     </div>
+ 
     <!--<div class="roulette-component">
       <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;">
         <p>Lancer la roulette !</p>
       </div>
     </div>-->
 
+ 
     <div class="fond"></div>
-
-    <div class="bubulle"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p><div class="container">
+<div class="bubulle"><button (click)="getPedro()"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p></button></div>
       <div class="circle-background">
         <div class="circle-progress" [ngStyle]="{ 'background': 'conic-gradient(#78C000 ' + progress + '%, transparent ' + progress + '%)' }">
         </div>
@@ -22,7 +23,7 @@
       </div>
     </div>
     
-    </div>
+    </div> 
     
 
     <div class="table-component">
@@ -230,11 +231,27 @@
         </svg>
       </div>
 
-      <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;"></div>
-      <div class="creditcontainer">
-        <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
-        <p class="p-credit" >Crédits <br>disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}€</p>
+ 
+      <div class="roulette-img" style="cursor: pointer;"></div>
+
+
+      <button class="hide-button" (click)="toggleCreditBlur()"><img src="../../../assets/image/oeuil.png" alt="Toggle Blur"></button>
+
+      <p class="p-credit" >Crédits disponibles : </p> <p class="p-credit2" [ngClass]="{ 'blurred': isCreditBlurred }">{{ credit }}</p><!-- <p class="p-credit3">€</p> -->
+    </div>
+
+
+    <div *ngIf="openReloadCredit" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Vous avez atteint 0 crédit. Vous en récupérez 100 !</h2>
+        <div class="btn btn-warning" (click)="reloadCredit();closeModal()" style="cursor: pointer;">
+          Recharger
+        </div>
       </div>
-      
+    </div>
+    
+    
+
+ 
   </div>
   

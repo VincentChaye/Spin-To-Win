@@ -20,15 +20,23 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseManager {
-    private static final String DB_URL = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1";
-    private static final String DB_USER = "sa";
-    private static final String DB_PASSWORD = "password";
+	 private static final String DB_URL = "jdbc:mysql://localhost:3306/VegaStudio_DB";
+	    private static final String DB_USER = "Compte_API";
+	    private static final String DB_PASSWORD = "FKf1VF6HiRyi1";
 
-    // Méthode pour établir une connexion à la base de données
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-    }
+	    // Chargement du pilote JDBC MySQL
+	    static {
+	        try {
+	            Class.forName("com.mysql.cj.jdbc.Driver");
+	        } catch (ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	    }
 
+	    // Méthode pour établir une connexion à la base de données
+	    private static Connection getConnection() throws SQLException {
+	        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+	    }
     // Méthode pour récupérer un joueur par son ID
     public static Joueur getJoueurById(int joueurId) {
         Joueur joueur = null;
@@ -134,8 +142,20 @@ public class DatabaseManager {
         return newPlayer;
     }
 
-    
-    
+    public static void updateEvolutionCredit(int joueurId, float credit) {
+        String sql = "INSERT INTO evolutionCredit (joueur_id, credit) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, joueurId);
+            pstmt.setFloat(2, credit);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     void createPlayerFromRequestData(Joueur newPlayer) {
         try {
             // Convertir la java.util.Date en java.sql.Date
@@ -240,6 +260,40 @@ public class DatabaseManager {
         return pseudos;
     }
 
+    public static List<Float> getAllEvolutionCredit(int id) {
+        List<Float> credits = new ArrayList<>();
+        String sql = "SELECT credit FROM evolutionCredit WHERE joueur_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setInt(1, id);  
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                float credit = rs.getFloat("credit");  
+                credits.add(credit);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return credits;
+    }
+
     
+    public static List<String> getAllMail() {
+        List<String> pseudos = new ArrayList<>();
+        String sql = "SELECT pseudo FROM joueur";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String pseudo = rs.getString("email");
+                pseudos.add(pseudo);
+            }
+            return pseudos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pseudos;
+    }
     // Autres méthodes pour gérer les opérations de base de données ici...
 }

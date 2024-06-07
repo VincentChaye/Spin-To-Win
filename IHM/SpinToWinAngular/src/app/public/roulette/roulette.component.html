@@ -1,6 +1,10 @@
 <!-- roulette.component.html -->
 <div class="body">
-  <div class="container-roulette">
+ 
+  <h2 *ngIf="PLAYERINFO.tableauparie?.length === 0" class="partieEnCours">Une partie est en cours, attendez le prochain tour pour jouer !</h2>
+  <div *ngIf="ballFalling == null" class="container-roulette">
+ 
+  <div class="container-roulette"> 
     <svg width="600" height="600" viewBox="-100 -100 200 200">
       <g transform="rotate(-90)">
         <path *ngFor="let path of paths; let i = index"
@@ -9,15 +13,43 @@
               [attr.id]="tab[i]"></path>
         <circle #ball cx="3" cy="-70" r="3" fill="white"></circle>
       </g>
+      <!-- Image avec animation de rotation -->
+      <g transform="rotate(-90)">
+        <g transform="translate(0 0)">
+          <image *ngIf="PLAYERINFO.pedro" class="PEDROIMG" xlink:href="../../../assets/image/PEDRO.png" width="140" height="140" x="-70" y="-70">
+            <!-- Animation de rotation de l'image -->
+            <animateTransform attributeName="transform"
+                               attributeType="XML"
+                               type="rotate"
+                               from="0 0 0"
+                               to="360 0 0"
+                               dur="5s"
+                               repeatCount="indefinite"/>
+          </image>
+        </g>
+      </g>
     </svg>
-    <!-- <button #spinButton>Spin</button> -->
-
-
-
+ 
+  
+    <!-- Balise audio pour l'audio en boucle -->
+    <audio *ngIf="PLAYERINFO.pedro" autoplay loop>
+      <source src="../../../assets/audio/pedropedroAudio.mp3" type="audio/mpeg">
+      Votre navigateur ne supporte pas l'audio HTML5.
+    </audio>
+ 
   </div>
+  
+  
+
+
+
+
+
+
+
 
   <div *ngIf="ballFalling !== null" class="resultat">
-
+ 
     <div *ngIf="isCreditInGreen()" class="resultat resultat-vert">
       <p class="numres">{{ ballFalling }}</p>
   </div>
@@ -35,5 +67,6 @@
     <p class="gain" *ngIf="getCreditDifference() === 0">Votre crédit n'a pas bougé.</p>
 
     <p class="warn">Préparez vous pour le prochain tour</p>
+ 
   </div>
 </div>
