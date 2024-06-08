@@ -50,7 +50,9 @@ public class Main {
         } else {
             System.err.println("HTTP server not initialized. CORS handler not added.");
         }
- 
-        
+
+        // Exemple d'utilisation de la génération de nombre aléatoire
+        int randomNumber = RandomNumberUtil.generateRandomNumber();
+        System.out.println("Generated random number in main: " + randomNumber);
     }
 }
