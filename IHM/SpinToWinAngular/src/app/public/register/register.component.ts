@@ -132,6 +132,8 @@ export class RegisterComponent implements OnInit {
         response.dateNaissance = new Date(response.dateNaissance).toISOString().split('T')[0];
         console.log('API POST réussi :', response);
         this.PLAYERINFO.playerInfo = response;
+        
+        this.PLAYERINFO.joueurConnecter=true;
         this.router.navigate(['/Jeu']);
       },
       (error: any) => {

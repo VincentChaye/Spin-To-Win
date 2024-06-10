@@ -3,7 +3,6 @@ package WebGestion;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-
 import spintowin.RandomNumber;
 
 import java.net.InetSocketAddress;
@@ -28,7 +27,7 @@ public class SalonWebSocketServer extends WebSocketServer {
             public void run() {
                 changerEtatPartie();
             }
-        }, 0, 30000); // 30 secondes
+        }, 0, 25000); // 30 secondes
     }
 
     private void changerEtatPartie() {
@@ -44,7 +43,7 @@ public class SalonWebSocketServer extends WebSocketServer {
                     System.out.println("Etat de la partie changé à 1");
                     envoyerEtatPartie();
                 }
-            }, 20000); // 15 secondes
+            }, 8000); // 15 secondes
         }
     }
 
@@ -67,7 +66,6 @@ public class SalonWebSocketServer extends WebSocketServer {
             salon.broadcast(data); // Envoyer l'état de la partie et le numéro du salon à tous les clients
         }
     }
-
 
     @Override
     public void onStart() {
@@ -135,7 +133,8 @@ public class SalonWebSocketServer extends WebSocketServer {
     }
 
     public static void main(String[] args) {
-        SalonWebSocketServer server = new SalonWebSocketServer(new InetSocketAddress(8888)); // Utiliser le port 8888
+        InetSocketAddress socketAddress = new InetSocketAddress(8888);
+        SalonWebSocketServer server = new SalonWebSocketServer(socketAddress); // Utiliser le port 8888
         server.start();
     }
 }

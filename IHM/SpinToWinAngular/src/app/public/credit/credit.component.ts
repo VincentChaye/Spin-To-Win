@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./credit.component.css']
 })
 export class CreditComponent implements OnInit {
-  constructor(public PLAYERINFO: PlayoutComponent, private http: HttpClient) {}
+  constructor(public PLAYERINFO: PlayoutComponent, private http: HttpClient) {this.PLAYERINFO.pageCharger = 1;}
 
   ngOnInit() {
     if (this.PLAYERINFO.playerInfo) {
@@ -81,5 +81,6 @@ export class CreditComponent implements OnInit {
 
   deconexion() {
     this.PLAYERINFO.playerInfo = null; // Vider playerInfo
+    this.PLAYERINFO.joueurConnecter=false;
   }
 }

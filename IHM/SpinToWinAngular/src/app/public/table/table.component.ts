@@ -13,19 +13,28 @@ export interface Bet {
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
-})
-export class TableComponent implements OnInit {
+}) 
+
+export class TableComponent implements OnInit  {
+  totalTime: number = 30; // Temps total en secondes
+  currentTime: number = this.totalTime;
+  interval: any; 
   selectedToken: { value: number, color: string } | null = null;
   cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
   credit: number = 100; //INITIALISATION CREDIT
   actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
   previousSelectedTokenElement: HTMLElement | null = null;
-  isCreditBlurred: boolean = false;
+  isCreditBlurred: boolean = false; 
   openReloadCredit: boolean = false;
   private allServerURL = 'http://localhost:8000/player/update';
   subscription: any;
-
+oldCredit : number | undefined;
+  isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
+  lastBet: { [key: string]: { count: number, color: string } } | null = null;
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
+ 
+  
+ 
     this.PLAYERINFO.pageCharger = 0;
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
@@ -36,6 +45,8 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     // Vérifiez si vous êtes actuellement sur la page de la table
     if (this.router.url === '/table') {
       // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table
@@ -53,6 +64,19 @@ export class TableComponent implements OnInit {
     if (this.credit <= 0) {
       this.openModal();
     }
+  }
+  startCountdown() {
+    this.interval = setInterval(() => {
+      if (this.currentTime > 0) {
+        this.currentTime--;
+      } else {
+        clearInterval(this.interval);
+      }
+    }, 1000);
+  }
+
+  get progress() {
+    return (this.currentTime / this.totalTime) * 100;
   }
 
 
@@ -137,8 +161,54 @@ export class TableComponent implements OnInit {
       // Update the display of the cell
       this.updateCellDisplay(cellId);
       this.logTokensData();
+   // Save the current bet as the last bet
     }
+  } 
+ 
+
+  onReplayLastBet() {
+    alert("Option indisponible pour le moment.");
+    /*if (this.lastBet) {
+      Object.keys(this.lastBet).forEach(cellId => {
+        const cellData = this.lastBet![cellId];
+        if (this.credit >= cellData.count) {
+          if (!this.cellTokens[cellId]) {
+            this.cellTokens[cellId] = { 
+              count: 0, 
+              color: cellData.color, 
+              originalContent: '', 
+              originalColor: '' 
+            };
+          }
+
+          // Save current state for undo functionality
+          this.actionHistory.push({ 
+            cellId, 
+            previousCount: this.cellTokens[cellId].count, 
+            previousColor: this.cellTokens[cellId].color,
+            tokenValue: cellData.count 
+          });
+
+          // Update the cell data with the last bet value
+          this.cellTokens[cellId].count += cellData.count;
+          this.cellTokens[cellId].color = cellData.color;
+          this.creditOp(-cellData.count);
+
+          // Update the display of the cell
+          this.updateCellDisplay(cellId);
+        } else {
+          alert("Crédit insuffisant pour rejouer le pari précédent !");
+        }
+      });
+      this.logTokensData();
+    } else {
+      alert("Aucun pari précédent à rejouer !");
+    }*/
   }
+
+  toggleBonus() {
+    this.isBonusActive = !this.isBonusActive;
+  } 
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
@@ -282,7 +352,7 @@ export class TableComponent implements OnInit {
 
   toggleCreditBlur() {
     this.isCreditBlurred = !this.isCreditBlurred;
-  }
+  } 
 
   openModal(){
     this.openReloadCredit=true;
@@ -317,4 +387,5 @@ export class TableComponent implements OnInit {
         }
       );
   }
+ 
 }

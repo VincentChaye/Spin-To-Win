@@ -47,6 +47,7 @@ export class LoginComponent {
          
           this.PLAYERINFO.playerInfo = response;
           console.log('trans', this.PLAYERINFO.playerInfo);
+          this.PLAYERINFO.joueurConnecter=true;
           this.router.navigate(['/Jeu']); // Utilisez le service Router pour la navigation
         },
         (error) => {

@@ -1,3 +1,4 @@
+
 package spintowin;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,20 +26,19 @@ public class SimpleHttpServer1 {
 
     public static void main(String[] args) throws IOException {
         // Créez le serveur HTTP sur le port 8000
-        server = HttpServer.create(new InetSocketAddress(8000), 0);
+    	 server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8000), 0);
 
-        // Définissez les gestionnaires de requêtes pour les différents chemins
-        server.createContext("/resource1", new Resource1Handler());
-        server.createContext("/resource2", new Resource2Handler());
-        server.createContext("/player", new PlayerHandler());
-        server.createContext("/player/name", new PlayerHandlerName());
-        server.createContext("/player/new", new PlayerHandlerNew());
-        server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
-        server.createContext("/player/mail", new PlayerHandlerAllMail());
-        server.createContext("/player/auth", new PlayerHandlerAuth());
-        server.createContext("/game/playe", new PlayerPlaye());
-        server.createContext("/player/update", new PlayerUpdateCredit());
-        server.createContext("/player/evolution/", new StattistiqueJoueur());
+        // Définissez les gestionnaires de requêtes pour les différents chemins 
+            server.createContext("/resource2", new Resource2Handler());
+            server.createContext("/player", new PlayerHandler());
+            server.createContext("/player/name", new PlayerHandlerName());
+            server.createContext("/player/new", new PlayerHandlerNew());
+            server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
+            server.createContext("/player/mail", new PlayerHandlerAllMail());
+            server.createContext("/player/auth", new PlayerHandlerAuth());
+            server.createContext("/game/playe", new PlayerPlaye());
+            server.createContext("/player/update", new PlayerUpdateCredit());
+            server.createContext("/player/evolution/", new StattistiqueJoueur());
 
         
     server.createContext("/game/ball", new GenerateBallHandler());
@@ -57,22 +57,6 @@ public class SimpleHttpServer1 {
         return server;
     }
 }
-
-// Request handler for the path "/resource1"
-class Resource1Handler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        System.out.println("Received request for /resource1");
-        
-        String response = "Babam Babam";
-        try (OutputStream os = exchange.getResponseBody()) {
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            os.write(response.getBytes());
-        }
-    }
-}
-
-// Request handler for the path "/resource2"
 class Resource2Handler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -597,8 +581,8 @@ class PlayerHandlerNew implements HttpHandler {
         	    System.out.println("Ball generate");
                 
                 // Générer un nombre aléatoire entre 0 et 36
-                
-                int randomNumber = RandomNumberUtil.generateRandomNumber(); // 0 inclus, 37 exclu
+                Random random = new Random();
+                int randomNumber = random.nextInt(37); // 0 inclus, 37 exclu
 
                 // Convertir le nombre en JSON
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -666,4 +650,3 @@ class PlayerHandlerNew implements HttpHandler {
         	        }
         	    }
                 }
-

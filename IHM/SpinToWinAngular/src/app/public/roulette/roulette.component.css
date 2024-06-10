@@ -14,10 +14,10 @@
   
   .container-roulette {
     position: absolute;
-    background-color: rgba(254, 178, 76, 0.43);
-    border: #011b3a 5px solid;
+    background-color: rgba(121, 84, 35, 0.719);
+    border: #000000 2px solid;
     top: 10%;
-    left: 33%;
+    left: 5%;
     padding: 50px;
     border-radius: 8px;
   }
@@ -49,22 +49,69 @@
 
 
   .resultat {
-    
-    color: #EEEEEE;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(254, 178, 76, 0.7); /* Fond blanc */
-    width: 50%; /* Taille de 50% de la largeur de l'écran */
-    height: 50%; /* Taille de 50% de la hauteur de l'écran */
     position: absolute;
-    top: 25%; /* Centrage vertical */
-    left: 25%; /* Centrage horizontal */
-    border-radius: 80px; /* Coins arrondis */
-    text-align: center;
+    background-color: rgba(121, 84, 35, 0.719);
+    border: 2px solid #000000;
+    top: 21%;
+    width: 500px;
+    height: 500px;
+    right: 5%;
+    padding: 50px;
+    border-radius: 8px;
+}
+
+.resultat-rouge,
+.resultat-noir,
+.resultat-vert {
+    position: absolute;
+    border-radius: 5px;
+    top: 15%;
+    left: 30%;
+    width: 200px;
+    height: 200px;
+    font-size: 300%;
+    font-weight: bold;
+    text-align: center; 
     z-index: 999; /* Assurez-vous que cette div apparaît au-dessus des autres éléments */
     padding: 20px; /* Ajoutez un peu d'espace intérieur */
   }
   
   
+  .partieEnCours {
+    color: red;
+    font-weight: bold;
+    white-space: nowrap;         /* Empêche le retour à la ligne */
+    overflow: hidden;            /* Cache le texte qui déborde */
+    text-overflow: ellipsis;    
+    text-align: center; /* Ajoute des points de suspension (...) si le texte déborde */
+  }
+  
+ 
+.resultat-rouge {
+    background-color: darkred;
+}
+
+.resultat-noir {
+    background-color: black;
+}
+
+.resultat-vert {
+    background-color: darkgreen;
+}
+
+.gain{
+  position: absolute;
+  color: black;
+  top: 65%;
+  left: 19%;
+  font-size: 150%;
+  font-weight: bold;
+}
+
+.warn{
+  position: absolute;
+  color: black;
+  font-size: 140%;
+  top: 75%;
+  left: 13%;
+} 

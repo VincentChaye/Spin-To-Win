@@ -42,37 +42,33 @@
 
 .hide-button{
     width: 64px;
-    height: 48px;
+    height: 97%;
 
-    background-color: rgb(48, 48, 48);
+    background-color: rgb(255, 23, 23);
     position: absolute;
-    top: 71%;
-    left: 93%;
+    top: 1%;
+    right: 1%;
+}
+.hide-button:active{
+    transform: scale(0.8);
 }
 
 .p-credit {
     position: absolute;
-    top: 73%;
-    left: 78%;
+    text-align: center;
+    top: 5%;
+    left: 18%;
     color: black;
     font-weight: bold;
-    font-size: 110%;
+    font-size: 130%;
 }
 .p-credit2 {
     position: absolute;
-    top: 73%;
-    left: 89%;
+    top: 65%;
+    left: 28%;
     color: black;
     font-weight: bold;
-    font-size: 110%;
-}
-.p-credit3 {
-    position: absolute;
-    top: 73%;
-    left: 91%;
-    color: black;
-    font-weight: bold;
-    font-size: 110%;
+    font-size: 130%;
 }
 
 .p-message {
@@ -348,6 +344,9 @@ td {
     margin-top: 2px;
     filter: drop-shadow(rgb(0, 0, 0) 0px 0px 8px );
 }
+.token:active{
+    transform: scale(0.8);
+}
 
 #casino-chip {
     width: 60px;
@@ -427,6 +426,9 @@ body {
     margin: 0;
     background-color: #f0f0f0;
 }
+.btn-bonus{
+    background-image: url("../../../assets/image/gold.jpg");
+}
 
 .back-button {
     background-color: red;
@@ -440,6 +442,72 @@ body {
     justify-content: center;
     align-items: center;
     transition: transform 0.2s, background-color 0.2s;
+}
+.replay-button {
+    background: rgb(73,73,73);
+    background: linear-gradient(315deg, rgba(73,73,73,1) 0%, rgba(179,179,179,0.8435749299719888) 10%, rgba(73,73,73,1) 20%, rgba(179,179,179,0.8435749299719888) 30%,rgba(73,73,73,1) 40%, rgba(179,179,179,0.8435749299719888) 50%,rgba(73,73,73,1) 60%, rgba(179,179,179,0.8435749299719888) 70%,rgba(73,73,73,1) 80%, rgba(179,179,179,0.8435749299719888) 90%,rgba(73,73,73,1) 100%);
+    color: white;
+    border: 2px solid black;
+    border-radius: 4%;
+    min-width: 140px;
+    height: 75px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.container {
+    position: absolute;
+    top: -18%;
+    left: 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .circle-background {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .circle-progress {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(darkred 0%, transparent 0%);
+  }
+  
+  .circle-inner {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .timer {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+.fond{
+    position: absolute;
+    height: 425px;
+    width: 100%;
+    bottom: 0px;
 }
 
 h2{
@@ -460,8 +528,8 @@ h2{
 }
 
 .bubulle p{
-    top: 30%;
-    left: 30%;
+    top: 29.5%;
+    left: 28%;
     font-weight: bold;
     font-size: 150%;
     color: black;
@@ -489,14 +557,38 @@ h2{
 }
 
 .blurred {
-    filter: blur(3px);
+    filter: blur(5px);
   }
 
   
   .p-credit {
     transition: filter 0.8s;
   }
+  .creditcontainer{
+    top: 70%;
+    left: 78%;
+    width: 300px;
+    height: 130px;
+    position: absolute;
+    border: 2px black solid;
+    background-color: rgba(255, 192, 57, 0.3);
+  }
+  .btn-bonus:hover{
+    cursor: pointer;
+  }
+  .btn-bonus:active{
+    border: inset;
+  }
+
+  .active {
+    color: darkgreen;
+  }
   
+  .inactive {
+    color: darkred;
+  }
+
+
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -538,15 +630,3 @@ h2{
     background-color: #e69500; /* Changement de couleur au survol */
     cursor: pointer; /* Curseur pointeur */
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
