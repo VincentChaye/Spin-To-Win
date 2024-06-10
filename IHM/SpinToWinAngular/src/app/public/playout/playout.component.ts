@@ -21,7 +21,7 @@ export class PlayoutComponent implements OnInit {
   private etatPartieSubject: BehaviorSubject<number | undefined> = new BehaviorSubject<number | undefined>(undefined);
   public etatPartie$: Observable<number | undefined> = this.etatPartieSubject.asObservable();
   subscription: any;
-  joueurConnecter : boolean = false;
+  joueurConnecter : boolean = false; 
   // Variables pour stocker les données WebSocket
   randomNumber: number | undefined;
   salonNumber: number | undefined;

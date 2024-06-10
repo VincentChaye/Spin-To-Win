@@ -28,17 +28,17 @@ public class SimpleHttpServer1 {
         // Créez le serveur HTTP sur le port 8000
     	 server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8000), 0);
 
-        // Définissez les gestionnaires de requêtes pour les différents chemins
-        server.createContext("/resource1", new Resource1Handler());
-        server.createContext("/resource2", new Resource2Handler());
-        server.createContext("/player", new PlayerHandler());
-        server.createContext("/player/name", new PlayerHandlerName());
-        server.createContext("/player/new", new PlayerHandlerNew());
-        server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
-        server.createContext("/player/mail", new PlayerHandlerAllMail());
-        server.createContext("/player/auth", new PlayerHandlerAuth());
-        server.createContext("/game/playe", new PlayerPlaye());
-        server.createContext("/player/update", new PlayerUpdateCredit());
+        // Définissez les gestionnaires de requêtes pour les différents chemins 
+            server.createContext("/resource2", new Resource2Handler());
+            server.createContext("/player", new PlayerHandler());
+            server.createContext("/player/name", new PlayerHandlerName());
+            server.createContext("/player/new", new PlayerHandlerNew());
+            server.createContext("/player/pseudo", new PlayerHandlerAllPseudo());
+            server.createContext("/player/mail", new PlayerHandlerAllMail());
+            server.createContext("/player/auth", new PlayerHandlerAuth());
+            server.createContext("/game/playe", new PlayerPlaye());
+            server.createContext("/player/update", new PlayerUpdateCredit());
+            server.createContext("/player/evolution/", new StattistiqueJoueur());
 
         
     server.createContext("/game/ball", new GenerateBallHandler());
@@ -57,22 +57,6 @@ public class SimpleHttpServer1 {
         return server;
     }
 }
-
-// Request handler for the path "/resource1"
-class Resource1Handler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        System.out.println("Received request for /resource1");
-        
-        String response = "Babam Babam";
-        try (OutputStream os = exchange.getResponseBody()) {
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            os.write(response.getBytes());
-        }
-    }
-}
-
-// Request handler for the path "/resource2"
 class Resource2Handler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -479,6 +463,22 @@ class PlayerHandlerNew implements HttpHandler {
                         return;
                     }
 
+                    // Comparer les crédits initiaux et les crédits mis à jour
+                    float initialCredits = playerCredits;
+                    float updatedCredits = updatedJoueur.getCredit();
+                    if (updatedCredits == 0) {
+                        // Faites quelque chose si updatedCredits est égal à 0
+                        updatedCredits = 100;
+                    }
+                    double difference = Math.abs((double) (updatedCredits - initialCredits) / initialCredits);
+
+                    // Modifier la condition pour vérifier une différence de 25 %
+                    if (difference > 0.25) {
+                        // Appeler updateEvolutionCredit avec l'id du joueur et les crédits actuels après la mise à jour
+                        System.out.println("TABLE2...");
+                        DatabaseManager.updateEvolutionCredit(updatedJoueur.getId(), updatedCredits);
+                    }
+
                     // Préparer la réponse JSON avec les informations mises à jour du joueur
                     String response = objectMapper.writeValueAsString(updatedJoueur);
                     exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -493,7 +493,81 @@ class PlayerHandlerNew implements HttpHandler {
                         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
                         exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
                     }
-                }}
+                }
+            }
+
+            
+            class StattistiqueJoueur implements HttpHandler {
+                @Override
+                public void handle(HttpExchange exchange) throws IOException {
+                    if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+                        Utils.setCorsHeaders(exchange);
+                        exchange.sendResponseHeaders(200, -1);
+                        return;
+                    }
+                    Utils.setCorsHeaders(exchange);
+                    System.out.println("All evolution");
+
+                    // Lire l'ID du joueur à partir du chemin de l'URL
+                    String path = exchange.getRequestURI().getPath();
+                    String[] pathParts = path.split("/");
+                    if (pathParts.length != 4) {
+                        String response = "ID du joueur est requis dans l'URL!";
+                        exchange.sendResponseHeaders(400, response.getBytes().length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(response.getBytes());
+                        }
+                        return;
+                    }
+
+                    int joueurId;
+                    try {
+                        joueurId = Integer.parseInt(pathParts[3]);
+                    } catch (NumberFormatException e) {
+                        String response = "ID du joueur invalide!";
+                        exchange.sendResponseHeaders(400, response.getBytes().length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(response.getBytes());
+                        }
+                        return;
+                    }
+
+                    // Récupérer le joueur par son ID
+                    Joueur joueur = DatabaseManager.getJoueurById(joueurId);
+                    if (joueur == null) {
+                        String response = "Joueur non trouvé!";
+                        exchange.sendResponseHeaders(404, response.getBytes().length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(response.getBytes());
+                        }
+                        return;
+                    }
+
+                    // Récupérer l'évolution des crédits du joueur
+                    List<Float> credits = DatabaseManager.getAllEvolutionCredit(joueur.getId());
+
+                    // Convertir la liste en JSON
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonResponse = objectMapper.writeValueAsString(credits);
+
+                    // Envoyer la réponse JSON
+                    byte[] responseBytes = jsonResponse.getBytes();
+                    exchange.getResponseHeaders().set("Content-Type", "application/json");
+                    exchange.sendResponseHeaders(200, responseBytes.length);
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(responseBytes);
+                    }
+                }
+
+                static class Utils {
+                    public static void setCorsHeaders(HttpExchange exchange) {
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                    }
+                }
+            }
+            
             
             class GenerateBallHandler implements HttpHandler {
             @Override
