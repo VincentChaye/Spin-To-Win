@@ -133,7 +133,7 @@ public class SalonWebSocketServer extends WebSocketServer {
     }
 
     public static void main(String[] args) {
-        InetSocketAddress socketAddress = new InetSocketAddress(8888);
+        InetSocketAddress socketAddress = new InetSocketAddress("0.0.0.0",8888);
         SalonWebSocketServer server = new SalonWebSocketServer(socketAddress); // Utiliser le port 8888
         server.start();
     }
