@@ -7,7 +7,7 @@ import { Observable, Observer, EMPTY } from 'rxjs';
 export class WebSocketService {
   private socket: WebSocket | null = null;
   private observer: Observer<any> | null = null;
-  private url: string = 'ws://vegastudio:8888';
+  private url: string = 'ws://localhost:8888';
   private subscription: Observable<any> | null = null;
 
   constructor() {}
