@@ -20,7 +20,7 @@
                                type="rotate"
                                from="0 0 0"
                                to="360 0 0"
-                               dur="20s"
+                               dur="7s"
                                repeatCount="indefinite"/>
           </image>
         </g>
@@ -52,4 +52,18 @@
 
     <p class="warn">Préparez vous pour le prochain tour</p>
   </div>
+
+
+  <div class="tchat">
+    <div class="tchat-list">
+      <div *ngFor="let message of PLAYERINFO.chatMessages" class="tchatmessage">
+        {{ message }}
+      </div>
+    </div>
+    <div class="tchat-input">
+      <input type="text" placeholder="Écrire un message..." [(ngModel)]="PLAYERINFO.messageInput">
+      <button (click)="envoyerUnMessage()">Envoyer</button> 
+    </div>
+  </div>
+  
 </div>

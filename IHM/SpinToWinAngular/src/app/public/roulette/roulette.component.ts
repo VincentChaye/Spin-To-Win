@@ -16,7 +16,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   tab = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
   ballFalling: number | null = null; 
   betscopy: any[] = []; 
-  private allServerURL = 'http://vegastudio:8000/game/playe';
+  private allServerURL = 'http://valentin:8000/game/playe';
   private subscription: Subscription | null = null;  // Ajout de la souscription
   
   @ViewChild("ball") ball!: ElementRef<SVGCircleElement>;
@@ -34,7 +34,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() { 
-    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
+    //if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     if ( this.router.url === '/roulette') {
       // Si le joueur est connecté, commencez à générer les chemins et démarrez l'animation
       this.generatePaths();
@@ -85,6 +85,8 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
 
+ 
+
   generatePaths(): void {
     const numSlices = 37;
     const sliceDegree = 360 / numSlices;
@@ -129,7 +131,9 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
         );
       }, 100);
     
+      // Écouter la fin de la transition
       this.renderer.listen(this.ball.nativeElement, 'transitionend', () => {
+        // Mettre à jour ballFalling une fois que l'animation est terminée
         this.calculGains(ball);
         this.ballFalling = ball; 
         console.log(this.ballFalling);
@@ -164,26 +168,25 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   calculGains(ball: number) {
     if (this.PLAYERINFO.tableauparie) {
       this.PLAYERINFO.oldCredit=this.PLAYERINFO.playerInfo.credit;
-      this.betscopy = this.PLAYERINFO.tableauparie; 
+      this.betscopy = this.PLAYERINFO.tableauparie; // Affecter la valeur de this.PLAYERINFO.tableauparie à this.bets
       const formattedJson = {
-        name: this.PLAYERINFO.playerInfo.pseudo, 
-        credits: this.PLAYERINFO.playerInfo.credit, 
+        name: this.PLAYERINFO.playerInfo.pseudo, // Récupérer le pseudo du joueur
+        credits: this.PLAYERINFO.playerInfo.credit, // Récupérer les crédits du joueur
         ballNumber: ball,
         bets: this.betscopy
       };
   
       console.log(JSON.stringify(formattedJson));
   
-      if (this.PLAYERINFO.playerInfo) {
-        this.gameResult(formattedJson);
-      }
+      // Appeler la fonction pour envoyer les données au serveur
+      this.gameResult(formattedJson);
     } else {
       console.error('Error: this.PLAYERINFO.tableauparie is undefined.');
     }
   }
   
   gameResult(data: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json'); 
+    const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Correction du type de contenu
   
     this.httpClient.put<any>(this.allServerURL, data, { headers: headers })
       .subscribe(
@@ -191,6 +194,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('PUT request successful:', response);
           delete response.mot_de_passe_hash;
   
+          // Mettre à jour les informations du joueur
           this.PLAYERINFO.playerInfo = response;
         },
         (error) => {
@@ -198,12 +202,12 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
   }
-   
+  
   red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
   black = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   green = [0];
   
- isCreditInRed(): boolean { 
+ isCreditInRed(): boolean {
     return this.ballFalling !== null && this.red.includes(this.ballFalling);
   }
 
@@ -216,7 +220,34 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getCreditDifference(): number {
-    return (this.PLAYERINFO.playerInfo.credit || 0) - (this.PLAYERINFO.oldCredit || 0);
+    console.log('oldcredit',this.PLAYERINFO.oldCredit)
+   if (!this.PLAYERINFO.oldCredit){return 0;}
+    else{return (this.PLAYERINFO.playerInfo.credit || 0) - (this.PLAYERINFO.oldCredit || 0);}
   }
 
+
+  
+  
+ 
+
+  envoyerUnMessage() {
+    if (this.PLAYERINFO.messageInput.trim() !== '') { // Vérifie que le message n'est pas vide
+      this.PLAYERINFO.sendMessage(this.PLAYERINFO.messageInput);
+      this.PLAYERINFO.messageInput = ''; // Réinitialise l'input après l'envoi du message
+    }
+  }
+
+  
+
+  envoyerUnMessageDepuisLogin() {
+    if (this.PLAYERINFO) {
+      this.PLAYERINFO.sendTotoMessage();
+    }
+  }
+
+  afficherLeTchatDepuisLogin() {
+    if (this.PLAYERINFO) {
+      this.PLAYERINFO.displayChatMessages();
+    }
+  }
 }

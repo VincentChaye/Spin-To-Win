@@ -26,11 +26,12 @@ export class TableComponent implements OnInit  {
   previousSelectedTokenElement: HTMLElement | null = null;
   isCreditBlurred: boolean = false; 
   openReloadCredit: boolean = false;
-  private allServerURL = 'http://vegastudio:8000/player/update';
+  private allServerURL = 'http://valentin:8000/player/update';
   subscription: any;
 oldCredit : number | undefined;
   isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
   lastBet: { [key: string]: { count: number, color: string } } | null = null;
+  
   constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
  
   
@@ -46,7 +47,8 @@ oldCredit : number | undefined;
 
   ngOnInit() {
     
-    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
+    //if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
+    
     // Vérifiez si vous êtes actuellement sur la page de la table
     if (this.router.url === '/table') {
       // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table
@@ -388,4 +390,24 @@ oldCredit : number | undefined;
       );
   }
  
+  envoyerUnMessage() {
+    if (this.PLAYERINFO.messageInput.trim() !== '') { // Vérifie que le message n'est pas vide
+      this.PLAYERINFO.sendMessage(this.PLAYERINFO.messageInput);
+      this.PLAYERINFO.messageInput = ''; // Réinitialise l'input après l'envoi du message
+    }
+  }
+
+  
+
+  envoyerUnMessageDepuisLogin() {
+    if (this.PLAYERINFO) {
+      this.PLAYERINFO.sendTotoMessage();
+    }
+  }
+
+  afficherLeTchatDepuisLogin() {
+    if (this.PLAYERINFO) {
+      this.PLAYERINFO.displayChatMessages();
+    }
+  }
 }
