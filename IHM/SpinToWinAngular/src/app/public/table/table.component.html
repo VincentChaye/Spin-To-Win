@@ -1,16 +1,31 @@
   <div class="body">
-    <div class="numéro-chauds">
-      <div class="btn" [routerLink]="['/Jeu']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: (39, 255, 104,0.4);left:1px; border: 2px black solid; top:1px;">Quitter le jeu</div>
-      <div class="btn" [routerLink]="['/credit']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: (39, 255, 104,0.4);right:1px; border: 2px black solid; top:1px;">Mon compte</div>
-      <p class="p-numérochaud">  Vous êtes dans le salon n ° {{ PLAYERINFO.salonNumber }}</p> 
+    <div class="numéro-chauds" style="position: relative;">
+      <div class="btn" [routerLink]="['/Jeu']" style="font-weight:bold; cursor:pointer; position:absolute; background-color: rgba(39, 255, 104, 0.4); left: 1px; border: 2px solid black; top: 1px;">Quitter le jeu</div>
+      
+      <div style="position: absolute; right: 1px; top: 1px; display: flex;">
+       
+        <div class="btn"  style="font-weight:bold; cursor:pointer; background-color: rgba(39, 255, 104, 0.4); border: 2px solid black; margin-right: 5px;" (click)="openCloseTchat()">
+          <i class="bi bi-chat-text-fill" style="font-size: 110%;"></i>
+        </div>
+        
+        <div class="btn" [routerLink]="['/credit']" style="font-weight:bold; cursor:pointer; background-color: rgba(39, 255, 104, 0.4); border: 2px solid black;">
+          <i class="bi bi-person-fill" style="font-size: 110%;"></i>
+        </div>
+      </div>
+      
+      <p class="p-numérochaud">Vous êtes dans le salon n° {{ PLAYERINFO.salonNumber }}</p>
+      
+    
+      <p class="p-numérochaud">Vous êtes dans le salon n° {{ PLAYERINFO.salonNumber }}</p> 
     </div>
+    
     <!--<div class="roulette-component">
       <div class="roulette-img" [routerLink]="['/roulette']" style="cursor: pointer;">
         <p>Lancer la roulette !</p>
       </div>
     </div>-->
 
-    <div class="tchat">
+    <div class="tchat" *ngIf="PLAYERINFO.tchatOpen">
       <div class="tchat-list">
         <div *ngFor="let message of PLAYERINFO.chatMessages" class="tchatmessage">
           {{ message }}

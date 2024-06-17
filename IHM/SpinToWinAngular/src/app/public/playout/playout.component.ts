@@ -29,6 +29,8 @@ export class PlayoutComponent implements OnInit {
 
   chatMessages: string[] = [];
 
+  tchatOpen : boolean = true;
+  
   constructor(private webSocketService: WebSocketService) {}
 
   updateReloader(num: number): void {

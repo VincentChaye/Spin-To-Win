@@ -410,4 +410,11 @@ oldCredit : number | undefined;
       this.PLAYERINFO.displayChatMessages();
     }
   }
+
+ 
+
+  openCloseTchat(){
+    this.PLAYERINFO.tchatOpen = !this.PLAYERINFO.tchatOpen;
+     
+  }
 }

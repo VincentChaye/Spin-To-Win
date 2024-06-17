@@ -18,6 +18,7 @@
     border: #000000 2px solid;
     top: 10%;
     left: 5%;
+    height: 78%;
     padding: 50px;
     border-radius: 8px;
   }
@@ -55,7 +56,7 @@
     top: 21%;
     width: 500px;
     height: 500px;
-    right: 5%;
+    left: 5%;
     padding: 50px;
     border-radius: 8px;
 }
@@ -170,10 +171,11 @@
 
 .tchat {
   position: fixed;
-  top: 5%;
-  right: 0;
-  width: 40%;
-  height: 40%;
+  top: 10%;
+  bottom: 10%;
+  right: 5%;
+  width: 40%; 
+  height: 78%;
   border: 3px solid #0738a1;
   overflow-y: scroll;
   padding: 10px;
