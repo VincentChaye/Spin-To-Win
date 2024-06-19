@@ -34,7 +34,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() { 
-    //if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
+    if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     if ( this.router.url === '/roulette') {
       // Si le joueur est connecté, commencez à générer les chemins et démarrez l'animation
       this.generatePaths();
@@ -229,12 +229,30 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   
   
  
-
   envoyerUnMessage() {
-    if (this.PLAYERINFO.messageInput.trim() !== '') { // Vérifie que le message n'est pas vide
-      this.PLAYERINFO.sendMessage(this.PLAYERINFO.messageInput);
-      this.PLAYERINFO.messageInput = ''; // Réinitialise l'input après l'envoi du message
+    if (this.PLAYERINFO.messageInput.trim() !== '') {
+      const pseudo = this.PLAYERINFO.playerInfo?.pseudo;
+      if (pseudo) {
+        const messageToSend = pseudo + " | " + this.PLAYERINFO.messageInput;
+        console.log('Message to send:', messageToSend);
+        this.PLAYERINFO.sendMessage(messageToSend);
+        this.PLAYERINFO.messageInput = '';
+      } else {
+        console.error('Player pseudo is not defined');
+      }
     }
+  }
+  @ViewChild('chatList') chatList!: ElementRef;
+
+  private scrollToBottom(): void {
+    try {
+      this.chatList.nativeElement.scrollTop = this.chatList.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Error scrolling chat list to bottom:', err);
+    }
+  }
+ ngAfterViewChecked() {
+    this.scrollToBottom();
   }
 
   

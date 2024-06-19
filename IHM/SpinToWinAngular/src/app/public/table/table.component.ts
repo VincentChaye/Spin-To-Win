@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -208,9 +208,7 @@ oldCredit : number | undefined;
     }*/
   }
 
-  toggleBonus() {
-    this.isBonusActive = !this.isBonusActive;
-  } 
+
 
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
@@ -329,6 +327,7 @@ oldCredit : number | undefined;
   }
 
   onUndoLastAction() {
+    console.log("toto")
     const lastAction = this.actionHistory.pop();
     if (lastAction) {
       const { cellId, previousCount, previousColor, tokenValue } = lastAction;
@@ -342,14 +341,26 @@ oldCredit : number | undefined;
   }
 
   logTokensData() {
+    console.log("totoo")
+    // Map the cellTokens to tableauparie
     this.PLAYERINFO.tableauparie = Object.entries(this.cellTokens).map(([key, value]) => {
-        return {
-            betType: value.originalContent,
-            amount: value.count
-        };
+      return {
+        betType: value.originalContent,
+        amount: value.count
+      };
     });
-
+  
+    // Add bonus bet if isBonusActive is true
+    if (this.isBonusActive) {
+      this.PLAYERINFO.tableauparie.push({ betType: 'bonus', amount: 0 });
+    }
+  
     console.table(this.PLAYERINFO.tableauparie);
+  }
+  
+  toggleBonus() {
+    this.isBonusActive = !this.isBonusActive;
+    this.logTokensData(); // Log the bets including the bonus bet when toggled
   }
 
   toggleCreditBlur() {
@@ -391,14 +402,30 @@ oldCredit : number | undefined;
   }
  
   envoyerUnMessage() {
-    if (this.PLAYERINFO.messageInput.trim() !== '') { // Vérifie que le message n'est pas vide
-      this.PLAYERINFO.sendMessage(this.PLAYERINFO.messageInput);
-      this.PLAYERINFO.messageInput = ''; // Réinitialise l'input après l'envoi du message
+    if (this.PLAYERINFO.messageInput.trim() !== '') {
+      const pseudo = this.PLAYERINFO.playerInfo?.pseudo;
+      if (pseudo) {
+        const messageToSend = pseudo + " | " + this.PLAYERINFO.messageInput;
+        console.log('Message to send:', messageToSend);
+        this.PLAYERINFO.sendMessage(messageToSend);
+        this.PLAYERINFO.messageInput = '';
+      } else {
+        console.error('Player pseudo is not defined');
+      }
     }
   }
+  @ViewChild('chatList') chatList!: ElementRef;
 
-  
-
+  private scrollToBottom(): void {
+    try {
+      this.chatList.nativeElement.scrollTop = this.chatList.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Error scrolling chat list to bottom:', err);
+    }
+  }
+ ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
   envoyerUnMessageDepuisLogin() {
     if (this.PLAYERINFO) {
       this.PLAYERINFO.sendTotoMessage();

@@ -26,16 +26,17 @@
     </div>-->
 
     <div class="tchat" *ngIf="PLAYERINFO.tchatOpen">
-      <div class="tchat-list">
+      <div class="tchat-list" #chatList>
         <div *ngFor="let message of PLAYERINFO.chatMessages" class="tchatmessage">
           {{ message }}
         </div>
       </div>
       <div class="tchat-input">
-        <input type="text" placeholder="Écrire un message..." [(ngModel)]="PLAYERINFO.messageInput">
+        <input type="text" placeholder="Écrire un message..." [(ngModel)]="PLAYERINFO.messageInput" (keydown.enter)="envoyerUnMessage()">
         <button (click)="envoyerUnMessage()">Envoyer</button> 
       </div>
     </div>
+    
     
     
     
