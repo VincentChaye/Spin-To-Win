@@ -641,13 +641,14 @@ h2{
     right: 0;
     width: 40%;
     height: 40%;
-    border: 3px solid #0738a1;
+    border: 3px solid black;
     overflow-y: scroll;
     padding: 10px;
     background-color: rgba(230, 149, 0, 0.5); /* Couleur de fond avec opacité */
     color: black;
     display: flex;
     flex-direction: column; /* Affichage en colonne pour empiler les éléments */
+    border-radius: 10px;
   }
   
   /* Personnalisation de la barre de défilement */
@@ -719,8 +720,8 @@ h2{
     /* Style spécifique pour chaque message dans la liste */
     margin-bottom: 10px; /* Espacement entre les messages */
     padding: 5px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    background-color: #a0a0a0;
+    border: 1px solid #000000;
     border-radius: 4px;
   }
   

@@ -18,13 +18,16 @@ public class Salon {
     }
 
     public boolean ajouterJoueur(WebSocket joueur) {
-        if (joueurs.size() < 10) {
+        if (joueurs.size() < 5) { // Changer 10 à 5
             joueurs.add(joueur);
             return true;
         }
         return false;
     }
-
+    
+    public int nombreJoueurDansSalon() {
+    	return joueurs.size();
+    }
     public void retirerJoueur(WebSocket joueur) {
         joueurs.remove(joueur);
     }
@@ -44,10 +47,8 @@ public class Salon {
     public static void addChatMessage(String message) {
         if (chatMessages.size() >= 50) {
             chatMessages.removeFirst();
-           
         }
         chatMessages.add(message);
-        
     }
 
     public void broadcast(String message) {

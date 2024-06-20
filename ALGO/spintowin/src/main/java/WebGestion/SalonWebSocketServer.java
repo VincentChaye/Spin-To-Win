@@ -26,7 +26,7 @@ public class SalonWebSocketServer extends WebSocketServer {
             public void run() {
                 changerEtatPartie();
             }
-        }, 0, 30000); // 30 secondes
+        }, 0, 25000); // 30 secondes
     }
 
     private void changerEtatPartie() {
@@ -41,7 +41,7 @@ public class SalonWebSocketServer extends WebSocketServer {
                     System.out.println("Etat de la partie changé à 1");
                     envoyerEtatPartie();
                 }
-            }, 8000); // 15 secondes
+            }, 8000); // 8 secondes
         }
     }
 
@@ -50,19 +50,20 @@ public class SalonWebSocketServer extends WebSocketServer {
             int randomNum = RandomNumber.generateNumber();
             System.out.println("Nouveau numéro de salon généré pour le salon " + salon.getNumero() + " : " + randomNum);
 
-            String salonData = "{\"NbAlea\": " + randomNum + ", \"salonId\": " + salon.getNumero() + ", \"etatPartie\": " + etatPartie + "}";
+            String salonData = "{\"NbAlea\": " + randomNum + ", \"salonId\": " + salon.getNumero() + ", \"etatPartie\": " + etatPartie + ", \"nbJoueur\": " + salon.nombreJoueurDansSalon() + "}";
             salon.broadcast(salonData);
         }
     }
 
+
     private void envoyerEtatPartie() {
-        String etatData = "{\"etatPartie\": " + etatPartie + "}";
         for (Salon salon : salons) {
             int salonId = salon.getNumero();
-            String data = "{\"salonId\": " + salonId + ", \"etatPartie\": " + etatPartie + "}";
+            String data = "{\"salonId\": " + salonId + ", \"etatPartie\": " + etatPartie + ", \"nbJoueur\": " + salon.nombreJoueurDansSalon() + "}";
             salon.broadcast(data);
         }
     }
+
 
     @Override
     public void onStart() {
@@ -89,7 +90,7 @@ public class SalonWebSocketServer extends WebSocketServer {
 
     private Salon trouverSalonDisponible() {
         for (Salon salon : salons) {
-            if (salon.getJoueurs().size() < 10) {
+            if (salon.getJoueurs().size() < 5) { // Changer 10 à 5
                 return salon;
             }
         }
@@ -127,7 +128,6 @@ public class SalonWebSocketServer extends WebSocketServer {
             }
         }
     }
-
 
     @Override
     public void onError(WebSocket conn, Exception ex) {

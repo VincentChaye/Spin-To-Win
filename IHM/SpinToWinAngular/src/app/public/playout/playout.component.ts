@@ -30,6 +30,7 @@ export class PlayoutComponent implements OnInit {
   chatMessages: string[] = [];
 
   tchatOpen : boolean = true;
+  nbJoueurs: number | undefined;
   
   constructor(private webSocketService: WebSocketService) {}
 
@@ -44,6 +45,7 @@ export class PlayoutComponent implements OnInit {
       this.randomNumber = data.NbAlea;
       this.salonNumber = data.salonId;
       this.etatPartie = data.etatPartie;
+      this.nbJoueurs = data.nbJoueur;
       this.etatPartieSubject.next(data.etatPartie);
     });
 

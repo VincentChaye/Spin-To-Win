@@ -3,6 +3,7 @@ import { PlayoutComponent } from '../playout/playout.component';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../web-socket.service'; // Importez le service WebSocket
+import { bannedWords } from '../banWord';
 
 export interface Bet {
   betType: string;
@@ -406,14 +407,28 @@ oldCredit : number | undefined;
       const pseudo = this.PLAYERINFO.playerInfo?.pseudo;
       if (pseudo) {
         const messageToSend = pseudo + " | " + this.PLAYERINFO.messageInput;
-        console.log('Message to send:', messageToSend);
-        this.PLAYERINFO.sendMessage(messageToSend);
-        this.PLAYERINFO.messageInput = '';
+  
+        // Vérifiez si le message contient un mot banni
+        const messageContainsBannedWord = bannedWords.some(bannedWord =>
+          messageToSend.toLowerCase().includes(bannedWord.toLowerCase())
+        );
+  
+        if (messageContainsBannedWord) {
+          this.PLAYERINFO.messageInput = '';
+          alert('Message de la france NON '); 
+          
+        } else {
+          console.log('Message to send:', messageToSend);
+          this.PLAYERINFO.sendMessage(messageToSend);
+          this.PLAYERINFO.messageInput = '';
+        }
       } else {
         console.error('Player pseudo is not defined');
       }
     }
   }
+  
+  
   @ViewChild('chatList') chatList!: ElementRef;
 
   private scrollToBottom(): void {
