@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { PlayoutComponent } from "../playout/playout.component";
 import { WebSocketService } from '../web-socket.service';  // Importez le service WebSocket
 import { Subscription } from 'rxjs';
+import { bannedWords } from "../banWord";
 
 @Component({
   selector: "app-roulette",
@@ -34,6 +35,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() { 
+    console.log("tab",this.PLAYERINFO.tableauparie)
     if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     if ( this.router.url === '/roulette') {
       // Si le joueur est connecté, commencez à générer les chemins et démarrez l'animation
@@ -66,9 +68,8 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    if (this.PLAYERINFO && this.PLAYERINFO.tableauparie && this.PLAYERINFO.tableauparie.length > 0) {
-      this.PLAYERINFO.tableauparie = []; // Clear the tableauparie array
-    }
+     
+    this.PLAYERINFO.tableauparie = []; 
   }
 
   getBall(): Promise<number> {
@@ -196,6 +197,7 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
   
           // Mettre à jour les informations du joueur
           this.PLAYERINFO.playerInfo = response;
+       
         },
         (error) => {
           console.error('PUT request error:', error);
@@ -234,9 +236,20 @@ export class RouletteComponent implements OnInit, AfterViewInit, OnDestroy {
       const pseudo = this.PLAYERINFO.playerInfo?.pseudo;
       if (pseudo) {
         const messageToSend = pseudo + " | " + this.PLAYERINFO.messageInput;
-        console.log('Message to send:', messageToSend);
-        this.PLAYERINFO.sendMessage(messageToSend);
-        this.PLAYERINFO.messageInput = '';
+  
+        // Vérifiez si le message contient un mot banni
+        const messageContainsBannedWord = bannedWords.some((bannedWord: string) =>
+          messageToSend.toLowerCase().includes(bannedWord.toLowerCase())
+        );
+  
+        if (messageContainsBannedWord) {
+          this.PLAYERINFO.messageInput = '';
+          alert('Message de la france NON '); 
+        } else {
+          console.log('Message to send:', messageToSend);
+          this.PLAYERINFO.sendMessage(messageToSend);
+          this.PLAYERINFO.messageInput = '';
+        }
       } else {
         console.error('Player pseudo is not defined');
       }

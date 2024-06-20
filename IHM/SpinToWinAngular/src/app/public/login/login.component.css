@@ -64,3 +64,9 @@
 }
 
 p{text-align: center;}
+
+.alert {
+	margin-left: 1rem;
+	margin-bottom: 0;
+  }
+  

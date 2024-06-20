@@ -13,10 +13,9 @@
         </div>
       </div>
       
-      <p class="p-numérochaud">Vous êtes dans le salon n° {{ PLAYERINFO.salonNumber }}</p>
+      <p class="p-numérochaud">Vous êtes dans le salon n° {{ PLAYERINFO.salonNumber }} , Joueurs connectés  : {{ PLAYERINFO.nbJoueurs }}</p>
       
     
-      <p class="p-numérochaud">Vous êtes dans le salon n° {{ PLAYERINFO.salonNumber }}</p> 
     </div>
     
     <!--<div class="roulette-component">
@@ -43,7 +42,7 @@
   
     <div class="fond"></div>
 
-    <div class="bubulle"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p>
+    <div class="bubulle"><button (click)="getPedro()"><img src="../../../assets/image/bull.png"><p>Faîtes vos jeux !</p></button>
      <!--<button (click)="getPedro()" style="    background: rgba(76, 175, 80, 0.0);
       
      border: none;">--> 
