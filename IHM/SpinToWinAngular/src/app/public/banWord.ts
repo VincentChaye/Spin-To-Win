@@ -1,3 +1,6 @@
+// Ceci est le fichier qui contient la liste des mots qui sont bannis dans notre tchat 
+
+
 export const bannedWords: string[] = [
     "alboche",
     "allez bien vous faire cuire le cul",
