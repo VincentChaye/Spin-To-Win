@@ -1,4 +1,11 @@
 /* Arrière-plan */
+
+.opacity{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
 #bg {
     position: fixed;
     top: 0;
@@ -53,6 +60,8 @@
 
 /* Conteneur "connecté" */
 #connected {
+    position: absolute;
+    left: 5%;
     margin-top: 7%; /* Ajustement pour espacement entre les conteneurs */
     width: 40%;
     height: auto; /* Réglage de la hauteur automatique pour s'adapter au contenu */

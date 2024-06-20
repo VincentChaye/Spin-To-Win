@@ -89,7 +89,7 @@
     font-weight: bold;
     font-size: 115%;
     top: 18%;
-    left: 35%;
+    left: 45%;
 }
 
 /* Component */
@@ -104,6 +104,24 @@
     transform: perspective(800px) rotateX(30deg);
     transition: transform 0.5s ease-in-out;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.progress_bar{
+    position: absolute;
+    background: linear-gradient(to right, green, yellow, red);
+    top: -6%;
+    height: 6%;
+    width: 100%;
+    border-radius: 0px;
+}
+
+.progress {
+    border-radius: 0;
+    height: 100%;
+    width: 0%;
+    background-color: black;
+    transition: width 21.5s linear; /* La ligne noir sagrandit pour cacher le dégradé  et elle prend 21.5s a cache le dégradé après avoir attendu 1 sec avant de commencer l'animation*/
+
 }
 
 .murtest{
@@ -177,7 +195,6 @@
     position: absolute;
     background-image: url("../../../assets/image/roulette2.png");
     background-size: cover;
-    cursor: pointer;
 }
 
 .roulette-img p {
@@ -291,7 +308,7 @@ td {
     position: absolute;
     width: 500px;
     height: 75px;
-    left: 26%;
+    left: 31%;
     top: 81%;
     display: flex;
     gap: 10px;
@@ -460,51 +477,6 @@ body {
     align-items: center;
     transition: transform 0.2s, background-color 0.2s;
 }
-
-.container {
-    position: absolute;
-    top: -18%;
-    left: 7%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .circle-background {
-    position: relative;
-    width: 65px;
-    height: 65px;
-    border-radius: 50%;
-    background: red;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .circle-progress {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: conic-gradient(darkred 0%, transparent 0%);
-  }
-  
-  .circle-inner {
-    position: relative;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .timer {
-    font-size: 24px;
-    font-weight: bold;
-  }
   
 .fond{
     position: absolute;
@@ -532,7 +504,7 @@ h2{
 
 .bubulle p{
     top: 29.5%;
-    left: 28%;
+    left: 31%;
     font-weight: bold;
     font-size: 150%;
     color: black;
@@ -639,12 +611,12 @@ h2{
     position: fixed;
     top: 5%;
     right: 0;
-    width: 40%;
+    width: 35%;
     height: 40%;
-    border: 3px solid black;
+    border: 2px solid black;
     overflow-y: scroll;
     padding: 10px;
-    background-color: rgba(230, 149, 0, 0.5); /* Couleur de fond avec opacité */
+    background-color: rgba(121, 84, 35, 0.719);
     color: black;
     display: flex;
     flex-direction: column; /* Affichage en colonne pour empiler les éléments */
@@ -720,7 +692,7 @@ h2{
     /* Style spécifique pour chaque message dans la liste */
     margin-bottom: 10px; /* Espacement entre les messages */
     padding: 5px;
-    background-color: #a0a0a0;
+    background-color: rgba(255, 171, 62, 0.836);
     border: 1px solid #000000;
     border-radius: 4px;
   }

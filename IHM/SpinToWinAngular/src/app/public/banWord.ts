@@ -93,6 +93,7 @@ export const bannedWords: string[] = [
     "facka",
     "faire cuire le cul",
     "FDP",
+    "F D P",
     "fdp",
     "femmelette",
     "ferme ta g",
