@@ -2,7 +2,7 @@
     <div class="opacity">
     <div class="element">
         <div class="componentjeu">
-            <div>
+            <div> <!-- Jeu de la roulette -->
                 <img src="../../../assets/image/roulettelogo.png" alt="">
                 <h1>SpinToWin</h1>
                 <hr>
@@ -11,27 +11,13 @@
                 <button *ngIf="!PLAYERINFO.playerInfo" [routerLink]="['/login']">Se connecter</button>
                 <button  *ngIf="PLAYERINFO.playerInfo" [routerLink]="['/table']">Jouer</button>
             </div>
-            <div>
+            <div> <!-- Jeu en développement dit Mystère -->
                 <img src="../../../assets/image/jeumystere.png" alt="">
                 <h1>Jeu Mystère</h1>
                 <hr>
                 <p style="text-align: center;">
                     Un peu de patience, nous développons pour votre divertissement d'autres jeux de casino remaniés pour plus d'originalité. Nous vous informerons dès qu'ils seront disponibles en ligne.</p>
             </div>
-            <!-- <div>
-                <img src="../../../assets/image/jeumystere.png" alt="">
-                <h1>Jeu Mystère</h1>
-                <hr>
-                <p>Jeu à venir</p>
-                <button class="pasdispo">Jouer</button>
-            </div>
-            <div>
-                <img src="../../../assets/image/jeumystere.png" alt="">
-                <h1>Jeu Mystère</h1>
-                <hr>
-                <p>Jeu à venir</p>
-                <button class="pasdispo">Jouer</button>
-            </div> -->
         </div>
     </div>
 </div>
