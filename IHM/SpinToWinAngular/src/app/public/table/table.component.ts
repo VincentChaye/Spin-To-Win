@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, SimpleChanges, ViewChild, Renderer2 } from '@angular/core';
 import { PlayoutComponent } from '../playout/playout.component';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -26,13 +26,13 @@ export class TableComponent implements OnInit  {
   previousSelectedTokenElement: HTMLElement | null = null;
   isCreditBlurred: boolean = false; 
   openReloadCredit: boolean = false;
-  private allServerURL = 'http://valentin:8000/player/update';
+  private allServerURL = 'http://10.22.27.51:8000/player/update';
   subscription: any;
 oldCredit : number | undefined;
   isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
   lastBet: { [key: string]: { count: number, color: string } } | null = null;
   
-  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService) {
+  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService,private renderer: Renderer2) {
  
   
  
@@ -47,6 +47,18 @@ oldCredit : number | undefined;
 
   ngOnInit() {
     
+
+    const progressBar = this.elRef.nativeElement.querySelector('.progress');
+    console.log('ProgressBar Element:', progressBar);
+    if (progressBar) {
+      setTimeout(() => {
+        console.log('Setting width to 100%');
+        this.renderer.setStyle(progressBar, 'width', '100%');
+      }, 100);
+    }
+      // Rest of your existing ngOnInit code...
+  
+  
     //if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
     
     // Vérifiez si vous êtes actuellement sur la page de la table
