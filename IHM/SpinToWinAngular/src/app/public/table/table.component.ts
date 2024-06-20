@@ -26,7 +26,7 @@ export class TableComponent implements OnInit  {
   previousSelectedTokenElement: HTMLElement | null = null;
   isCreditBlurred: boolean = false; 
   openReloadCredit: boolean = false;
-  private allServerURL = 'http://vegastudio:8000/player/update';
+  private allServerURL = 'http://paul:8000/player/update';
   subscription: any;
 oldCredit : number | undefined;
   isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
