@@ -1,3 +1,10 @@
+.opacity{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+}
+
 
 .bg{
     position: fixed;
@@ -14,9 +21,7 @@
 .element{
     width: 100%;
     height: 100%;
-    background-color: #00000098;
-    position: fixed;
-    overflow-y: scroll;
+
 }
 
 .componentjeu{
@@ -27,13 +32,15 @@
     grid-template-columns: repeat(2, 1fr);
 
     grid-gap: 10px;
-    place-items: center;
     margin-left: 10%;
     margin-bottom: 10%;
     row-gap: 5%;
 }
 
 .componentjeu div{
+    position: relative;
+    top: -10%;
+    left: 17%;
     display: flex;
     justify-content: center;
     align-items: center;

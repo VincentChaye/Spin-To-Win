@@ -1,260 +1,223 @@
 .body {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background: url("../../../assets/image/bck.png") no-repeat center center fixed;
-    background-size: cover;
-  }
-  
-  svg {
-    background-image: url("../../../assets/image/roulette2.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  
-  .container-roulette {
-    position: absolute;
-    background-color: rgba(121, 84, 35, 0.719);
-    border: #000000 2px solid;
-    top: 10%;
-    left: 5%;
-    height: 78%;
-    padding: 50px;
-    border-radius: 8px;
-  }
-  
-  g,
-  path {
-    fill: rgba(0, 0, 0, 0);
-  }
-  
-  .container-roulette g,
-  path {
-    transform: rotate(-2deg);
-  }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(calc(1080deg + var(--final-angle)));
-    }
-  }
-  
-  .ball-animation {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: url("../../../assets/image/bck.png") no-repeat center center fixed;
+  background-size: cover;
+}
+
+svg {
+  background-image: url("../../../assets/image/roulette2.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container-roulette {
+  position: absolute;
+  background-color: rgba(121, 84, 35, 0.719);
+  border: #000000 2px solid;
+  top: 10%;
+  left: 5%;
+  height: 78%;
+  padding: 50px;
+  border-radius: 8px;
+}
+
+g,
+path {
+  fill: rgba(0, 0, 0, 0);
+}
+
+.container-roulette g,
+path {
+  transform: rotate(-2deg);
+}
+
+@keyframes spin {
+  from {
     transform: rotate(0deg);
-    animation: spin 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
   }
-  
+  to {
+    transform: rotate(calc(1080deg + var(--final-angle)));
+  }
+}
+
+.ball-animation {
+  transform: rotate(0deg);
+  animation: spin 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
 
 
-  .resultat {
-    position: absolute;
-    background-color: rgba(121, 84, 35, 0.719);
-    border: 2px solid #000000;
-    top: 21%;
-    width: 500px;
-    height: 500px;
-    left: 5%;
-    padding: 50px;
-    border-radius: 8px;
+
+.resultat {
+  position: absolute;
+  background-color: rgba(121, 84, 35, 0.719);
+  border: 2px solid #000000;
+  top: 10%;
+  align-content: center;
+  text-align: center;
+  width: 40%;
+  height: 78%;
+  left: 5%;
+  padding: 50px;
+  border-radius: 8px;
 }
 
 .resultat-rouge,
 .resultat-noir,
 .resultat-vert {
-    position: absolute;
-    border-radius: 5px;
-    top: 15%;
-    left: 30%;
-    width: 200px;
-    height: 200px;
-    font-size: 300%;
-    font-weight: bold;
-    text-align: center; 
-    z-index: 999; /* Assurez-vous que cette div apparaît au-dessus des autres éléments */
-    padding: 20px; /* Ajoutez un peu d'espace intérieur */
-  }
-  
-  
-  .partieEnCours {
-    color: red;
-    font-weight: bold;
-    white-space: nowrap;         /* Empêche le retour à la ligne */
-    overflow: hidden;            /* Cache le texte qui déborde */
-    text-overflow: ellipsis;    
-    text-align: center; /* Ajoute des points de suspension (...) si le texte déborde */
-  }
-  
- 
+position: absolute;
+border-radius: 5px;
+top: 15%;
+left: 30%;
+width: 40%;
+height: 40%;
+font-size: 300%;
+font-weight: bold;
+text-align: center;
+align-content: center;
+vertical-align: middle;
+z-index: 999;
+padding: 20px;
+}
+
+
+.partieEnCours {
+  color: red;
+  font-weight: bold;
+  white-space: nowrap;         /* Empêche le retour à la ligne */
+  overflow: hidden;            /* Cache le texte qui déborde */
+  text-overflow: ellipsis;    
+  text-align: center; /* Ajoute des points de suspension (...) si le texte déborde */
+}
+
+
 .resultat-rouge {
-    background-color: darkred;
+  background-color: darkred;
 }
 
 .resultat-noir {
-    background-color: black;
+  background-color: black;
 }
 
 .resultat-vert {
-    background-color: darkgreen;
+  background-color: darkgreen;
+}
+
+.numres{
+  text-align: center;
+  color: white;
+  font-size: 200%;
+  align-items: center;
+  align-self: center;
 }
 
 .gain{
+text-align: center;
   position: absolute;
   color: black;
-  top: 65%;
-  left: 19%;
+
+  left: 30%;
+  top: 65%; 
   font-size: 150%;
   font-weight: bold;
 }
 
 .warn{
-  position: absolute;
-  color: black;
-  font-size: 140%;
-  top: 75%;
-  left: 13%;
+position: absolute;
+color: black;
+font-size: 140%;
+top: 75%;
+left: 25%;
 } 
 
 
-
 .tchat {
-  position: fixed;
-  top: 5%;
-  right: 0;
-  width: 40%;
-  height: 40%;
-  border: 1px solid #ccc;
-  overflow-y: scroll; /* Permet le défilement vertical */
-  padding: 10px;
-  background-color: #e69500; /* Fond de couleur #e69500 */
-  color: black; /* Couleur du texte noire */
-}
-
-.message-list {
-  max-height: calc(100% - 50px); /* Hauteur maximale moins la hauteur de la zone de saisie */
-  overflow-y: auto; /* Défilement automatique si nécessaire */
-}
-
-.message-input {
-  margin-top: 10px;
-}
-
-.message-input input[type="text"] {
-  width: 70%; /* Largeur de l'input pour écrire le message */
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.message-input button {
-  width: 25%; /* Largeur du bouton Envoyer */
-  padding: 8px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.message-input button:hover {
-  background-color: #0056b3;
-}
-
-
-
-
-
-
-.tchat {
-  position: fixed;
-  top: 10%;
-  bottom: 10%;
-  right: 5%;
-  width: 40%; 
-  height: 78%;
-  border: 3px solid #0738a1;
-  overflow-y: scroll;
-  padding: 10px;
-  background-color: rgba(230, 149, 0, 0.5); /* Couleur de fond avec opacité */
-  color: black;
-  display: flex;
-  flex-direction: column; /* Affichage en colonne pour empiler les éléments */
+position: fixed;
+top: 10%;
+bottom: 10%;
+right: 5%;
+width: 40%; 
+height: 78%;
+border: 2px solid black;
+overflow-y: scroll;
+padding: 10px;
+background-color: rgba(121, 84, 35, 0.719);
+color: black;
+display: flex;
+flex-direction: column; /* Affichage en colonne pour empiler les éléments */
+border-radius: 10px;
 }
 
 /* Personnalisation de la barre de défilement */
 .tchat::-webkit-scrollbar {
-  width: 2px;
+width: 2px;
 }
 
 .tchat::-webkit-scrollbar-track {
-  background: transparent; /* Couleur de l'arrière-plan de la piste */
+background: transparent; /* Couleur de l'arrière-plan de la piste */
 }
 
 .tchat::-webkit-scrollbar-thumb {
-  background-color: #007bff; /* Couleur de la barre de défilement */
-  border-radius: 10px; /* Optionnel : ajoute des coins arrondis */
+background-color: #007bff; /* Couleur de la barre de défilement */
+border-radius: 10px; /* Optionnel : ajoute des coins arrondis */
 }
 
 .tchat-list {
-  flex: 1; /* Permet à la liste des messages de prendre toute la hauteur disponible */
-  max-height: calc(100% - 50px); /* Hauteur maximale moins la zone de saisie */
-  overflow-y: auto;
+flex: 1; /* Permet à la liste des messages de prendre toute la hauteur disponible */
+max-height: calc(100% - 50px); /* Hauteur maximale moins la zone de saisie */
+overflow-y: auto;
 }
 
 /* Personnalisation de la barre de défilement dans la liste */
 .tchat-list::-webkit-scrollbar {
-  width: 5px;
+width: 5px;
 }
 
 .tchat-list::-webkit-scrollbar-track {
-  background: transparent; /* Couleur de l'arrière-plan de la piste */
+background: transparent; /* Couleur de l'arrière-plan de la piste */
 }
 
 .tchat-list::-webkit-scrollbar-thumb {
-  background-color: #007bff; /* Couleur de la barre de défilement */
-  border-radius: 10px; /* Optionnel : ajoute des coins arrondis */
+background-color: #007bff; /* Couleur de la barre de défilement */
+border-radius: 10px; /* Optionnel : ajoute des coins arrondis */
 }
 
 .tchat-input {
-  margin-top: 10px;
-  display: flex;
-  align-items: center; /* Centre les éléments verticalement */
+margin-top: 10px;
+display: flex;
+align-items: center; /* Centre les éléments verticalement */
 }
 
 .tchat-input input[type="text"] {
-  flex: 1; /* L'input prend autant d'espace que possible */
-  width: 70%;
-  padding: 8px;
-  border: 1px solid #cccccc00;
-  border-radius: 4px;
-  font-size: 14px;
+flex: 1; /* L'input prend autant d'espace que possible */
+width: 70%;
+padding: 8px;
+border: 1px solid #cccccc00;
+border-radius: 4px;
+font-size: 14px;
 }
 
 .tchat-input button {
-  width: 25%;
-  padding: 8px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 10px; /* Espacement entre l'input et le bouton */
+width: 25%;
+padding: 8px;
+border: none;
+background-color: #007bff;
+color: #fff;
+border-radius: 4px;
+cursor: pointer;
+font-size: 14px;
+margin-left: 10px; /* Espacement entre l'input et le bouton */
 }
 
 .tchat-input button:hover {
-  background-color: #0056b3;
+background-color: #0056b3;
 }
-
 .tchatmessage {
   /* Style spécifique pour chaque message dans la liste */
   margin-bottom: 10px; /* Espacement entre les messages */
   padding: 5px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  background-color: rgba(255, 171, 62, 0.836);
+  border: 1px solid #000000;
   border-radius: 4px;
 }
