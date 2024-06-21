@@ -18,7 +18,7 @@ export class LoginComponent {
   private allServerURL = 'http://10.22.27.51:8000/player/auth';
   username: string = '';
   password: string = '';
-  
+  loginError: boolean = false; // Ajoutez cette ligne
 
   sendData(): void {
     const username = (document.getElementById('username') as HTMLInputElement).value;
@@ -40,23 +40,23 @@ export class LoginComponent {
         (response) => {
           console.log('PUT request successful:', response);
           delete response.mot_de_passe_hash;
- 
           
           // Formater la date
           response.dateNaissance = new Date(response.dateNaissance).toISOString().split('T')[0];
           
-         
           this.PLAYERINFO.playerInfo = response;
           console.log('trans', this.PLAYERINFO.playerInfo);
-          this.PLAYERINFO.joueurConnecter=true;
+          this.PLAYERINFO.joueurConnecter = true;
           this.router.navigate(['/Jeu']); // Utilisez le service Router pour la navigation
+          this.loginError = false; // Reset the error state on success
         },
         (error) => {
           console.error('PUT request error:', error);
+          this.loginError = true; // Set the error state on failure
         }
       );
   }
- 
+
   envoyerUnMessageDepuisLogin() {
     if (this.PLAYERINFO) {
       this.PLAYERINFO.sendTotoMessage();
@@ -85,5 +85,4 @@ export class LoginComponent {
   //       // Assigner les données récupérées à une variable ou effectuer un traitement supplémentaire si nécessaire
   //     });
   // }
- 
 }

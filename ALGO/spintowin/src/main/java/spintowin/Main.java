@@ -19,10 +19,7 @@ public class Main {
             }
         });
 
-        Thread h2DatabaseThread = new Thread(() -> {
-            // Lancement du serveur H2
-            H2Database.main(new String[]{});
-        });
+       
 
         Thread webSocketServerThread = new Thread(() -> {
             // Démarrage du serveur WebSocket
@@ -33,7 +30,6 @@ public class Main {
 
         // Démarrage des threads
         httpServerThread.start();
-        h2DatabaseThread.start();
         webSocketServerThread.start();
 
         // Attendez que le serveur HTTP démarre avant d'ajouter le gestionnaire de contexte CORS

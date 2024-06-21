@@ -20,23 +20,25 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseManager {
-	 private static final String DB_URL = "jdbc:mysql://localhost:3306/VegaStudio_DB";
-	    private static final String DB_USER = "Compte_API";
-	    private static final String DB_PASSWORD = "FKf1VF6HiRyi1";
+    // URL, utilisateur et mot de passe pour la connexion à la base de données
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/VegaStudio_DB";
+    private static final String DB_USER = "Compte_API";
+    private static final String DB_PASSWORD = "FKf1VF6HiRyi1";
 
-	    // Chargement du pilote JDBC MySQL
-	    static {
-	        try {
-	            Class.forName("com.mysql.cj.jdbc.Driver");
-	        } catch (ClassNotFoundException e) {
-	            e.printStackTrace();
-	        }
-	    }
+    // Chargement du pilote JDBC MySQL
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-	    // Méthode pour établir une connexion à la base de données
-	    private static Connection getConnection() throws SQLException {
-	        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-	    }
+    // Méthode pour établir une connexion à la base de données
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+    }
+
     // Méthode pour récupérer un joueur par son ID
     public static Joueur getJoueurById(int joueurId) {
         Joueur joueur = null;
@@ -62,13 +64,14 @@ public class DatabaseManager {
         }
         return joueur;
     }
-    
+
+    // Méthode pour récupérer un joueur par son pseudo
     public static Joueur getJoueurByName(String joueurPseudo) {
         Joueur joueur = null;
         String sql = "SELECT * FROM joueur WHERE pseudo = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        	pstmt.setString(1, joueurPseudo);
+            pstmt.setString(1, joueurPseudo);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 joueur = new Joueur(
@@ -87,7 +90,8 @@ public class DatabaseManager {
         }
         return joueur;
     }
-    
+
+    // Méthode pour mettre à jour le crédit d'un joueur
     public static Joueur updateCredit(String pseudo, double credit) {
         Joueur joueur = null;
         String sql = "UPDATE joueur SET credit = ? WHERE pseudo = ?";
@@ -115,36 +119,36 @@ public class DatabaseManager {
         return joueur;
     }
 
+    // Méthode pour vérifier le mot de passe d'un joueur
     public static Joueur verifieMotDePasse(String joueurPseudo, String MotDePasse) {
         Joueur newPlayer = null;
         String motDePasseCrypte = crypterMotDePasse(MotDePasse);
         String sql = "SELECT * FROM joueur WHERE pseudo = ? AND mot_de_passe_hash = ?";
         try (Connection conn = getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-               pstmt.setString(1, joueurPseudo);
-               pstmt.setString(2, motDePasseCrypte); 
-               ResultSet rs = pstmt.executeQuery();
-               if (rs.next()) {
-                   newPlayer = new Joueur(
-                           rs.getInt("id"),
-                           rs.getString("pseudo"),
-                           rs.getString("nom"),
-                           rs.getString("prenom"),
-                           rs.getString("email"),
-                           rs.getDate("date_naissance"),
-                           rs.getFloat("credit")
-                          
-                   );
-               }
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, joueurPseudo);
+            pstmt.setString(2, motDePasseCrypte);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                newPlayer = new Joueur(
+                        rs.getInt("id"),
+                        rs.getString("pseudo"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getDate("date_naissance"),
+                        rs.getFloat("credit")
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return newPlayer;
     }
 
+    // Méthode pour mettre à jour l'évolution du crédit d'un joueur
     public static void updateEvolutionCredit(int joueurId, float credit) {
         String sql = "INSERT INTO evolutionCredit (joueur_id, credit) VALUES (?, ?)";
-
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, joueurId);
@@ -155,7 +159,7 @@ public class DatabaseManager {
         }
     }
 
-
+    // Méthode pour créer un joueur à partir des données de la requête
     void createPlayerFromRequestData(Joueur newPlayer) {
         try {
             // Convertir la java.util.Date en java.sql.Date
@@ -189,7 +193,7 @@ public class DatabaseManager {
         }
     }
 
-
+    // Méthode pour crypter un mot de passe en utilisant SHA-256
     private static String crypterMotDePasse(String motDePasse) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -209,40 +213,35 @@ public class DatabaseManager {
             return null;
         }
     }
-    
-    
-    
+
     // Méthode pour récupérer tous les joueurs
     public static List<Joueur> getAllJoueurs() {
         List<Joueur> joueurs = new ArrayList<>();
         String sql = "SELECT * FROM joueur";
         try (Connection conn = getConnection();
-        	     PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        	    ResultSet rs = pstmt.executeQuery();
-        	    while (rs.next()) {
-        	        Joueur joueur = new Joueur(
-        	                rs.getInt("id"),
-        	                rs.getString("pseudo"),
-        	                rs.getString("nom"),
-        	                rs.getString("prenom"),
-        	                rs.getString("email"),
-        	                rs.getDate("date_naissance"),
-        	                rs.getFloat("credit"),
-        	                rs.getString("mot_de_passe_hash")
-        	        );
-        	        joueurs.add(joueur);
-        	    }
-        	    return joueurs;
-        	} catch (SQLException e) {
-        	    e.printStackTrace();
-        	}
-		return joueurs;
-
-        
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Joueur joueur = new Joueur(
+                        rs.getInt("id"),
+                        rs.getString("pseudo"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getDate("date_naissance"),
+                        rs.getFloat("credit"),
+                        rs.getString("mot_de_passe_hash")
+                );
+                joueurs.add(joueur);
+            }
+            return joueurs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return joueurs;
     }
 
-    
-    
+    // Méthode pour récupérer tous les pseudos des joueurs
     public static List<String> getAllPseudo() {
         List<String> pseudos = new ArrayList<>();
         String sql = "SELECT pseudo FROM joueur";
@@ -260,16 +259,16 @@ public class DatabaseManager {
         return pseudos;
     }
 
+    // Méthode pour récupérer l'évolution du crédit d'un joueur
     public static List<Float> getAllEvolutionCredit(int id) {
         List<Float> credits = new ArrayList<>();
         String sql = "SELECT credit FROM evolutionCredit WHERE joueur_id = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-             
-            pstmt.setInt(1, id);  
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                float credit = rs.getFloat("credit");  
+                float credit = rs.getFloat("credit");
                 credits.add(credit);
             }
         } catch (SQLException e) {
@@ -278,7 +277,7 @@ public class DatabaseManager {
         return credits;
     }
 
-    
+    // Méthode pour récupérer tous les emails des joueurs
     public static List<String> getAllMail() {
         List<String> pseudos = new ArrayList<>();
         String sql = "SELECT pseudo FROM joueur";
@@ -295,5 +294,6 @@ public class DatabaseManager {
         }
         return pseudos;
     }
+
     // Autres méthodes pour gérer les opérations de base de données ici...
 }

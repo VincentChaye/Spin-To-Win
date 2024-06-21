@@ -24,14 +24,14 @@
           <div class="labelinput">
             <label for="dateNaissance">Date de naissance</label>
             <input type="date" id="dateNaissance" name="dateNaissance" [(ngModel)]="Age" (ngModelChange)="checkAgeValidity()" required>
-            <div *ngIf="!isAgeValid" class="error-message">Vous devez avoir au moins 18 ans.</div>
+            <div *ngIf="!isAgeValid" class="error-message" style="color: rgb(199, 9, 9);" >Vous devez avoir au moins 18 ans.</div>
           </div>
         </div>
         <div class="multiinput">
           <div class="labelinput">
             <label for="username">Nom d'utilisateur</label>
             <input type="text" id="username" name="username" [(ngModel)]="Username" (ngModelChange)="checkPseudoValidity()" required>
-            <div *ngIf="!isPseudoIncluded" class="error-message">Ce nom d'utilisateur est déjà utilisé.</div>
+            <div *ngIf="!isPseudoIncluded" class="error-message" style="color: rgb(199, 9, 9);">Ce nom d'utilisateur est déjà utilisé.</div>
           </div>
           <div class="labelinput">
             <label for="password">Mot de passe</label>
