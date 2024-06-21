@@ -26,6 +26,7 @@ export class PlayoutComponent implements OnInit {
   randomNumber: number | undefined;
   salonNumber: number | undefined;
   etatPartie: number | undefined;
+  //import chat here
 
   constructor(private webSocketService: WebSocketService) {} // Injection du service WebSocket
 
@@ -42,6 +43,7 @@ export class PlayoutComponent implements OnInit {
       this.salonNumber = data.salonId;
       this.etatPartie = data.etatPartie;
       this.etatPartieSubject.next(data.etatPartie); // Mettre à jour etatPartie avec la nouvelle valeur reçue du WebSocket
+      // Mettre à jour le chat ici
     });
   }
 }

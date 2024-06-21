@@ -2,6 +2,7 @@
 package WebGestion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.java_websocket.WebSocket;
 
@@ -9,6 +10,7 @@ public class Salon {
     private static int count = 0;
     private int numero;
     private List<WebSocket> joueurs;
+    private HashMap< WebSocket, String> chat;
 
     public Salon() {
         this.numero = ++count;
