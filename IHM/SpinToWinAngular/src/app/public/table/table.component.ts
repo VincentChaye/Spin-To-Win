@@ -3,11 +3,11 @@ import { PlayoutComponent } from '../playout/playout.component';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../web-socket.service'; // Importez le service WebSocket
-import { bannedWords } from '../banWord';
 
+// Interface définissant la structure d'un pari
 export interface Bet {
-  betType: string;
-  amount: number;
+  betType: string; // Type de pari
+  amount: number; // Montant du pari
 }
 
 @Component({
@@ -16,39 +16,43 @@ export interface Bet {
   styleUrls: ['./table.component.css']
 }) 
 
-export class TableComponent implements OnInit  {
-  totalTime: number = 30; // Temps total en secondes
-  currentTime: number = this.totalTime;
-  interval: any; 
-  selectedToken: { value: number, color: string } | null = null;
-  cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {};
-  credit: number = 100; //INITIALISATION CREDIT
-  actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = [];
-  previousSelectedTokenElement: HTMLElement | null = null;
-  isCreditBlurred: boolean = false; 
-  openReloadCredit: boolean = false;
-  private allServerURL = 'http://10.22.27.51:8000/player/update';
-  subscription: any;
-oldCredit : number | undefined;
-  isBonusActive: boolean = false; // Ajout de la variable pour l'état du bouton
-  lastBet: { [key: string]: { count: number, color: string } } | null = null;
-  
-  constructor(public PLAYERINFO: PlayoutComponent, private elRef: ElementRef, private httpClient: HttpClient, private router: Router, private webSocketService: WebSocketService,private renderer: Renderer2) {
- 
-  
- 
+export class TableComponent implements OnInit {
+  totalTime: number = 30; // Temps total en secondes pour le compte à rebours
+  currentTime: number = this.totalTime; // Temps actuel du compte à rebours
+  interval: any; // Intervalle pour le compte à rebours
+  selectedToken: { value: number, color: string } | null = null; // Jeton sélectionné
+  cellTokens: { [key: string]: { count: number, color: string, originalContent: string, originalColor: string } } = {}; // Jetons placés sur la table
+  credit: number = 100; // Crédit initial du joueur
+  actionHistory: { cellId: string, previousCount: number, previousColor: string, tokenValue: number }[] = []; // Historique des actions pour annuler
+  previousSelectedTokenElement: HTMLElement | null = null; // Élément du jeton précédemment sélectionné
+  isCreditBlurred: boolean = false; // État pour flouter le crédit
+  openReloadCredit: boolean = false; // État pour afficher le modal de rechargement de crédit
+  private allServerURL = 'http://10.22.27.51:8000/player/update'; // URL du serveur pour mettre à jour le crédit
+  subscription: any; // Subscription pour l'état de la partie
+  oldCredit : number | undefined; // Ancien crédit du joueur
+  isBonusActive: boolean = false; // État pour le bouton bonus
+  lastBet: { [key: string]: { count: number, color: string } } | null = null; // Dernier pari
+
+  constructor(
+    public PLAYERINFO: PlayoutComponent,
+    private elRef: ElementRef,
+    private httpClient: HttpClient,
+    private router: Router,
+    private webSocketService: WebSocketService,
+    private renderer: Renderer2
+  ) {
+    // Initialisation de la page
     this.PLAYERINFO.pageCharger = 0;
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
     }
-    if(this.credit <= 0){
+    if (this.credit <= 0) {
       this.openModal();
     }
   }
 
   ngOnInit() {
-    
-
+    // Initialisation de la barre de progression
     const progressBar = this.elRef.nativeElement.querySelector('.progress');
     console.log('ProgressBar Element:', progressBar);
     if (progressBar) {
@@ -57,11 +61,7 @@ oldCredit : number | undefined;
         this.renderer.setStyle(progressBar, 'width', '100%');
       }, 100);
     }
-      // Rest of your existing ngOnInit code...
-  
-  
-    //if(!this.PLAYERINFO.joueurConnecter){this.router.navigate(['/login']);}
-    
+
     // Vérifiez si vous êtes actuellement sur la page de la table
     if (this.router.url === '/table') {
       // Abonnez-vous uniquement aux changements de l'état de partie si vous êtes sur la page de la table
@@ -72,7 +72,7 @@ oldCredit : number | undefined;
         }
       });
     }
-  
+
     if (this.PLAYERINFO.playerInfo && typeof this.PLAYERINFO.playerInfo.credit === 'number') {
       this.credit = this.PLAYERINFO.playerInfo.credit;
     }
@@ -80,6 +80,8 @@ oldCredit : number | undefined;
       this.openModal();
     }
   }
+
+  // Démarrer le compte à rebours
   startCountdown() {
     this.interval = setInterval(() => {
       if (this.currentTime > 0) {
@@ -90,35 +92,37 @@ oldCredit : number | undefined;
     }, 1000);
   }
 
+  // Obtenir la progression en pourcentage
   get progress() {
     return (this.currentTime / this.totalTime) * 100;
   }
 
-
+  // Désabonnement à la destruction du composant
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
-  
+
+  // Redirection vers la page de connexion si le joueur n'est pas connecté
   redirectToLogin() {
-    // Vérifier si le joueur est connecté
     if (!this.PLAYERINFO.playerInfo || !this.PLAYERINFO.playerInfo.pseudo) {
-      // Rediriger vers le composant de connexion
       this.router.navigate(['/login']);
     } else {
-      // Rediriger vers la page de la roulette
       this.router.navigate(['/roulette']);
     }
   }
+
+  // Opération sur le crédit du joueur
   creditOp(value: number) {
     this.credit += value;
   }
 
+  // Gestion de la sélection d'un jeton
   onTokenClick(value: number, color: string) {
-    if (value === 99) { // Check if the clicked token is MAX
+    if (value === 99) { // Vérifiez si le jeton sélectionné est le jeton MAX
       if (this.credit > 0) {
-        value = this.credit; // Use all remaining credits
+        value = this.credit; // Utilisez tous les crédits restants
       } else {
         alert("Crédit insuffisant pour placer ce pari !");
         return;
@@ -127,6 +131,7 @@ oldCredit : number | undefined;
     this.selectedToken = { value, color };
     console.log(`Selected token: ${value} of color ${color}`);
 
+    // Gestion de la sélection visuelle du jeton
     if (this.previousSelectedTokenElement) {
       this.previousSelectedTokenElement.classList.remove('selected');
     }
@@ -140,17 +145,19 @@ oldCredit : number | undefined;
     });
   }
 
+  // Gestion du clic sur une cellule de la table
   onCellClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     if (this.selectedToken && target.tagName === 'TD' && target.id) {
       const cellId = target.id;
-  
+
       // Vérifiez si le crédit est suffisant pour placer le jeton
       if (this.credit < this.selectedToken.value) {
         alert("Crédit insuffisant pour placer ce pari !");
         return;
       }
-  
+
+      // Initialisation de la cellule si elle n'existe pas encore
       if (!this.cellTokens[cellId]) {
         this.cellTokens[cellId] = { 
           count: 0, 
@@ -159,70 +166,27 @@ oldCredit : number | undefined;
           originalColor: target.style.backgroundColor || '' 
         };
       }
-      
-      // Save current state for undo functionality
+
+      // Sauvegarder l'état actuel pour la fonctionnalité d'annulation
       this.actionHistory.push({ 
         cellId, 
         previousCount: this.cellTokens[cellId].count, 
         previousColor: this.cellTokens[cellId].color,
         tokenValue: this.selectedToken.value 
       });
-      
-      // Update the cell data with the selected token value
+
+      // Mettre à jour les données de la cellule avec la valeur du jeton sélectionné
       this.cellTokens[cellId].count += this.selectedToken.value;
       this.cellTokens[cellId].color = this.selectedToken.color;
       this.creditOp(-this.selectedToken.value);
 
-      // Update the display of the cell
+      // Mettre à jour l'affichage de la cellule
       this.updateCellDisplay(cellId);
       this.logTokensData();
-   // Save the current bet as the last bet
     }
-  } 
- 
-
-  onReplayLastBet() {
-    alert("Option indisponible pour le moment.");
-    /*if (this.lastBet) {
-      Object.keys(this.lastBet).forEach(cellId => {
-        const cellData = this.lastBet![cellId];
-        if (this.credit >= cellData.count) {
-          if (!this.cellTokens[cellId]) {
-            this.cellTokens[cellId] = { 
-              count: 0, 
-              color: cellData.color, 
-              originalContent: '', 
-              originalColor: '' 
-            };
-          }
-
-          // Save current state for undo functionality
-          this.actionHistory.push({ 
-            cellId, 
-            previousCount: this.cellTokens[cellId].count, 
-            previousColor: this.cellTokens[cellId].color,
-            tokenValue: cellData.count 
-          });
-
-          // Update the cell data with the last bet value
-          this.cellTokens[cellId].count += cellData.count;
-          this.cellTokens[cellId].color = cellData.color;
-          this.creditOp(-cellData.count);
-
-          // Update the display of the cell
-          this.updateCellDisplay(cellId);
-        } else {
-          alert("Crédit insuffisant pour rejouer le pari précédent !");
-        }
-      });
-      this.logTokensData();
-    } else {
-      alert("Aucun pari précédent à rejouer !");
-    }*/
   }
 
-
-
+  // Mise à jour de l'affichage de la cellule
   updateCellDisplay(cellId: string) {
     const cell = document.getElementById(cellId);
     if (cell) {
@@ -241,6 +205,7 @@ oldCredit : number | undefined;
     }
   }
 
+  // Obtention de la couleur du jeton en fonction du montant
   getTokenColor(count: number): string {
     if (count >= 1 && count <= 4) {
       return 'yellow';
@@ -255,6 +220,7 @@ oldCredit : number | undefined;
     }
   }
 
+  // Création du SVG du jeton
   createTokenSvg(value: number, color: string): SVGSVGElement {
     const svgNamespace = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNamespace, 'svg') as SVGSVGElement;
@@ -312,17 +278,19 @@ oldCredit : number | undefined;
     return svg;
   }
 
+  // Obtenir le nombre de jetons dans une cellule
   getCellCount(cellId: string): number {
     return this.cellTokens[cellId]?.count;
   }
 
-
-  getPedro(){
-    this.PLAYERINFO.pedro=!this.PLAYERINFO.pedro;
+  // Gestion de l'affichage de Pedro
+  getPedro() {
+    this.PLAYERINFO.pedro = !this.PLAYERINFO.pedro;
     console.log("pedro");
     console.log(this.PLAYERINFO.pedro);
   }
 
+  // Suppression de tous les jetons
   onRemoveAllTokens() {
     Object.keys(this.cellTokens).forEach(cellId => {
       const cellData = this.cellTokens[cellId];
@@ -339,6 +307,7 @@ oldCredit : number | undefined;
     this.logTokensData();
   }
 
+  // Annulation de la dernière action
   onUndoLastAction() {
     console.log("toto")
     const lastAction = this.actionHistory.pop();
@@ -353,6 +322,7 @@ oldCredit : number | undefined;
     }
   }
 
+  // Log des données des jetons
   logTokensData() {
     console.log("totoo")
     // Map the cellTokens to tableauparie
@@ -362,31 +332,37 @@ oldCredit : number | undefined;
         amount: value.count
       };
     });
-  
+
     // Add bonus bet if isBonusActive is true
     if (this.isBonusActive) {
       this.PLAYERINFO.tableauparie.push({ betType: 'bonus', amount: 0 });
     }
-  
+
     console.table(this.PLAYERINFO.tableauparie);
   }
-  
+
+  // Basculement de l'état du bonus
   toggleBonus() {
     this.isBonusActive = !this.isBonusActive;
     this.logTokensData(); // Log the bets including the bonus bet when toggled
   }
 
+  // Basculement de l'affichage flouté du crédit
   toggleCreditBlur() {
     this.isCreditBlurred = !this.isCreditBlurred;
   } 
 
-  openModal(){
-    this.openReloadCredit=true;
-  }
-  closeModal(){
-    this.openReloadCredit=false;
+  // Ouverture du modal de rechargement de crédit
+  openModal() {
+    this.openReloadCredit = true;
   }
 
+  // Fermeture du modal de rechargement de crédit
+  closeModal() {
+    this.openReloadCredit = false;
+  }
+
+  // Rechargement du crédit
   reloadCredit() {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
   
@@ -413,36 +389,25 @@ oldCredit : number | undefined;
         }
       );
   }
- 
+
+  // Envoi d'un message dans le chat
   envoyerUnMessage() {
     if (this.PLAYERINFO.messageInput.trim() !== '') {
       const pseudo = this.PLAYERINFO.playerInfo?.pseudo;
       if (pseudo) {
         const messageToSend = pseudo + " | " + this.PLAYERINFO.messageInput;
-  
-        // Vérifiez si le message contient un mot banni
-        const messageContainsBannedWord = bannedWords.some(bannedWord =>
-          messageToSend.toLowerCase().includes(bannedWord.toLowerCase())
-        );
-  
-        if (messageContainsBannedWord) {
-          this.PLAYERINFO.messageInput = '';
-          alert('Message de la france NON '); 
-          
-        } else {
-          console.log('Message to send:', messageToSend);
-          this.PLAYERINFO.sendMessage(messageToSend);
-          this.PLAYERINFO.messageInput = '';
-        }
+        console.log('Message to send:', messageToSend);
+        this.PLAYERINFO.sendMessage(messageToSend);
+        this.PLAYERINFO.messageInput = '';
       } else {
         console.error('Player pseudo is not defined');
       }
     }
   }
-  
-  
+
   @ViewChild('chatList') chatList!: ElementRef;
 
+  // Fonction pour faire défiler la liste de chat vers le bas
   private scrollToBottom(): void {
     try {
       this.chatList.nativeElement.scrollTop = this.chatList.nativeElement.scrollHeight;
@@ -450,9 +415,11 @@ oldCredit : number | undefined;
       console.error('Error scrolling chat list to bottom:', err);
     }
   }
- ngAfterViewChecked() {
+
+  ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
   envoyerUnMessageDepuisLogin() {
     if (this.PLAYERINFO) {
       this.PLAYERINFO.sendTotoMessage();
@@ -465,10 +432,8 @@ oldCredit : number | undefined;
     }
   }
 
- 
-
-  openCloseTchat(){
+  // Ouverture/fermeture du chat
+  openCloseTchat() {
     this.PLAYERINFO.tchatOpen = !this.PLAYERINFO.tchatOpen;
-     
   }
 }

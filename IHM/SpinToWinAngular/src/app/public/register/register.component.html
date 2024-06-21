@@ -4,7 +4,7 @@
       <div>
         <h1>S'inscrire</h1>
       </div>
-      <form (ngSubmit)="submitForm($event)">
+      <form (ngSubmit)="submitForm($event)"> <!-- Début du formulaire -->
         <div class="multiinput">
           <div class="labelinput">
             <label for="nom">Nom</label>
@@ -38,9 +38,9 @@
             <input type="password" id="password" name="password" [(ngModel)]="Password" required>
           </div>
         </div>
-        <p>Vous avez déjà un compte ? <br><a [routerLink]="['/login']">Connectez-vous</a></p>
+        <p>Vous avez déjà un compte ? <br><a [routerLink]="['/login']">Connectez-vous</a></p> 
         <button class="btn btn-warning" [disabled]="!isFormValid()" type="submit">Envoyer</button>
-      </form>
+      </form> <!-- Fin du formulaire -->
     </div>
   </div>
   </div>

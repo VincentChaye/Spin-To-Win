@@ -2,7 +2,7 @@
   <div class="opacity">
   <div id="connected" style="top: 50px;" class="info" *ngIf="PLAYERINFO.playerInfo">
     <h1>Crédit</h1>
-    <div class="row">
+    <div class="row"> <!-- Information du compte du joueur -->
       <p class="col">Pseudo: {{ PLAYERINFO.playerInfo.pseudo }}</p>
       <p class="col">Nom: {{ PLAYERINFO.playerInfo.nom }}</p>
     </div>
@@ -12,12 +12,12 @@
     </div>
   
   
-    <canvas id="creditChart" width="600" height="400"></canvas> 
+    <canvas id="creditChart" width="600" height="400"></canvas> <!-- Graphique de l'historique des crédits -->
     
     <button class="btn btn-lg btn-warning" [routerLink]="['/Vegastudio']" (click)="deconexion()">Se déconnecter</button>
   </div>
   
-  <div id="notconnected" class="info" *ngIf="!PLAYERINFO.playerInfo">
+  <div id="notconnected" class="info" *ngIf="!PLAYERINFO.playerInfo"> <!-- Si le joueur n'est pas connecté renvoie vers la connexion en notifiant d'une erreur-->
     <h1>Erreur !</h1>
     <p>Vous n'êtes pas connecté</p>
     <button class="btn btn-lg btn-warning" [routerLink]="['/login']">Se connecter</button>

@@ -1,9 +1,12 @@
-<!-- roulette.component.html -->
 <div class="body">
+ 
+   
+<!--  Affichage et construction de la roulette  -->
   <h2 *ngIf="!PLAYERINFO.tableauparie || PLAYERINFO.tableauparie.length === 0" class="partieEnCours">
     Une partie est en cours, attendez le prochain tour pour jouer !
   </h2>
   <div *ngIf="ballFalling == null" class="container-roulette">
+ 
   <svg width="600" height="600" viewBox="-100 -100 200 200">
     <g transform="rotate(-90)">
       <path *ngFor="let path of paths; let i = index"
@@ -12,6 +15,7 @@
             [attr.id]="tab[i]"></path>
       <circle #ball cx="3" cy="-70" r="3" fill="white"></circle>
     </g>
+    <!--  EasterEGG Pedro  -->
     <!-- Image avec animation de rotation -->
     <g transform="rotate(-90)">
       <g transform="translate(0 0)">
@@ -34,6 +38,8 @@
   </audio>
 </div>
 
+<!--  Affichage du numéro tombé et du gain/de la perte  -->
+
 <div *ngIf="ballFalling !== null" class="resultat">
   <div *ngIf="isCreditInGreen()" class="resultat resultat-vert">
     <p class="numres">{{ ballFalling }}</p>
@@ -54,7 +60,7 @@
   <p class="warn">Préparez-vous pour le prochain tour</p>
 </div>
 
-
+<!--  Tchat  -->
 
 <div class="tchat" *ngIf="PLAYERINFO.tchatOpen">
   <div class="tchat-list" #chatList>

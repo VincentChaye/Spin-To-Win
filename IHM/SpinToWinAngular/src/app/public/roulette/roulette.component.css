@@ -6,6 +6,8 @@
   background-size: cover;
 }
 
+/*ROULETTE*/
+
 svg {
   background-image: url("../../../assets/image/roulette2.png");
   background-repeat: no-repeat;
@@ -25,12 +27,12 @@ svg {
 
 g,
 path {
-  fill: rgba(0, 0, 0, 0);
+  fill: rgba(0, 0, 0, 0); /* transparence de la structure svg pour que l'image ressorte */
 }
 
 .container-roulette g,
 path {
-  transform: rotate(-2deg);
+  transform: rotate(-2deg); /* rotation de l'image de la roulette pour l'accordé avec la structure svg html*/
 }
 
 @keyframes spin {
@@ -38,16 +40,16 @@ path {
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(calc(1080deg + var(--final-angle)));
+    transform: rotate(calc(1080deg + var(--final-angle))); /* calcul de l'angle de l'animation */
   }
 }
 
 .ball-animation {
   transform: rotate(0deg);
-  animation: spin 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: spin 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; /* Animation de la balle qui tourne */
 }
 
-
+/* CSS RESULTAT TIRAGE*/
 
 .resultat {
   position: absolute;
@@ -131,6 +133,8 @@ top: 75%;
 left: 25%;
 } 
 
+
+/* CSS DU TCHAT */
 
 .tchat {
 position: fixed;
